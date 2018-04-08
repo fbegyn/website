@@ -42,7 +42,7 @@ disableKinds = ["page", "section", "taxonomy", "taxonomyTerm", "RSS", "sitemap",
 
       [[params.links.list1.link]]
         text = "Email"
-        url = "francis.begyn@gmail.com"
+        url = "mailto:francis.begyn@gmail.com"
 
       [[params.links.list1.link]]
         text = "LinkedIn"
