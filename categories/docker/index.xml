@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on francisbegyn</title>
+    <link>https://about.francisbegyn.be/categories/docker/</link>
+    <description>Recent content in Docker on francisbegyn</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 17 Jun 2018 01:38:45 +0200</lastBuildDate>
+    
+	<atom:link href="https://about.francisbegyn.be/categories/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Docker, trustworthy or shady?</title>
+      <link>https://about.francisbegyn.be/posts/maliciousdocker/</link>
+      <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/posts/maliciousdocker/</guid>
+      <description>When I saw the article about docker images on dockerhub being infected with cryptocurrency mining malware, I couldn&amp;rsquo;t help but write something about my feelings about docker.
+Docker? According to wikipedia
+ Docker is a computer program that performs operating-system-level virtualization also known as containerization.[6] It is developed by Docker, Inc.[7] Docker is primarily developed for Linux, where it uses the resource isolation features of the Linux kernel such as cgroups and kernel namespaces, and a union-capable file system such as OverlayFS and others[8] to allow independent &amp;ldquo;containers&amp;rdquo; to run within a single Linux instance, avoiding the overhead of starting and maintaining virtual machines (VMs).</description>
+    </item>
+    
+  </channel>
+</rss>
