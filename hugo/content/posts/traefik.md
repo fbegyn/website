@@ -1,5 +1,5 @@
 +++ 
-draft = true
+draft = false
 date = 2018-06-17T00:30:40+02:00
 title = "Setting up a reverse proxy, traefik"
 slug = "traefik" 
@@ -47,3 +47,27 @@ Now this differs from which service you pick as a reverse proxy Apache, Nginx, T
 
 Treafik is a simple to configure, feature rich reverse proxy written in Go. It gets configured through a [TOML](https://en.wikipedia.org/wiki/TOML) config file. But back to getting our Promtheus behind the reverse proxy.
 
+So traefik works by defining frontends and backends, and then linking them to eachother. So lets define our prometheus backend.
+
+```
+[backends]
+  [backends.prometheus]
+    [backends.prometheus.servers]
+      [backends.prometheus.servers.server0]
+        url = "http://prometheus.server.ip:port"
+```
+
+Then we define the frontend and couple them together.
+
+```
+[fronteds]
+  [frontends.prometheus]
+    entryPoints = ["http"]
+    backend = "prometheus"
+    [frontends.prometheus.routes]
+      [frontends.prometheus.routes.route0]
+        rule = "Host:prometheus.foo.bar"
+```
+
+Setting this up, will make the prometheus server available on http://prometheus.foo.bar . We can repeat this way of working for whatever service we want too.
+More config options can be found [here](https://docs.traefik.io/configuration/backends/file/). To secure the website with https, when need to change `entryPoints = ["http"]` to `entryPoints = ["http","https"]` and readjust the config according to the options mentioned here [here](https://docs.traefik.io/configuration/acme/#configuration).
