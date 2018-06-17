@@ -6,9 +6,73 @@
     <description>Recent content in Tags on francisbegyn</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
+    <lastBuildDate>Sun, 17 Jun 2018 01:38:45 +0200</lastBuildDate>
     
 	<atom:link href="https://about.francisbegyn.be/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Containerisation</title>
+      <link>https://about.francisbegyn.be/tags/containerisation/</link>
+      <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/containerisation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>https://about.francisbegyn.be/tags/docker/</link>
+      <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go</title>
+      <link>https://about.francisbegyn.be/tags/go/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ipsec</title>
+      <link>https://about.francisbegyn.be/tags/ipsec/</link>
+      <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/ipsec/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reverse Proxy</title>
+      <link>https://about.francisbegyn.be/tags/reverse-proxy/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/reverse-proxy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Treafik</title>
+      <link>https://about.francisbegyn.be/tags/treafik/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/treafik/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Web</title>
+      <link>https://about.francisbegyn.be/tags/web/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/web/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
