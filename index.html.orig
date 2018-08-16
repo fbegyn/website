@@ -10,11 +10,9 @@
     <meta name="keywords" content="blog,developer,personal,linux,go,rust">
 
     <base href="https://about.francisbegyn.be">
-    <title>
-  Reverse Proxy · francisbegyn
-</title>
+    <title>francisbegyn</title>
 
-    <link rel="canonical" href="https://about.francisbegyn.be/tags/reverse-proxy/">
+    <link rel="canonical" href="https://about.francisbegyn.be/">
 
     <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700">
     <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
@@ -26,11 +24,17 @@
     <link rel="icon" type="image/png" href="https://about.francisbegyn.be/images/favicon-16x16.png" sizes="16x16">
 
     
-      <link href="https://about.francisbegyn.be/tags/reverse-proxy/index.xml" rel="alternate" type="application/rss+xml" title="francisbegyn" />
-      <link href="https://about.francisbegyn.be/tags/reverse-proxy/index.xml" rel="feed" type="application/rss+xml" title="francisbegyn" />
+      <link href="https://about.francisbegyn.be/index.xml" rel="alternate" type="application/rss+xml" title="francisbegyn" />
+      <link href="https://about.francisbegyn.be/index.xml" rel="feed" type="application/rss+xml" title="francisbegyn" />
     
 
+<<<<<<< HEAD
+    <meta name="generator" content="Hugo 0.42.1" />
+||||||| merged common ancestors
+    <meta name="generator" content="Hugo 0.40.3" />
+=======
     <meta name="generator" content="Hugo 0.46" />
+>>>>>>> release/post/deb-arch-pack
   </head>
 
   <body>
@@ -59,22 +63,22 @@
 
       <div class="content">
         
-  <section class="container list">
-  <h1 class="title">Reverse Proxy</h1>
-  <ul>
+  <section class="container centered">
+  <div class="about">
+    <h1>Francis Begyn</h1>
+    <h2>Student, light tech and I dabble in monitoring</h2>
     
-    <li>
-      <span>June 17, 2018</span><a href="https://about.francisbegyn.be/posts/traefik/">Setting up a reverse proxy, traefik</a>
-    </li>
+    <ul>
+      
+      <li><a href="https://github.com/fbegyn/">Github</a></li>
+      
+      <li><a href="https://twitter.com/fbegyn/">Twitter</a></li>
+      
+      <li><a href="https://www.linkedin.com/in/fbegyn/">LinkedIn</a></li>
+      
+    </ul>
     
-  </ul>
-  
-
-
-
-
-
-
+  </div>
 </section>
 
 

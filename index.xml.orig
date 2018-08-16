@@ -17,6 +17,7 @@
     
     
     <item>
+<<<<<<< HEAD
       <title>Docker, trustworthy or shady?</title>
       <link>https://about.francisbegyn.be/posts/maliciousdocker/</link>
       <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
@@ -37,6 +38,38 @@ Docker? According to wikipedia
     </item>
     
     <item>
+||||||| merged common ancestors
+=======
+      <title>Making debian packages on Arch Linux</title>
+      <link>https://about.francisbegyn.be/posts/deb-packages-arch/</link>
+      <pubDate>Thu, 16 Aug 2018 12:58:17 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/posts/deb-packages-arch/</guid>
+      <description>Lately I&amp;rsquo;ve been helping with a little APT repo, and it&amp;rsquo;s been fun. The thing I struggled a bit with was making a .deb package on my system (&amp;ldquo;Hey, did you know I use Arch Linux?&amp;rdquo;). Not because this is badly documented, but a lot of the documentation is actually making use of devscripts, dh_make or other helpers, which for some unkown reason all refuse to work on my system.</description>
+    </item>
+    
+    <item>
+      <title>Docker, trustworthy or shady?</title>
+      <link>https://about.francisbegyn.be/posts/maliciousdocker/</link>
+      <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/posts/maliciousdocker/</guid>
+      <description>When I saw the article about docker images on dockerhub being infected with cryptocurrency mining malware, I couldn&amp;rsquo;t help but write something about my feelings about docker.
+Docker? According to wikipedia
+ Docker is a computer program that performs operating-system-level virtualization also known as containerization.[6] It is developed by Docker, Inc.[7] Docker is primarily developed for Linux, where it uses the resource isolation features of the Linux kernel such as cgroups and kernel namespaces, and a union-capable file system such as OverlayFS and others[8] to allow independent &amp;ldquo;containers&amp;rdquo; to run within a single Linux instance, avoiding the overhead of starting and maintaining virtual machines (VMs).</description>
+    </item>
+    
+    <item>
+      <title>Setting up a reverse proxy, traefik</title>
+      <link>https://about.francisbegyn.be/posts/traefik/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/posts/traefik/</guid>
+      <description>So I run a few services at home, primarily for testing and development only. I simply do not have the infrastructure or network to do so for anything I deem important. That said, being able to test some things quickly on a system where I have to care little about introducing breaking changes is very handy (not that I often do, just when it happens I don&amp;rsquo;t do it on production :p ).</description>
+    </item>
+    
+    <item>
+>>>>>>> release/post/deb-arch-pack
       <title>About me</title>
       <link>https://about.francisbegyn.be/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
