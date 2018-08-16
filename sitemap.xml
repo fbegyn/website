@@ -3,7 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://about.francisbegyn.be/posts/deb-packages-arch/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/posts/maliciousdocker/</loc>
+    <lastmod>2018-06-17T01:38:45+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/posts/traefik/</loc>
+    <lastmod>2018-06-17T00:30:40+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://about.francisbegyn.be/about/</loc>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/arch/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -12,12 +33,122 @@
   </url>
   
   <url>
+    <loc>https://about.francisbegyn.be/tags/containerisation/</loc>
+    <lastmod>2018-06-17T01:38:45+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/debian/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/docker/</loc>
+    <lastmod>2018-06-17T01:38:45+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/categories/docker/</loc>
+    <lastmod>2018-06-17T01:38:45+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/go/</loc>
+    <lastmod>2018-06-17T00:30:40+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/categories/go/</loc>
+    <lastmod>2018-06-17T00:30:40+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/ipsec/</loc>
+    <lastmod>2018-06-17T01:38:45+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/categories/ipsec/</loc>
+    <lastmod>2018-06-17T01:38:45+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/linux/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/categories/linux/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/packages/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/posts/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/reverse-proxy/</loc>
+    <lastmod>2018-06-17T00:30:40+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/categories/security/</loc>
+    <lastmod>2018-06-17T01:38:45+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/categories/server/</loc>
+    <lastmod>2018-06-17T00:30:40+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://about.francisbegyn.be/tags/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/treafik/</loc>
+    <lastmod>2018-06-17T00:30:40+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/tags/web/</loc>
+    <lastmod>2018-06-17T00:30:40+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://about.francisbegyn.be/categories/web/</loc>
+    <lastmod>2018-06-17T00:30:40+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://about.francisbegyn.be/</loc>
+    <lastmod>2018-08-16T12:58:17+02:00</lastmod>
     <priority>0</priority>
   </url>
   
