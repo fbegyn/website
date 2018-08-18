@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on francisbegyn</title>
+    <link>https://about.francisbegyn.be/categories/linux/</link>
+    <description>Recent content in Linux on francisbegyn</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 16 Aug 2018 12:58:17 +0200</lastBuildDate>
+    
+	<atom:link href="https://about.francisbegyn.be/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Making debian packages on Arch Linux</title>
+      <link>https://about.francisbegyn.be/posts/deb-packages-arch/</link>
+      <pubDate>Thu, 16 Aug 2018 12:58:17 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/posts/deb-packages-arch/</guid>
+      <description>Lately I&amp;rsquo;ve been helping with a little APT repo, and it&amp;rsquo;s been fun. The thing I struggled a bit with was making a .deb package on my system (&amp;ldquo;Hey, did you know I use Arch Linux?&amp;rdquo;). Not because this is badly documented, but a lot of the documentation is actually making use of devscripts, dh_make or other helpers, which for some unkown reason all refuse to work on my system.</description>
+    </item>
+    
+  </channel>
+</rss>

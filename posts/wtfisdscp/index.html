@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Francis Begyn">
+    <meta name="description" content="My little place on the internet">
+    <meta name="keywords" content="blog,developer,personal,linux,go,rust">
+
+    <base href="https://about.francisbegyn.be">
+    <title>
+  DSCP, what is it and what does it do? · francisbegyn
+</title>
+
+    <link rel="canonical" href="https://about.francisbegyn.be/posts/wtfisdscp/">
+
+    <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700">
+    <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+    <link rel="stylesheet" href="https://about.francisbegyn.be/css/style.min.css">
+
+    
+
+    <link rel="icon" type="image/png" href="https://about.francisbegyn.be/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://about.francisbegyn.be/images/favicon-16x16.png" sizes="16x16">
+
+    
+
+    <meta name="generator" content="Hugo 0.46" />
+  </head>
+
+  <body>
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="https://about.francisbegyn.be">
+      francisbegyn
+    </a>
+    
+    <ul class="navigation-list float-right">
+      
+      <li class="navigation-item">
+        <a class="navigation-link" href="https://about.francisbegyn.be/posts/">Blog</a>
+      </li>
+      
+      <li class="navigation-item">
+        <a class="navigation-link" href="https://about.francisbegyn.be/about/">About</a>
+      </li>
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+  <article>
+    <header>
+      <h1 class="title">DSCP, what is it and what does it do?</h1>
+      <h2 class="date">August 18, 2018</h2>
+
+      
+    </header>
+
+    
+
+<p>I&rsquo;ve done a post about DSCP before but it got lost and it wasn&rsquo;t proper anyways. So here&rsquo;s another one which will be better documented and hosted on my github (that way it&rsquo;s better preserved). So let&rsquo;s get to it.</p>
+
+<h1 id="dscp">DSCP?</h1>
+
+<p>First of all, what is DSCP?</p>
+
+<p>DSCP stand for Differentiated Services Code Point and  is used to identify &ldquo;services&rdquo; straight from the IP header. DSCP is carried in the Differentiated Services (DS) field and together with the ECN field (which occupies the lower 2 bits) is carried in the legacy ToS field of the IP header.</p>
+
+<p>The DS field occupies the upper 6 bits of a byte and thus has 64 possible Code Points (DSCP) it can carry. Most commonly used DSCP values are standardised into 3 pools:</p>
+
+<ul>
+<li>xxxxx0  Standards Action</li>
+<li>xxxx11  Experimental or Local Use Reserved for experimental or Local Use</li>
+<li>xxxx01  Standards Action</li>
+</ul>
+
+<p>I&rsquo;ll list the standards actions below so we have an overview of them.</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th align="left">Binary</th>
+<th align="left">Decimal</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>CS0</td>
+<td align="left">000000</td>
+<td align="left">0</td>
+</tr>
+
+<tr>
+<td>CS1</td>
+<td align="left">001000</td>
+<td align="left">8</td>
+</tr>
+
+<tr>
+<td>CS2</td>
+<td align="left">010000</td>
+<td align="left">16</td>
+</tr>
+
+<tr>
+<td>CS3</td>
+<td align="left">011000</td>
+<td align="left">24</td>
+</tr>
+
+<tr>
+<td>CS4</td>
+<td align="left">100000</td>
+<td align="left">32</td>
+</tr>
+
+<tr>
+<td>CS5</td>
+<td align="left">101000</td>
+<td align="left">40</td>
+</tr>
+
+<tr>
+<td>CS6</td>
+<td align="left">110000</td>
+<td align="left">48</td>
+</tr>
+
+<tr>
+<td>CS7</td>
+<td align="left">111000</td>
+<td align="left">56</td>
+</tr>
+
+<tr>
+<td>AF11</td>
+<td align="left">001010</td>
+<td align="left">10</td>
+</tr>
+
+<tr>
+<td>AF12</td>
+<td align="left">001100</td>
+<td align="left">12</td>
+</tr>
+
+<tr>
+<td>AF13</td>
+<td align="left">001110</td>
+<td align="left">14</td>
+</tr>
+
+<tr>
+<td>AF21</td>
+<td align="left">010010</td>
+<td align="left">18</td>
+</tr>
+
+<tr>
+<td>AF22</td>
+<td align="left">010100</td>
+<td align="left">20</td>
+</tr>
+
+<tr>
+<td>AF23</td>
+<td align="left">010110</td>
+<td align="left">22</td>
+</tr>
+
+<tr>
+<td>AF31</td>
+<td align="left">011010</td>
+<td align="left">26</td>
+</tr>
+
+<tr>
+<td>AF32</td>
+<td align="left">011100</td>
+<td align="left">28</td>
+</tr>
+
+<tr>
+<td>AF33</td>
+<td align="left">011110</td>
+<td align="left">30</td>
+</tr>
+
+<tr>
+<td>AF41</td>
+<td align="left">100010</td>
+<td align="left">34</td>
+</tr>
+
+<tr>
+<td>AF42</td>
+<td align="left">100100</td>
+<td align="left">36</td>
+</tr>
+
+<tr>
+<td>AF43</td>
+<td align="left">100110</td>
+<td align="left">38</td>
+</tr>
+
+<tr>
+<td>EF</td>
+<td align="left">101110</td>
+<td align="left">46</td>
+</tr>
+
+<tr>
+<td>VOICE-ADMIT</td>
+<td align="left">101100</td>
+<td align="left">44</td>
+</tr>
+</tbody>
+</table>
+
+<p>Same translations from the table above:</p>
+
+<ul>
+<li>CS: Class Selector - marks traffic as a certain class (Network control, realtime, &hellip;)</li>
+<li>AF: Assured Forwarding - when an AF class is overloaded, preferentially discard packets. These classes differentiate in the drop probability, but the <a href="https://en.wikipedia.org/wiki/Differentiated_services#Assured_Forwarding">wikipedia</a> sums it up much better then I ever could.</li>
+<li>EF: Expedited forwarding - priority access to a link</li>
+</ul>
+
+<p>Everything aside from these standard can be used to your own whims, even the standards code points can be used to your own whims (but that&rsquo;s bad practice, so lets not do that).</p>
+
+<h1 id="how-is-dscp-used">How is DSCP used?</h1>
+
+<p>When a packet enters a router, the router reads the DSCP value. Based on the DSCP value the packet gets categorised into one 64 behaviours (these are called Per Hop Behaviour or PHB). A PHB group is not unique to a DSCP, as multiple DSCPs can share the same PHB group. Each PHB group has a queue in which packets are stored prior to forwarding.</p>
+
+<p>DSCP is also designed to be backwards compatible with ToS. So non-DSCP, ToS compliant HW can use DSCP by making smart use of the ToS field.</p>
+
+<h1 id="conversions">Conversions</h1>
+
+<p>So how does one go from ToS to DSCP and back again?</p>
+
+<p>As mentioned before, DSCP and ECN together form a byte, in wich DSCP uses th upper 6 and ECN the lower 2. ToS on it&rsquo;s own is a complete byte.</p>
+<div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4">|xxxxxx |  xx |
+| DSCP  | ECN |
+|     ToS     |</pre></div>
+<p>So the conversions are straightforward knowing this:</p>
+
+<ul>
+<li>ToS -&gt; DSCP: <code>ToS value &gt;&gt; 2</code></li>
+<li>DSCP -&gt; ToS: <code>DSCP value &lt;&lt; 2</code> (that is assuming the ECN is set to <code>00</code>, otherwise see the above schematic and common sense to determine the ToS value).</li>
+</ul>
+
+<h1 id="usefull-things-when-working-with-dscp">Usefull things when working with DSCP</h1>
+
+<p>Ping has to option to set a ToS field (and after this blog, you know how to use this to set a DSCP value). <code>ping -Q &lt;ToS value&gt; &lt;target&gt;</code>. You can use both decimal/hexadecimal notation for ipv4, but ipv6 only accepts ipv6.</p>
+
+<p>Fping is also usefull, here you can use <code>fping -O &lt;ToS value&gt; &lt;target&gt;</code> to set the ToS.</p>
+
+<p>Captuiring packets with specific DSCP value can e done with <code>tcpdump</code>. <code>tcpdump -v -n -i ppp0 'ip and (ip[1] &amp; 0xfc) &gt;&gt; 2 == 0x12'</code> for example captures DSCP 0x12 or 18 packets. You can also use it to capture a specific ToS packet with <code>tcpdump -v -n -i ppp0 'ip and ip[1] &amp; 0xfc == 72'</code>. (Credits for this paragraph to <a href="https://www.tucny.com/home/dscp-tos">this page</a>)</p>
+
+  </article>
+
+  <br/>
+
+  
+  
+</section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+     © 2018    ·  Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>. 
+  </section>
+</footer>
+
+    </main>
+
+    
+
+  </body>
+
+</html>

@@ -6,9 +6,145 @@
     <description>Recent content in Tags on francisbegyn</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
+    <lastBuildDate>Thu, 16 Aug 2018 12:58:17 +0200</lastBuildDate>
     
 	<atom:link href="https://about.francisbegyn.be/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Arch</title>
+      <link>https://about.francisbegyn.be/tags/arch/</link>
+      <pubDate>Thu, 16 Aug 2018 12:58:17 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/arch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Containerisation</title>
+      <link>https://about.francisbegyn.be/tags/containerisation/</link>
+      <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/containerisation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Debian</title>
+      <link>https://about.francisbegyn.be/tags/debian/</link>
+      <pubDate>Thu, 16 Aug 2018 12:58:17 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/debian/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>https://about.francisbegyn.be/tags/docker/</link>
+      <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dscp</title>
+      <link>https://about.francisbegyn.be/tags/dscp/</link>
+      <pubDate>Sat, 18 Aug 2018 13:10:00 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/dscp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go</title>
+      <link>https://about.francisbegyn.be/tags/go/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ipsec</title>
+      <link>https://about.francisbegyn.be/tags/ipsec/</link>
+      <pubDate>Sun, 17 Jun 2018 01:38:45 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/ipsec/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>https://about.francisbegyn.be/tags/linux/</link>
+      <pubDate>Thu, 16 Aug 2018 12:58:17 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Networking</title>
+      <link>https://about.francisbegyn.be/tags/networking/</link>
+      <pubDate>Sat, 18 Aug 2018 13:10:00 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/networking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Packages</title>
+      <link>https://about.francisbegyn.be/tags/packages/</link>
+      <pubDate>Thu, 16 Aug 2018 12:58:17 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/packages/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Qos</title>
+      <link>https://about.francisbegyn.be/tags/qos/</link>
+      <pubDate>Sat, 18 Aug 2018 13:10:00 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/qos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reverse Proxy</title>
+      <link>https://about.francisbegyn.be/tags/reverse-proxy/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/reverse-proxy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tos</title>
+      <link>https://about.francisbegyn.be/tags/tos/</link>
+      <pubDate>Sat, 18 Aug 2018 13:10:00 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/tos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Treafik</title>
+      <link>https://about.francisbegyn.be/tags/treafik/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/treafik/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Web</title>
+      <link>https://about.francisbegyn.be/tags/web/</link>
+      <pubDate>Sun, 17 Jun 2018 00:30:40 +0200</pubDate>
+      
+      <guid>https://about.francisbegyn.be/tags/web/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
