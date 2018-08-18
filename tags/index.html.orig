@@ -31,12 +31,18 @@
     
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     <meta name="generator" content="Hugo 0.42.1" />
 ||||||| merged common ancestors
     <meta name="generator" content="Hugo 0.40.3" />
 =======
     <meta name="generator" content="Hugo 0.46" />
 >>>>>>> release/post/deb-arch-pack
+||||||| merged common ancestors
+    <meta name="generator" content="Hugo 0.40.3" />
+=======
+    <meta name="generator" content="Hugo 0.46" />
+>>>>>>> develop
   </head>
 
   <body>
@@ -69,6 +75,7 @@
   <h1 class="title">Tags</h1>
   <ul>
     
+<<<<<<< HEAD
 <<<<<<< HEAD
     <li>
       <span>June 17, 2018</span><a href="https://about.francisbegyn.be/tags/containerisation/">Containerisation</a>
@@ -145,6 +152,69 @@
     </li>
     
 >>>>>>> release/post/deb-arch-pack
+||||||| merged common ancestors
+=======
+    <li>
+      <span>August 16, 2018</span><a href="https://about.francisbegyn.be/tags/arch/">Arch</a>
+    </li>
+    
+    <li>
+      <span>June 17, 2018</span><a href="https://about.francisbegyn.be/tags/containerisation/">Containerisation</a>
+    </li>
+    
+    <li>
+      <span>August 16, 2018</span><a href="https://about.francisbegyn.be/tags/debian/">Debian</a>
+    </li>
+    
+    <li>
+      <span>June 17, 2018</span><a href="https://about.francisbegyn.be/tags/docker/">Docker</a>
+    </li>
+    
+    <li>
+      <span>August 18, 2018</span><a href="https://about.francisbegyn.be/tags/dscp/">Dscp</a>
+    </li>
+    
+    <li>
+      <span>June 17, 2018</span><a href="https://about.francisbegyn.be/tags/go/">Go</a>
+    </li>
+    
+    <li>
+      <span>June 17, 2018</span><a href="https://about.francisbegyn.be/tags/ipsec/">Ipsec</a>
+    </li>
+    
+    <li>
+      <span>August 16, 2018</span><a href="https://about.francisbegyn.be/tags/linux/">Linux</a>
+    </li>
+    
+    <li>
+      <span>August 18, 2018</span><a href="https://about.francisbegyn.be/tags/networking/">Networking</a>
+    </li>
+    
+    <li>
+      <span>August 16, 2018</span><a href="https://about.francisbegyn.be/tags/packages/">Packages</a>
+    </li>
+    
+    <li>
+      <span>August 18, 2018</span><a href="https://about.francisbegyn.be/tags/qos/">Qos</a>
+    </li>
+    
+    <li>
+      <span>June 17, 2018</span><a href="https://about.francisbegyn.be/tags/reverse-proxy/">Reverse Proxy</a>
+    </li>
+    
+    <li>
+      <span>August 18, 2018</span><a href="https://about.francisbegyn.be/tags/tos/">Tos</a>
+    </li>
+    
+    <li>
+      <span>June 17, 2018</span><a href="https://about.francisbegyn.be/tags/treafik/">Treafik</a>
+    </li>
+    
+    <li>
+      <span>June 17, 2018</span><a href="https://about.francisbegyn.be/tags/web/">Web</a>
+    </li>
+    
+>>>>>>> develop
   </ul>
   
 

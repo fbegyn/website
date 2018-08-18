@@ -30,13 +30,7 @@
       <link href="https://about.francisbegyn.be/categories/index.xml" rel="feed" type="application/rss+xml" title="francisbegyn" />
     
 
-<<<<<<< HEAD
-    <meta name="generator" content="Hugo 0.42.1" />
-||||||| merged common ancestors
-    <meta name="generator" content="Hugo 0.40.3" />
-=======
     <meta name="generator" content="Hugo 0.46" />
->>>>>>> release/post/deb-arch-pack
   </head>
 
   <body>
@@ -83,6 +77,10 @@
     </li>
     
     <li>
+      <span>August 16, 2018</span><a href="https://about.francisbegyn.be/categories/linux/">Linux</a>
+    </li>
+    
+    <li>
       <span>June 17, 2018</span><a href="https://about.francisbegyn.be/categories/security/">Security</a>
     </li>
     
@@ -113,6 +111,10 @@
     </li>
     
     <li>
+      <span>August 18, 2018</span><a href="https://about.francisbegyn.be/categories/networking/">Networking</a>
+    </li>
+    
+    <li>
       <span>June 17, 2018</span><a href="https://about.francisbegyn.be/categories/security/">Security</a>
     </li>
     
@@ -124,7 +126,7 @@
       <span>June 17, 2018</span><a href="https://about.francisbegyn.be/categories/web/">Web</a>
     </li>
     
->>>>>>> release/post/deb-arch-pack
+>>>>>>> develop
   </ul>
   
 
