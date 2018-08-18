@@ -1,6 +1,6 @@
 +++
-draft = true
-date = 2018-08-18T11:16:51+02:00
+draft = false
+date = 2018-08-18T13:10:00+02:00
 title = "DSCP, what is it and what does it do?"
 slug = "wtfisdscp"
 tags = ["dscp","qos","tos","networking"]
