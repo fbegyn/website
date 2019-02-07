@@ -1,4 +1,4 @@
-baseurl = "https://fbegyn.gitlab.io/personalsite"
+baseurl = "https://about.francisbegyn.be"
 title = "francisbegyn"
 
 theme = "coder"
