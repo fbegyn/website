@@ -1,13 +1,13 @@
 +++ 
-draft = true
+draft = false
 date = 2019-03-09T14:28:03+01:00
-title = "Setting up screen with irssi"
+title = "Setting up irssi with screen"
 slug = "always-on-irc" 
 tags = ["irc","linux","irssi","screen"]
 categories = ["irc","linux"]
 +++
 
-So up till recently I ran my irc client (irssi) on my local system. I had no problem with this, but my continious joining
+So up until recently I ran my irc client (irssi) on my local system. I had no problem with this, but my continious joining
 and leaving was causing some annoyance with some people. And I don't blame them.
 The thing was that I packed up my laptop and as it jumped from network to network it was causing some spam.
 
