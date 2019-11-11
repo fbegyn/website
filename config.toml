@@ -1,29 +1,57 @@
-baseurl = "https://about.francisbegyn.be"
-title = "francisbegyn"
+baseurl = "https://francis.begyn.be" # Hostname (and path) to the root.
+title = "Francis Begyn" # Site title.
+theme = "coder-portfolio" # Set the theme.
+languagecode = "en" # The site’s language code used to generate RSS.
+defaultcontentlanguage = "en" # The default content language.
 
-theme = "coder"
+paginate = 20 # Default number of pages per page in pagination.
 
-languagecode = "en"
+pygmentsstyle = "b2" # Color-theme or style for syntax highlighting.
+pygmentscodefences = true # Enable code fence background highlighting.
+pygmentscodefencesguesssyntax = true # Enable syntax guessing for code fences without specified language.
+pygmentsUseClasses = true # new add
 
-paginate = 20
-canonifyurls = true
+#disqusShortname = "yourdiscussshortname" # Enable or disable Disqus.
 
-pygmentsstyle = "b2"
-pygmentscodefences = true
-pygmentscodefencesguesssyntax = true
+[params] # theme parameters
+    author = "Francis Begyn" # Author's name.
+    info = "System engineering and SRE enthousiast" # Author's job title or info.
+    description = "My little place on the internet" # Site description.
+    keywords = "blog,developer,personal" # Site keywords.
+    avatarurl = "images/profile.jpg" # Contain the path of the optionnal avatar in the static folder.
 
-[params]
-    author = "Francis Begyn"
-    description = "My little place on the internet"
-    keywords = "blog,developer,personal,linux,go,rust"
-    info = "Student, light tech and I dabble in monitoring"
+    #footercontent = "Enter a text here." # Add footer content
+    #fixedbarContent = "Do you want to know me more private?→" # Add fixedbar content
+    #fixedbarContentAfter = "Thank You! Please share it if you like it→" # Add fixedbar content after click
 
+    # Whether you want to hide copyright and credits in the footer.
     hideCredits = false
     hideCopyright = false
 
     # Custom CSS
-	custom_css = []
+    custom_css = []
 
+    # Alignment of Mobile Menu items
+    itemscentered = true
+
+    # RTL support
+    rtl = false
+
+    # Bottom sns share
+    snsShare = true # new add
+    # Popular sns share
+    # if you want add sns. please message!
+    enableTwitterShare = true  # new add
+    enableFacebookShare = true # new add
+    #enableHatenaShare = true   # new add
+    #enableLineShare = true     # new add
+
+    thumbnail = "images/tn.png" # default sns thumbnail
+
+    # Multilanguage mode
+    langseparator = "|" # Separates menus from language selectors when site is multilingual.
+
+# Social links
 [[params.social]]
     name = "Github"
     weight = 1
@@ -37,11 +65,12 @@ pygmentscodefencesguesssyntax = true
     weight = 3
     url = "https://www.linkedin.com/in/fbegyn/"
 
+# Menu links
 [[menu.main]]
     name = "Blog"
     weight = 1
-    url  = "/posts/"
+    url  = "posts"
 [[menu.main]]
     name = "About"
     weight = 2
-    url = "/about/"
+    url = "about"
