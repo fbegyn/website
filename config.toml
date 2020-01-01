@@ -1,17 +1,17 @@
-baseurl = "https://francis.begyn.be" # Hostname (and path) to the root.
-title = "Francis Begyn" # Site title.
-theme = "development" # Set the theme.
-#languagecode = "en" # The site’s language code used to generate RSS.
-#defaultcontentlanguage = "en" # The default content language.
+baseurl = "https://francis.begyn.be"
+title = "Francis Begyn"
+theme = "development"
+#languagecode = "en"
+#defaultcontentlanguage = "en"
 
-paginate = 20 # Default number of pages per page in pagination.
+paginate = 20
 
-[params] # theme parameters
-    author = "Francis Begyn" # Author's name.
-    info = "System engineering and SRE enthousiast" # Author's job title or info.
-    keywords = "blog,developer,personal" # Site keywords.
+[params]
+    author = "Francis Begyn"
+    info = "System engineering and SRE enthousiast"
+    keywords = "blog,developer,personal"
     description = "Development"
-    avatarurl = "images/profile.jpg" # Contain the path of the optionnal avatar in the static folder.
+    avatarurl = "images/profile.jpg"
 
 
 # Social links
@@ -27,3 +27,9 @@ paginate = 20 # Default number of pages per page in pagination.
     name = "LinkedIn"
     weight = 3
     url = "https://www.linkedin.com/in/fbegyn/"
+
+# Menu links
+[[menu.main]]
+    name = "About"
+    weight = 2
+    url = "about"

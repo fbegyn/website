@@ -1,17 +1,15 @@
-{{ define "landing" }}
-<section class="container centered">
+{{/* landing page for my personal website */}}
+{{ define "content" }}
+<section class="container center">
   <div class="about">
-    {{ with .Site.Params.avatarurl }}
-      <div class="avatar"><img src="{{ . | absURL }}" alt="avatar"></div>
-    {{ end }}
     <h1>{{ .Site.Params.author }}</h1>
     <h2>{{ .Site.Params.info }}</h2>
     {{ with .Site.Params.social }}
-    <ul>
+    <p>
       {{ range sort .}}
-      <li><a href="{{ .url }}">{{ .name }}</a></li>
+      <a href="{{ .url }}">{{ .name }}</a>
       {{ end }}
-    </ul>
+    </p>
     {{ end }}
   </div>
 </section>
