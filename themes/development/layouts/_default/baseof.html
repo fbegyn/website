@@ -9,12 +9,11 @@
     <base href="{{ .Permalink }}">
     <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
 
-    <link rel="stylesheet" href="{{ "css/normalize.min.css" | absURL}}">
-    <link rel="stylesheet" href="{{ "css/style.css" | absURL }}">
+    <link rel="stylesheet" href="{{ "css/hack.css" | absURL }}">
 
     {{ hugo.Generator }}
   </head>
-  <body>
+  <body class="hack">
     {{ block "content" . }}{{ end }}
   </body>
 </html>

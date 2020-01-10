@@ -34,17 +34,42 @@ paginate = 20
     url = "about"
 
 [[params.experience]]
+    weight = 1
     name = "Team Lead Site & Safety"
     company = "Student Kick-Off"
     years = "2018 - 2019"
     description = "In charge of the team that is responsible for the build up and break down of the festival terrain. We also provide operational security during the festival and coordinate with city and emergerncy services to ensure the visitors have a pleasant and safe experience."
     url = "https://studentkickoff.be/"
     [[params.experience.hist]]
-    name = "electricity coordinator"
-    years = "2017"
+        name = "electricity coordinator"
+        years = "2017"
     [[params.experience.hist]]
-    name = "crew lead"
-    years = "2016"
+        name = "crew lead"
+        years = "2016"
+
+[[params.experience]]
+    weight = 5
+    name = "System engineer"
+    company = "Axians"
+    years = "2018 - 2019"
+    description = "Internship for designing and implementing intrusion detection system based on aggregated logging. Tested and deployed EFK and ELK stacks in a high traffic environment."
+    url = "https://www.axians.be/"
+
+[[params.experience]]
+    weight = 8
+    name = "System administrator"
+    company = "Schnitzel team"
+    years = "2016 - 2018"
+    description = "Manage and deploy service in a virtualized environment for personal use cases."
+    url = "https://schnitzel.team/"
+
+[[params.experience]]
+    weight = 10
+    name = "Assistant theatre technician"
+    company = "GC De Kluize"
+    years = "2013 - 2017"
+    description = "Assist with load in and load out of theatre shows and performances. Board operation with an emphasis on lighting design."
+    url = "https://www.gcdekluize.be/"
 
 [[params.education]]
     diploma = "Engineering technology: electronics/ICT"
@@ -58,3 +83,24 @@ paginate = 20
         years = "2018 - current"
         weight = 2
 
+[[params.technologies]]
+    skill = "Programming:"
+    desc = "Golang, Python, C"
+[[params.technologies]]
+    skill = "Framework:"
+    desc = "Tensorflow, Kubernetes"
+[[params.technologies]]
+    skill = "Software:"
+    desc = "Unix, Git, Prometheus, Grafana, Ansible, Nginx"
+
+[[params.hobbies]]
+  emph = "Cycling"
+  desc = "across fields"
+
+[[params.hobbies]]
+  emph = "Discovering"
+  desc = "new places in the world"
+
+[[params.hobbies]]
+  emph = "Tinkering"
+  desc = "with all things technology related"
