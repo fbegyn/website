@@ -1,16 +1,73 @@
 {{/* landing page for my personal website */}}
 {{ define "content" }}
-<section class="container center">
-  <div class="about">
-    <h1>{{ .Site.Params.author }}</h1>
-    <h2>{{ .Site.Params.info }}</h2>
-    {{ with .Site.Params.social }}
-    <p>
-      {{ range sort .}}
-      <a href="{{ .url }}">{{ .name }}</a>
+<div class="cv">
+  <main>
+    <section>
+      <h1 id="name">{{ .Site.Params.author }}</h1>
+      <p> {{ .Site.Params.description }} </p>
+    </section>
+    <section>
+      <h2 id="contact">Contact:</h2>
+      <ul>
+      {{ with .Site.Params.social }}
+        {{ range sort .}}
+        <li><a href="{{ .url }}">{{ .name }}</a></li>
+        {{ end }}
       {{ end }}
-    </p>
-    {{ end }}
-  </div>
-</section>
+      </ul>
+    </section>
+    <section>
+      <h2 id="experience">Experience:</h2>
+      <ul>
+      {{ with .Site.Params.experience }}
+        {{ range sort .}}
+        <li>
+          <h3>{{ .name }} ({{ .years }})<br>
+            <a href="{{ .url }}">{{ .company }}</a>
+          </h3>
+          <p>{{ .description }}</p>
+          <ul>
+            {{ with .hist }}
+              {{ range sort . }}
+              <li>
+                {{ .name }} ({{ .years }})
+              </li>
+              {{ end }}
+            {{ end }}
+          </ul>
+        </li>
+        {{ end }}
+      {{ end }}
+    </section>
+    <section>
+      <h2 id="technologies">Technologies:</h2>
+      <h2 id="education">Education</h2>
+      <ul>
+      {{ with .Site.Params.education }}
+        {{ range sort .}}
+        <li>
+          <strong>{{ .diploma }}</strong> at {{ .school }}</h3>
+          <ul>
+            {{ with .levels }}
+              {{ range sort . }}
+              <li>
+                <strong>{{ .name }}</strong> {{ .years }}
+              </li>
+              {{ end }}
+            {{ end }}
+          </ul>
+        </li>
+        {{ end }}
+      {{ end }}
+      </ul>
+      <h2 id="free-time">Free time:</h2>
+      <ul>
+      {{ with .Site.Params.hobbies }}
+        {{ range sort .}}
+        {{ end }}
+      {{ end }}
+      </ul>
+    </section>
+  </main>
+</div>
 {{ end }}

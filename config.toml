@@ -9,10 +9,9 @@ paginate = 20
 [params]
     author = "Francis Begyn"
     info = "System engineering and SRE enthousiast"
+    description = "An engineering technology student with an intrest for designing reliable and robust systems. Has the tendancy to keep digging untill the root cause of an issue is found and solved under the motto 'first time right'."
     keywords = "blog,developer,personal"
-    description = "Development"
     avatarurl = "images/profile.jpg"
-
 
 # Social links
 [[params.social]]
@@ -33,3 +32,29 @@ paginate = 20
     name = "About"
     weight = 2
     url = "about"
+
+[[params.experience]]
+    name = "Team Lead Site & Safety"
+    company = "Student Kick-Off"
+    years = "2018 - 2019"
+    description = "In charge of the team that is responsible for the build up and break down of the festival terrain. We also provide operational security during the festival and coordinate with city and emergerncy services to ensure the visitors have a pleasant and safe experience."
+    url = "https://studentkickoff.be/"
+    [[params.experience.hist]]
+    name = "electricity coordinator"
+    years = "2017"
+    [[params.experience.hist]]
+    name = "crew lead"
+    years = "2016"
+
+[[params.education]]
+    diploma = "Engineering technology: electronics/ICT"
+    school = "Ghent university"
+    [[params.education.levels]]
+        name = "BSc."
+        years = "2013 - 2018"
+        weight = 3
+    [[params.education.levels]]
+        name = "MSc."
+        years = "2018 - current"
+        weight = 2
+
