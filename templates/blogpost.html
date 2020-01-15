@@ -1,0 +1,28 @@
+{{ define "title" }}
+<title>{{ .Title }}</title>
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@fbegyn" />
+<meta name="twitter:title" content="{{ .Title }}" />
+<meta name="twitter:description" content="Posted on {{ .Date }}" />
+
+<!-- Description -->
+<meta name="description" content="{{ .Title }} - Francis Begyn's thoughts" />
+<meta name="author" content="Francis Begyn">
+{{ end }}
+
+{{ define "content" }}
+{{ .BodyHTML }}
+
+<hr />
+
+<p>This article was posted on {{ .Date }}. Some thing may have changed since then, please <a
+  href="mailto:francis@bgyn.be">mail</a> or <a href="https://twitter.com/fbegyn">tweet</a> at me if
+you have correction or question.</p>
+
+{{ if ne .Tags "" }}
+<p>Tags:{{.Tags}}</p>
+{{ end }}
+
+{{ end }}

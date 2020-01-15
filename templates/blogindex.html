@@ -1,0 +1,17 @@
+{{ define "title" }}
+<title>Blog - Francis Begyn</title>
+{{ end }}
+
+{{ define "content" }}
+<h1>Posts</h1>
+
+<p> Below you can find the random collection of my thoughts.</p>
+
+<p>
+    <ul>
+        {{ range . }}
+            <li>{{ .DateString }} - <a href="{{ .Link }}">{{ .Title }}</a></li>
+        {{ end }}
+    </ul>
+</p>
+{{ end }}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {{ template "title" . }}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/css/hack.css" />
+        <style>
+         .hack h1 {
+             padding-top: 0;
+         }
+
+         footer.footer {
+             border-top: 1px solid #ccc;
+             margin-top: 80px;
+             margin-top: 5rem;
+             padding: 48px 0;
+             padding: 3rem 0;
+         }
+
+         img {
+             max-width: 100%;
+             padding: 1em;
+         }
+        </style>
+        {{ template "styles" . }}
+    </head>
+    <body class="hack">
+        <div class="container">
+            <header>
+                <p><a href="/">Francis Begyn</a> - <a href="/blog">Blog</a> - <a
+                    href="/about">About</a></p>
+            </header>
+
+            <div>
+                {{ template "content" . }}
+            </div>
+
+            <footer>
+                <blockquote>Copyright 2020 Francis Begyn. Any and all opinions listed here are my own and not representative of my employers; future, past and present.</blockquote>
+            </footer>
+        </div>
+    </body>
+</html>
+
+{{ define "styles" }}{{ end }}
