@@ -60,7 +60,7 @@ DSCP is also designed to be backwards compatible with ToS. So non-DSCP, ToS comp
 
 So how does one go from ToS to DSCP and back again?
 
-As mentioned before, DSCP and ECN together form a byte, in wich DSCP uses th upper 6 and ECN the lower 2. ToS on it's own is a complete byte.
+As mentioned before, DSCP and ECN together form a byte, in which DSCP uses the upper 6 and ECN the lower 2. ToS on it's own is a complete byte.
 ```
 |xxxxxx |  xx |
 | DSCP  | ECN |
@@ -76,6 +76,6 @@ So the conversions are straightforward knowing this:
 
 Ping has to option to set a ToS field (and after this blog, you know how to use this to set a DSCP value). `ping -Q <ToS value> <target>`. You can use both decimal/hexadecimal notation for ipv4, but ipv6 only accepts ipv6.
 
-Fping is also usefull, here you can use `fping -O <ToS value> <target>` to set the ToS.
+Fping is also useful, here you can use `fping -O <ToS value> <target>` to set the ToS.
 
-Captuiring packets with specific DSCP value can e done with `tcpdump`. `tcpdump -v -n -i ppp0 'ip and (ip[1] & 0xfc) >> 2 == 0x12'` for example captures DSCP 0x12 or 18 packets. You can also use it to capture a specific ToS packet with `tcpdump -v -n -i ppp0 'ip and ip[1] & 0xfc == 72'`. (Credits for this paragraph to [this page](https://www.tucny.com/home/dscp-tos))
+Capturing packets with specific DSCP value can be done with `tcpdump`. `tcpdump -v -n -i ppp0 'ip and (ip[1] & 0xfc) >> 2 == 0x12'` for example captures DSCP 0x12 or 18 packets. You can also use it to capture a specific ToS packet with `tcpdump -v -n -i ppp0 'ip and ip[1] & 0xfc == 72'`. (Credits for this paragraph to [this page](https://www.tucny.com/home/dscp-tos))
