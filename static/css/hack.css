@@ -15,6 +15,57 @@ body {
     word-wrap: break-word
 }
 
+@media (prefers-color-scheme: light) {
+  body {
+      background-color: #f0f0f0;
+      color: black;
+  }
+  a {
+      color: #ff8100;
+      border-bottom: 1px solid #ff8100
+  }
+  a:hover {
+      background-color: #ff8100;
+      color: black
+  }
+  pre {
+    background-color: #fff;
+    border: 1px solid #ccc;
+  }
+  table {
+    color: ##778087;
+  }
+  table tbody td:first-child {
+    color: #333;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+      background-color: #333333;
+      color: #f1f1f1;
+  }
+  a {
+      color: #ff8100;
+      border-bottom: 1px solid #ff8100;
+  }
+  a:hover {
+      background-color: #ff8100;
+      color: #d6d6d6;
+  }
+  pre {
+    background-color: #484848;
+    border: 1px solid #ccc;
+  }
+  table {
+    color: ##778087;
+  }
+
+  table tbody td:first-child {
+    color: #c1c1c1
+  }
+}
+
 h1,h2,h3,h4,h5,h6 {
     line-height: 1.3em
 }
@@ -28,8 +79,6 @@ fieldset {
 pre {
     padding: 2rem;
     margin: 1.75rem 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
     overflow: auto
 }
 
@@ -41,14 +90,7 @@ code[class*=language-],pre[class*=language-],pre code {
 
 a {
     cursor: pointer;
-    color: #ff2e88;
     text-decoration: none;
-    border-bottom: 1px solid #ff2e88
-}
-
-a:hover {
-    background-color: #ff2e88;
-    color: #fff
 }
 
 .grid {
@@ -415,7 +457,6 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin: 1.75rem 0;
-    color: #778087
 }
 
 table td,table th {
@@ -431,7 +472,6 @@ table thead th {
 
 table tbody td:first-child {
     font-weight: 700;
-    color: #333
 }
 
 .form {
