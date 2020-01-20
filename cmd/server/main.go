@@ -116,6 +116,9 @@ func Build() (*Site, error) {
 	s.mux.Handle("/about", s.renderPageTemplate("about.html", nil))
 	s.mux.Handle("/blog", s.renderPageTemplate("blogindex.html", s.Posts))
 	s.mux.Handle("/blog/", http.HandlerFunc(s.renderPost))
+	s.mux.HandleFunc("/cv.pdf", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./cv/cv.pdf")
+	})
 
 	// server static files
 	s.mux.Handle("/static/", http.FileServer(http.Dir(".")))
