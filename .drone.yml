@@ -1,0 +1,32 @@
+---
+kind: pipeline
+type: docker
+name: go1.13
+
+steps:
+- name: lint
+  image: golang:1.13
+  commands:
+  - go get -u golang.org/x/lint/golint
+  - golint ./cmd/server
+
+- name: build
+  image: golang:1.13
+  commands:
+  - go build -o ./websiteserver -ldflags "-w -s" ./cmd/server
+---
+kind: pipeline
+type: docker
+name: go1.12
+
+steps:
+- name: lint
+  image: golang:1.12
+  commands:
+  - go get -u golang.org/x/lint/golint
+  - golint ./cmd/server
+
+- name: build
+  image: golang:1.12
+  commands:
+  - go build -o ./websiteserver -ldflags "-w -s" ./cmd/server

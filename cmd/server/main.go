@@ -47,6 +47,7 @@ func main() {
 	ln.FatalErr(ctx, http.ListenAndServe(":"+port, mux))
 }
 
+// Site represents the website structure and data
 type Site struct {
 	Posts blog.Entries
 	About template.HTML
@@ -68,6 +69,7 @@ func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	middleware.RequestID(s.xffmw.Handler(ex.HTTPLog(s.mux))).ServeHTTP(w, r)
 }
 
+// Build renders the entire website
 func Build() (*Site, error) {
 	// Define sitemap for the website
 	smap := sitemap.New()
