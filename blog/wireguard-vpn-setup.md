@@ -8,10 +8,10 @@ tags: ['networking','vpn']
 
 The use cases for a VPN are extremely varied. Maybe you just want access to some systems that run
 behind a firewall (without opening them to the internet). Or you just want to use the Pihole server
-that you are running at home while on the go? Maybe your entire company suddenly has to WFH and you
-need a quick and easy fix to offer access to the remote workers? Or just want the peace of mind that, 
-when your sitting in your local bar, your internet traffic is securely send to an endpoint that
-you know.
+that you are running at home while on the road. Maybe your entire company suddenly has to work form
+home and you need a quick and easy fix to offer access to the remote workers? Or just want the peace
+of mind that, when you're sitting in your local bar, your internet traffic is securely sent to an
+endpoint that you know.
 
 # Why Wireguard?
 
@@ -20,7 +20,7 @@ straightforward way to set up a VPN. The tooling is easy and simple.
 
 # Installing Wireguard
 
-Both steps below will install `wireguard` and it's dependencies onto your system. Wireguard comes
+Both steps below will install `wireguard` and its dependencies onto your system. Wireguard comes
 with a kernel module.
 
 ## Arch linux
@@ -31,8 +31,8 @@ just do `yay -S wireguard-arch wireguard-tools` (or use whatever AUR helper you 
 
 ## Debian based 
 
-For Debian based systems, the installation is equally as simple. The `wireguard` package is available
-in the unstable repos of Debian. SO it can easily be enabled with the following commands.
+For Debian-based systems, the installation is equally as simple. The `wireguard` package is available
+in the unstable repos of Debian. So it can easily be enabled with the following commands.
 
 ```
 echo "deb http://deb.debian.org/debian/ unstable main" | sudo tee /etc/apt/sources.list.d/unstable-wireguard.list
@@ -48,7 +48,7 @@ system.
 # Setup
 
 The setup for Wireguard is one of the strong suits for me personally. The helper scripts that
-Wireguard offers make it incredibly easy to setup a VPN server and offer secure configs for your
+Wireguard offers make it incredibly easy to setup a VPN server and offer secure configuration for your
 clients.
 
 ## Key generation
@@ -68,7 +68,7 @@ If you want to ensure an additional layer of security of top of these keys, it i
 add a pre-shared secret. Here I'll demonstrate it for the  `foo` client `wg genpsk > client-foo-preshared`.
 
 The good thing about this, is that you can also request that your client generates his own key and
-just sends the public key to you. This way the client can be sure that the server admin can
+just sends the public key to you. This way the client can be sure that the server admin can't
 'impersonate' him by using the private key of the client.
 
 ## Configs
@@ -78,8 +78,8 @@ just sends the public key to you. This way the client can be sure that the serve
 So on the server side:
 
 * the VPN interface will get the name of the config, in this case `wg0`
-* `interface` block: defined the properties for the system itself
-  * `Address`: specify the address and netmask of the VPN interface. Here `wg0` would get `172.12.1.1/24`
+* `interface` block: defines the properties for the system itself
+  * `Address`: specifies the address and netmask of the VPN interface. Here `wg0` would get `172.12.1.1/24`
   * `ListenPort`: specifies to port on which the VPN server will listen. This port needs to be
   port-forwarded from your router to the VPN server (UDP only).
   * `PrivateKey`: the content of `server-priv-key`
@@ -92,6 +92,8 @@ So on the server side:
   * OPTIONAL - `PresharedKey`: the content of `client-foo-preshared`
   * `AllowedIPs`: this will ensure that the peer is only allowed traffic from this IP. If it connects
   with another IP, it will not work.
+
+An example configuration for the server side would be:
 
 ```
 /etc/wireguard/wg0.conf
@@ -118,7 +120,7 @@ PublicKey = PEER_BAR_PUBLIC_KEY
 AllowedIPs = 172.12.1.3/32
 ```
 
-After we've configured the server side. We can enable the interface by running `sudo wg-quick up wg0`.
+After we've configured the server side, we can enable the interface by running `sudo wg-quick up wg0`.
 If you're running a systemd based system, you can also enable and start the service by running `sudo
 systemctl start wg-quick@<config name>`. So for the example above it would be `sudo systemctl start
 wg-quick@wg0`
@@ -128,20 +130,21 @@ wg-quick@wg0`
 Now let's look over the config for the `foo` client.
 
 * `interface` block: describes the behaviour of the system the interface is created on.
-  * `Address`: specify the address and netmask of the VPN interface. Here `wg0` would get `172.12.1.1/24`
+  * `Address`: specifies the address and netmask of the VPN interface. Here `wg0` would get `172.12.1.1/24`
   * `PrivateKey`: the content of `client-foo-priv-key`
-  * OPTIONAL - `DNS`: set the DNS server of the system to this when the tunnel is up. Also gets
+  * OPTIONAL - `DNS`: sets the DNS server of the system to this when the tunnel is up. Also gets
   removed when stopping the VPN connection with `wg-quick down <config name>`
 * `peer` block: defines the properties of the clients/peers connecting to the server. I'll expand on
   the `foo` peer block.
-  * `PublicKey`: the content of `client-foo-pub-key`
+  * `PublicKey`: the content of `server-pub-key`
   * OPTIONAL - `PresharedKey`: the content of `client-foo-preshared`
   * `AllowedIPs`: this determines which traffic get send over the VPN. `0.0.0.0/0` and `::/0` are
   wild cards that will route all traffic over the VPN. If you only want to route traffic to your
   local network over the VPN, you can do that by specifying the CIDR of the network here.
-  * OPTIONAL - `PresharedKey`: the content of `client-foo-preshared`
   * `Endpoint`: the public access for the VPN server from previous section. This would be the WAN IP
   of your router or the DNS associated with it.
+
+Below is an example configuration for a client/peer of the VPN server above:
 
 ```
 foo.conf
@@ -179,7 +182,7 @@ Endpoint = my.ddns.example.com:51820
 
 # Some remarks
 
-* Pick a high random number as the endpoint for your server, preferably not somthing you can't find
+* Pick a high random number as for the port for your VPN server, preferably not something you can find
   in any of the examples
 * Personally I prefer that my clients generate their own key pairs and just let me know the public key.
 * Secure firewalling on the server side can prevent your VPN clients from accessing parts of the
