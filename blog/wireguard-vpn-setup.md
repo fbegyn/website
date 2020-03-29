@@ -8,7 +8,7 @@ tags: ['networking','vpn']
 
 The use cases for a VPN are extremely varied. Maybe you just want access to some systems that run
 behind a firewall (without opening them to the internet). Or you just want to use the Pihole server
-that you are running at home while on the road. Maybe your entire company suddenly has to work form
+that you are running at home while on the road. Maybe your entire company suddenly has to work from
 home and you need a quick and easy fix to offer access to the remote workers? Or just want the peace
 of mind that, when you're sitting in your local bar, your internet traffic is securely sent to an
 endpoint that you know.
