@@ -9,6 +9,7 @@ import (
 
 	"github.com/fbegyn/website/cmd/server/internal/blog"
 	"github.com/fbegyn/website/cmd/server/internal/middleware"
+	"github.com/gorilla/feeds"
 	"github.com/sebest/xff"
 	"github.com/snabb/sitemap"
 	"within.website/ln"
@@ -52,6 +53,8 @@ type Site struct {
 	Posts blog.Entries
 	About template.HTML
 
+	rssFeed *feeds.Feed
+
 	mux   *http.ServeMux
 	xffmw *xff.XFF
 }
@@ -89,6 +92,19 @@ func Build() (*Site, error) {
 	s := &Site{
 		mux:   http.NewServeMux(),
 		xffmw: xffmw,
+		rssFeed: &feeds.Feed{
+			Title: "Francis Begyn's thoughts",
+			Link: &feeds.Link{
+				Href: "https://francis.begyn.be/blog",
+			},
+			Description: "A collection of my thoughts on the interwebs",
+			Author: &feeds.Author{
+				Name:  "Francis Begyn",
+				Email: "francis@begyn.be",
+			},
+			Created:   rssTime,
+			Copyright: "Copyright 2020 Francis Begyn. Any and all opinions listed here are my own and not representative of my employers; future, past and present.",
+		},
 	}
 
 	posts, err := blog.LoadEntriesDir("./blog/", "blog")
@@ -98,6 +114,19 @@ func Build() (*Site, error) {
 	s.Posts = posts
 
 	for _, entry := range s.Posts {
+		s.rssFeed.Items = append(s.rssFeed.Items, &feeds.Item{
+			Title: entry.Title,
+			Link: &feeds.Link{
+				Href: "https://francis.begyn.be/" + entry.Link,
+			},
+			Author: &feeds.Author{
+				Name:  "Francis Begyn",
+				Email: "francis@begyn.be",
+			},
+			Description: entry.Summary,
+			Created:     entry.Date,
+			Content:     string(entry.BodyHTML),
+		})
 		smap.Add(&sitemap.URL{
 			Loc:        "https://francis.begyn.be/" + entry.Link,
 			LastMod:    &entry.Date,
@@ -117,6 +146,7 @@ func Build() (*Site, error) {
 
 	s.mux.Handle("/about", s.renderPageTemplate("about.html", nil))
 	s.mux.Handle("/blog", s.renderPageTemplate("blogindex.html", s.Posts))
+	s.mux.Handle("/blog.rss", http.HandlerFunc(s.createFeed))
 	s.mux.Handle("/blog/", http.HandlerFunc(s.renderPost))
 	s.mux.HandleFunc("/cv.pdf", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./cv/cv.pdf")
