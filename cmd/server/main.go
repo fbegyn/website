@@ -151,6 +151,9 @@ func Build() (*Site, error) {
 	s.mux.HandleFunc("/cv.pdf", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./cv/cv.pdf")
 	})
+	s.mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./static/favicon.ico")
+	})
 
 	// server static files
 	s.mux.Handle("/static/", http.FileServer(http.Dir(".")))
