@@ -148,8 +148,11 @@ func Build() (*Site, error) {
 	s.mux.Handle("/blog", s.renderPageTemplate("blogindex.html", s.Posts))
 	s.mux.Handle("/blog.rss", http.HandlerFunc(s.createFeed))
 	s.mux.Handle("/blog/", http.HandlerFunc(s.renderPost))
-	s.mux.HandleFunc("/cv.pdf", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./cv/cv.pdf")
+	s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")
+	})
+	s.mux.HandleFunc("/francis_begyn_cv_nl.pdf", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./cv/francis_begyn_cv_nl.pdf")
 	})
 	s.mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/favicon.ico")
