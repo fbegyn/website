@@ -10,7 +10,7 @@ html {
 body {
     font-size: 1rem;
     line-height: 1.5rem;
-    margin: 0;
+    margin: 0 0 5mm 5mm;
     font-family: Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
     word-wrap: break-word;
     background-color: #ffffff;
@@ -18,7 +18,7 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6 {
-    line-height: 1.3em
+    line-height: 1.75em
 }
 
 fieldset {
