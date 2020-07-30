@@ -4,12 +4,30 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/fbegyn/website/cmd/server/internal"
 	"github.com/fbegyn/website/cmd/server/internal/blog"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"within.website/ln"
 	"within.website/ln/opname"
+)
+
+var (
+	pageViews = promauto.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "page_views",
+			Help: "number of views for a page (excluding posts)",
+		}, []string{"page"},
+	)
+	postViews = promauto.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "post_views",
+			Help: "number of views per post",
+		}, []string{"post"},
+	)
 )
 
 func (s *Site) renderPageTemplate(templateFile string, data interface{}) http.Handler {
@@ -37,6 +55,7 @@ func (s *Site) renderPageTemplate(templateFile string, data interface{}) http.Ha
 				"page":   templateFile,
 			})
 		}
+		pageViews.With(prometheus.Labels{"page": templateFile}).Inc()
 	})
 }
 
@@ -84,4 +103,5 @@ func (s *Site) renderPost(w http.ResponseWriter, r *http.Request) {
 		Date:     internal.IOS13Detri(p.Date),
 		Tags:     tags,
 	}).ServeHTTP(w, r)
+	postViews.With(prometheus.Labels{"post": filepath.Base(p.Link)}).Inc()
 }

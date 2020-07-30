@@ -10,6 +10,7 @@ import (
 	"github.com/fbegyn/website/cmd/server/internal/blog"
 	"github.com/fbegyn/website/cmd/server/internal/middleware"
 	"github.com/gorilla/feeds"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sebest/xff"
 	"github.com/snabb/sitemap"
 	"within.website/ln"
@@ -144,10 +145,11 @@ func Build() (*Site, error) {
 		s.renderPageTemplate("index.html", nil).ServeHTTP(w, r)
 	})
 
-	s.mux.Handle("/about", s.renderPageTemplate("about.html", nil))
-	s.mux.Handle("/blog", s.renderPageTemplate("blogindex.html", s.Posts))
-	s.mux.Handle("/blog.rss", http.HandlerFunc(s.createFeed))
-	s.mux.Handle("/blog/", http.HandlerFunc(s.renderPost))
+	s.mux.Handle("/metrics", promhttp.Handler())
+	s.mux.Handle("/about", middleware.Metrics("about", s.renderPageTemplate("about.html", nil)))
+	s.mux.Handle("/blog", middleware.Metrics("blog", s.renderPageTemplate("blogindex.html", s.Posts)))
+	s.mux.Handle("/blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
+	s.mux.Handle("/blog/", middleware.Metrics("post", http.HandlerFunc(s.renderPost)))
 	s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")
 	})
