@@ -10,6 +10,8 @@ import (
 	"github.com/fbegyn/website/cmd/server/internal/blog"
 	"github.com/fbegyn/website/cmd/server/internal/middleware"
 	"github.com/gorilla/feeds"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sebest/xff"
 	"github.com/snabb/sitemap"
@@ -19,8 +21,14 @@ import (
 )
 
 var (
-	port    = os.Getenv("SERVER_PORT")
-	arbDate = time.Date(2020, time.January, 9, 0, 0, 0, 0, time.UTC)
+	port          = os.Getenv("SERVER_PORT")
+	arbDate       = time.Date(2020, time.January, 9, 0, 0, 0, 0, time.UTC)
+	fileDownloads = promauto.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "file_downloads",
+			Help: "Number of times a file is downloaded",
+		}, []string{"file"},
+	)
 )
 
 func main() {
@@ -151,9 +159,11 @@ func Build() (*Site, error) {
 	s.mux.Handle("/blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog/", middleware.Metrics("post", http.HandlerFunc(s.renderPost)))
 	s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
+		fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_eng.pdf"}).Inc()
 		http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")
 	})
 	s.mux.HandleFunc("/francis_begyn_cv_nl.pdf", func(w http.ResponseWriter, r *http.Request) {
+		fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_nl.pdf"}).Inc()
 		http.ServeFile(w, r, "./cv/francis_begyn_cv_nl.pdf")
 	})
 	s.mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
