@@ -101,3 +101,56 @@ generated systemd service:
 
 sudo systemctl start restic-backups-gdrive.service
 ```
+
+## Restoring, the most important part
+
+Restic offers multiple ways to restore your backups. You can restore a snapshot
+to a specific location with a `--target <id>` parameter.
+
+```
+restic -r rclone:gdrive:/backups restore <id> --target <path>`
+```
+
+Which will restore the snapshot to the `<path>`. You can modify what will be
+restored by using a `--host <host>` (restoring a snapshot from a specific host)
+and `--path <path>` (to only restore a snapshot of a specific path). There are
+also of course the `--include/--exclude <sub>` which will include/exclude parts
+of the snapshot (these are by default case sensitive, can be made case
+insensitive by prefixing `i`).
+
+Aside from that, you can mount snapshot like a file system (so you can copy from
+it as usual). This is easily done with the `mount <mountpoint>` command. This will mount the
+repository on the mountpoint specified.
+
+```
+ ls -al /tmp/backups/
+total 48
+dr-xr-xr-x  1 francis francis     0 11 jan 23:37 ./
+drwxrwxrwt 36 root    root    45056 11 jan 23:37 ../
+dr-xr-xr-x  1 francis francis     0 11 jan 23:37 hosts/
+dr-xr-xr-x  1 francis francis     0 11 jan 23:37 ids/
+dr-xr-xr-x  1 francis francis     0 11 jan 23:37 snapshots/
+dr-xr-xr-x  1 francis francis     0 11 jan 23:37 tags/
+
+~
+❯ ls -al /tmp/backups/snapshots/
+total 0
+dr-xr-xr-x 1 francis francis 0 11 jan 23:37 ./
+dr-xr-xr-x 1 francis francis 0 11 jan 23:37 ../
+dr-xr-xr-x 3 francis francis 0 11 jan 20:52 2021-01-11T20:52:25+01:00/
+dr-xr-xr-x 3 francis francis 0 11 jan 21:43 2021-01-11T21:43:54+01:00/
+lrwxrwxrwx 1 francis francis 0 11 jan 21:43 latest -> 2021-01-11T21:43:54+01:00/
+```
+
+You can browse through the backups by various means: tags, hosts, id, snapshot
+dates, ... .
+
+And last but not least, you can just dump a file from the snapshot to stdout with
+the `dump` command. This handy when you just need that 1 SQL dump to restore it
+for example.
+
+## Sources
+
+* [restic docs](https://restic.readthedocs.io/en/stable/index.html)
+* [restic nixos options](https://search.nixos.org/options?channel=20.09&from=0&size=30&sort=relevance&query=restic)
+* [rclone docs](https://rclone.org/docs/)
