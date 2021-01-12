@@ -2,6 +2,7 @@
 title: "Kicking off 2020"
 date: 2020-01-17
 tags: [personal,blog,meta]
+draft: false
 ---
 # Kicking off 2020
 

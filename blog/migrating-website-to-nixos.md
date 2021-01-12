@@ -2,6 +2,7 @@
 title: Nixos website migration
 date: 2021-01-13
 tags: [ linux, nixos, website]
+draft: true
 ---
 
 # Nixos website migration

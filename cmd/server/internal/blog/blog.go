@@ -22,6 +22,7 @@ type Entry struct {
 	Tags       []string
 	Date       time.Time
 	DateString string
+	Draft      bool
 }
 
 type Entries []Entry
@@ -39,6 +40,7 @@ func LoadEntriesDir(dirName string, prefix string) (Entries, error) {
 		Title string
 		Date  string
 		Tags  []string
+		Draft bool
 	}
 
 	var entries Entries
@@ -87,9 +89,12 @@ func LoadEntriesDir(dirName string, prefix string) (Entries, error) {
 			Body:       string(post),
 			BodyHTML:   template.HTML(postHTML),
 			Tags:       fm.Tags,
+			Draft:      fm.Draft,
 		}
 
-		entries = append(entries, entry)
+		if !entry.Draft {
+		    entries = append(entries, entry)
+		}
 
 		return nil
 	})

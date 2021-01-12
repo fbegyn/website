@@ -2,6 +2,7 @@
 date: 2020-03-22
 title: "Setting up a Wireguard VPN"
 tags: ['networking','vpn']
+draft: false
 ---
 
 # Why do you need this?

@@ -2,6 +2,7 @@
 date: 2020-12-02
 title: "AoC 2020: day 1 and 2"
 tags: [aoc,programming]
+draft: false
 ---
 # AoC 2020: day 1 and 2
 

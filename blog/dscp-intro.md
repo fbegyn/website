@@ -2,6 +2,7 @@
 date: 2018-08-18
 title: "DSCP, what is it and what does it do?"
 tags: [dscp,qos,tos,networking]
+draft: false
 ---
 # DSCP?
 

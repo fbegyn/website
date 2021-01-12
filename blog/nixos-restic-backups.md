@@ -2,7 +2,7 @@
 title: Setting up restic backups on Nixos
 date: 2021-01-12
 tags: [ linux, restic, nixos, backup]
-draft: true
+draft: false
 ---
 
 # Setting up restic backups on Nixos

@@ -123,6 +123,9 @@ func Build() (*Site, error) {
 	s.Posts = posts
 
 	for _, entry := range s.Posts {
+		if entry.Draft {
+			continue
+		}
 		s.rssFeed.Items = append(s.rssFeed.Items, &feeds.Item{
 			Title: entry.Title,
 			Link: &feeds.Link{

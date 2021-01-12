@@ -1,16 +1,27 @@
-{ pkgs, stdenv, fetchFromGitHub }:
+{ pkgs ? import <nixpkgs> {} }:
 
-pkgs.buildGoModule rec {
-  pname = "fbegyn-website";
-  version = "0.1.0";
-  src = /home/francis/Documents/projects/personal/website;
+let
+  srcNoTarget = dir:
+    builtins.filterSource
+    (path: type: type != "directory" || builtins.baseNameOf path != "target")
+    dir;
+  src = ./.;
+in pkgs.stdenv.mkDerivation {
+  name = "website";
+  version = "HEAD";
+  inherit src;
 
-  vendorSha256 = null;
-  runVend = true;
+  buildInputs = [
+    pkgs.go
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Francis Begyn his website binary";
-    homepage = "https://francis.begyn.be";
-    license = licenses.mit;
-  };
+  buildPhase = ''
+    ${pkgs.go}/bin/go get -d ./
+    ls -al ./
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp -rf ./bin/website $out/bin/website
+  '';
 }
