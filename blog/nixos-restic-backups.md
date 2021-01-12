@@ -16,11 +16,13 @@ but i still do it the old fashioned way: manually. Luckily, Nixos has
 
 ## Starting with Restic: repositories
 
-Restic works with "repositories" to which you can send backups. So first, we
-need to create some repository. In this post, I'll set up a sync to my Google
-drive through [rclone](). This is a bit more complex [than some of the other
+Restic works with "repositories" to which you can send backups. So first, we need
+to create some repository. In this post, I'll set up a sync to my Google drive
+through [rclone](https://rclone.org/). This is a bit more complex [than some of
+the other
 options](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#),
-but I use the Google drive for plenty of things and it'll most likely always be accessible.
+but I use the Google drive for plenty of things and it'll most likely always be
+accessible.
 
 So, first we need to setup `rclone` to talk to Google drive. Thankfully, `rclone`
 has an amazing setup guide, just type `rclone config` and follow the steps of the
