@@ -1,6 +1,6 @@
 ---
-title: Linux TC - part 01
-date: 2021-01-01
+title: Setting up restic backups on Nixos
+date: 2021-01-12
 tags: [ linux, restic, nixos, backup]
 draft: true
 ---
