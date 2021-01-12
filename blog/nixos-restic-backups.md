@@ -12,7 +12,7 @@ blogpost](https://christine.website/blog/borg-backup-2021-01-09), I decided to
 set up my own backup solution of my server data with
 [Restic](https://restic.net/). I currently use it for backup of my workstations,
 but i still do it the old fashioned way: manually. Luckily, Nixos has
-`servives.restic.backups` available, so let's dive in.
+`services.restic.backups` available, so let's dive in.
 
 ## Starting with Restic: repositories
 
