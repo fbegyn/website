@@ -196,14 +196,205 @@ networking = {
   nftables = {
     ...
     ruleset = ''
+      table ip filter {
+        chain output {
+          type filter hook output priority 100; policy accept;
+        }
+
+        chain input {
+          type filter hook input priority filter; policy drop;
+
+          # Allow trusted networks to access the router
+          iifname {
+            "lan",
+          } counter accept
+
+          # Allow returning traffic from ppp0 and drop everthing else
+          iifname "ppp0" ct state { established, related } counter accept
+          iifname "ppp0" drop
+        }
+        
+        chain forward {
+          type filter hook forward priority filter; policy drop;
+
+          # Allow trusted network WAN access
+          iifname {
+                  "lan",
+          } oifname {
+                  "ppp0",
+          } counter accept comment "Allow trusted LAN to WAN"
+
+          # Allow established WAN to return
+          iifname {
+                  "ppp0",
+          } oifname {
+                  "lan",
+          } ct state established,related counter accept comment "Allow established back to LANs"
+      }
+
+      table ip nat {
+        chain prerouting {
+          type nat hook output priority filter; policy accept;
+        }
+
+        # Setup NAT masquerading on the ppp0 interface
+        chain postrouting {
+          type nat hook postrouting priority filter; policy accept;
+          oifname "ppp0" masquerade
+        } 
+      }
     '';
   };
 };
 ```
 
+This should cover a fairly basic `nftables` ruleset that offers internet
+connectivity to `lan` and locks `iot` completely to local connections only. At
+the end, lets install some handy packages for a router.
+
+```
+environment.systemPackages = with pkgs; [
+  vim                 # my preferred editor
+  htop                # to see the system load
+  ppp                 # for some manual debugging of pppd
+  ethtool             # manage NIC settings (offload, NIC feeatures, ...)
+  tcpdump             # view network traffic
+  conntrack-tools     # view network connection states
+];
+```
+
+## DHCP server
+
+So, now that we got the routing part set up, we need to make sure that devices
+that plug into these networks can get some IP addresses. For this, we spin up a
+quick DHCP server on the router (or any other compute connected to the networks).
+
+```
+services.dhcpd4 = {
+    enable = true;
+    interfaces = [ "lan" "iot" ];
+    extraConfig = ''
+      option domain-name-servers 10.5.1.10, 1.1.1.1;
+      option subnet-mask 255.255.255.0;
+
+      subnet 10.1.1.0 netmask 255.255.255.0 {
+        option broadcast-address 10.1.1.255;
+        option routers 10.1.1.1;
+        interface lan;
+        range 10.1.1.128 10.1.1.254;
+      }
+
+      subnet 10.1.90.0 netmask 255.255.255.0 {
+        option broadcast-address 10.1.90.255;
+        option routers 10.1.90.1;
+        option domain-name-servers 10.1.1.10;
+        interface iot;
+        range 10.1.90.128 10.1.90.254;
+      }
+    '';
+  };
+```
+
 ## Performance tuning
 
+The squeeze the most out of this timy box, I played around a bit with some
+interrupt steering and packet handling settings. After a few minutes I found what
+seemed to work optimally for me and wrote up this little script that is called at
+startup. It sets the [smp
+affinity](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/performance_tuning_guide/s-cpu-irq)
+and
+[RPS](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/performance_tuning_guide/network-rps).
+Generally, you want to avoid CPU core handling the HW interrupts from SMP
+affinity for RPS.
+
+```
+#! /usr/bin/env sh
+
+smp1=8
+rps1=7
+smp2=8
+rps2=7
+
+# set balancer for enp1s0
+echo ${smp1} > /proc/irq/36/smp_affinity
+echo ${smp1} > /proc/irq/37/smp_affinity
+echo ${smp1} > /proc/irq/38/smp_affinity
+echo ${smp1} > /proc/irq/39/smp_affinity
+echo ${smp1} > /proc/irq/40/smp_affinity
+
+# set rps for enp1s0
+echo ${rps1} > /sys/class/net/enp1s0/queues/rx-0/rps_cpus
+echo ${rps1} > /sys/class/net/enp1s0/queues/rx-1/rps_cpus
+echo ${rps1} > /sys/class/net/enp1s0/queues/rx-2/rps_cpus
+echo ${rps1} > /sys/class/net/enp1s0/queues/rx-3/rps_cpus
+
+# set balancer for enp2s0
+echo ${smp2} > /proc/irq/42/smp_affinity
+echo ${smp2} > /proc/irq/43/smp_affinity
+echo ${smp2} > /proc/irq/44/smp_affinity
+echo ${smp2} > /proc/irq/45/smp_affinity
+echo ${smp2} > /proc/irq/46/smp_affinity
+
+# set rps for enp2s0
+echo ${rps2} > /sys/class/net/enp2s0/queues/rx-0/rps_cpus
+echo ${rps2} > /sys/class/net/enp2s0/queues/rx-1/rps_cpus
+echo ${rps2} > /sys/class/net/enp2s0/queues/rx-2/rps_cpus
+echo ${rps2} > /sys/class/net/enp2s0/queues/rx-3/rps_cpus
+```
+
 ## IoT vlan: Chromecast
+
+So, first device for the `iot` vlan is a chromecast. I want to be able to use
+this chromecast as you normally can, this means that when I am connected to the
+network I can cast content to the chromecast. After reading through
+[some](https://baihuqian.github.io/2020-12-13-secure-home-network-using-chromecast-across-vlans/)
+[blog]() posts and asking around a bit, I determined the following:
+
+* TCP ports `8008-8009` to the chromecast
+* high UDP ports `32768-61000` to and from the chromecast
+* mDNS is being used coming from the chromecast
+
+To handle the mDNS, I set up a mDNS reflector using Avahi. Again, Nixos makes
+this almost too easy:
+
+```
+services.avahi = {
+  enable = true;
+  reflector = true;
+  interfaces = [
+    "lan"
+    "iot"
+  ];
+};
+```
+
+And then I modified the `input` chain on the router where the Avahi service is
+running:
+
+```
+chain input {
+  ...
+  # Accept mDNS for avahi reflection
+  iifname "iot" ip saddr <chromecast IP> tcp dport { llmnr } counter accept
+  iifname "iot" ip saddr <chromecast IP> udp dport { mdns, llmnr } counter accept
+  ...
+}
+```
+
+This will make the chromecast show up on all devices, but the casting will fail
+since the `iot` vlan is still locked down. So, we need to allow the chromecast to
+access the internet and communicate with the devices on the `lan` network
+(uncertain about this, I need to play around a bit more the implement the first 2
+rules I mentioned at the beginning of this chapter). For this, we modify the
+`forward` chain of the firewall:
+
+```
+chain forward {
+  # Chromecast
+  iifname "iot" oifname "ppp0" ip saddr <chromecast IP> tcp dport { 80, 443 } counter accept
+  iifname "iot" ip saddr <chromecast IP> oifname { "enp2s0", "lan0", "wifi" } counter accept
+}
+```
 
 ## Sources
 
