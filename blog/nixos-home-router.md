@@ -223,7 +223,6 @@ networking = {
 
           # enable flow offloading for better throughput
           ip protocol { tcp, udp } flow offload @f
-          ip6 nexthdr { tcp, udp } flow offload @f
 
           # Allow trusted network WAN access
           iifname {
