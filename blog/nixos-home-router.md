@@ -355,7 +355,7 @@ So, first device for the `iot` vlan is a chromecast. I want to be able to use
 this chromecast as you normally can, this means that when I am connected to the
 network I can cast content to the chromecast. After reading through
 [some](https://baihuqian.github.io/2020-12-13-secure-home-network-using-chromecast-across-vlans/)
-[blog]() posts and asking around a bit, I determined the following:
+blog post and asking around a bit, I determined the following:
 
 * TCP ports `8008-8009` to the chromecast
 * high UDP ports `32768-61000` to and from the chromecast
