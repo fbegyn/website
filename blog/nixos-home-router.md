@@ -222,8 +222,8 @@ networking = {
           type filter hook forward priority filter; policy drop;
 
           # enable flow offloading for better throughput
-          ip protocol { tcp, udp } offload flow @f
-          ip6 protocol { tcp, udp } offload flow @f
+          ip protocol { tcp, udp } flow offload @f
+          ip6 nexthdr { tcp, udp } flow offload @f
 
           # Allow trusted network WAN access
           iifname {
