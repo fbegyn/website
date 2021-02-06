@@ -1,8 +1,8 @@
 ---
 title: Using Nixos as a router
-date: 2021-01-28
+date: 2021-02-07
 tags: [ linux, networking, nixos, router]
-draft: true
+draft: false
 ---
 
 # Using Nixos as a router (NaaR)
@@ -27,11 +27,11 @@ OSes](https://openwrt.org/toh/ubiquiti/edgerouter.lite#flash_layout)). Some
 router with good support for OpenWRT would also be a good fit.
 
 But hearing some good things about the [PCEngine
-APU](https://pcengines.ch/apu2.htm) boards and it being x86, offering most Linux
-flavors as OS and having quite the community behind them, I ended up picking the
-[APU2E4](https://pcengines.ch/apu2e4.htm). This mainly because the ,theoretically
-more performant Intel i210AT NIC vs Intel i211AT NIC in the other models and with
-3 ethernet ports I have enough.
+APU2](https://pcengines.ch/apu2.htm) boards (and it's relatives) and it being
+x86, offering most Linux flavors as OS and having quite the community behind
+them, I ended up picking the [APU2E4](https://pcengines.ch/apu2e4.htm). This
+mainly because the ,theoretically more performant Intel i210AT NIC vs Intel
+i211AT NIC in the other models and with 3 ethernet ports I have enough.
 
 ## Installing Nixos
 
@@ -54,8 +54,6 @@ Some remarks on the installation process:
 * After installing, you want to make sure that the [PCEngine
   APU](https://github.com/NixOS/nixos-hardware/blob/master/pcengines/apu/default.nix)
   entry from the Nixos hardware repo is present, as it enables the console port.
-* I'm not sure if the APU would support EFI, so mine is just classic MBR. Maybe
-  I'll try this in the future. It is Coreboot, so it *should*.
 
 ## Configuring as a router
 
@@ -197,6 +195,12 @@ networking = {
     ...
     ruleset = ''
       table ip filter {
+        # enable flow offloading for better throughput
+        flowtable f {
+          hook ingress priority 0;
+          devices = { ppp0, lan };
+        }
+
         chain output {
           type filter hook output priority 100; policy accept;
         }
@@ -216,6 +220,10 @@ networking = {
         
         chain forward {
           type filter hook forward priority filter; policy drop;
+
+          # enable flow offloading for better throughput
+          ip protocol { tcp, udp } offload flow @f
+          ip6 protocol { tcp, udp } offload flow @f
 
           # Allow trusted network WAN access
           iifname {
@@ -403,3 +411,4 @@ chain forward {
 * [EDPnet site](https://www.edpnet.be/en/support/installation-and-usage/internet/learn-about-fiber-installation/i-have-a-fiber-connection-what-should-i-know-about-the-internal-cabling.html)
 * [Nixos APU install notes](https://gist.github.com/tomfitzhenry/35389b0907d9c9172e5d790ca9e0d0dc)
 * [nftables wiki](https://wiki.nftables.org/wiki-nftables/index.php/Main_Page)
+* [nftables flow offloading](https://wiki.nftables.org/wiki-nftables/index.php/Flowtable)
