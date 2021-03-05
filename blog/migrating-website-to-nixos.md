@@ -41,13 +41,13 @@ HTTPS host really straight forward. We first set `security.acme.accpetTerms =
 true;` to state that we agree with the terms and then we can request certificates
 by using the following scheme:
 
-```
-ecurity.acme.certs."<fqdn>".email = "<email>";
+```nix
+security.acme.certs."<fqdn>".email = "<email>";
 ```
 
 Then we can setup an NGINX proxy with the following scheme:
 
-```
+```nix
 services.nginx.enable = true;
   services.nginx.virtualHosts."<fqdn>" = {
     forceSSL = true; # force HTTPS
@@ -62,7 +62,7 @@ services.nginx.enable = true;
 Currently the site runs through a systemd services, that's also created through
 Nixos:
 
-```
+```nix
 systemd.services.website = {
     enable = true;
     unitConfig = {

@@ -39,7 +39,7 @@ Keep this password safe, losing it will lock you out of the backups. The flipsid
 of having encrypted backups. Off course, we could also let Nixos create this
 repository:
 
-```
+```nix
 ...
 services.restic.backups = {
   gdrive = {
@@ -57,7 +57,7 @@ Which will setup the repository with the password provided by the `passwordFile`
 
 We now got a repository ready, time to get some data in it!
 
-```
+```nix
 services.restic.backups = {
   gdrive = {
     ...
@@ -73,7 +73,7 @@ there are directories that should be excluded or you want to use some other
 options for `restic` that you want to user, you can set that with the
 `extraBackupArgs` option:
 
-```
+```nix
 extraBackupArgs = [ "--exclude-file=/home/backups/important/data/not-important" ];
 ```
 
@@ -84,7 +84,7 @@ option makes use of a systemd timer to enable schedueled backups. The syntac for
 it can be found in `man systemd.timer` and `man systemd.time`. Below is an
 example to take backups, every Saturday at 23:00.
 
-```
+```nix
 services.restic.backups = {
   gdrive = {
     ...
@@ -98,10 +98,10 @@ services.restic.backups = {
 All that is left to say is that you can now trigger backups manually by using the
 generated systemd service:
 
-```
+```shell
 # The naming follows restic-backups-<backup name>, so for us here it would be
 
-sudo systemctl start restic-backups-gdrive.service
+$ sudo systemctl start restic-backups-gdrive.service
 ```
 
 ## Restoring, the most important part
@@ -109,8 +109,8 @@ sudo systemctl start restic-backups-gdrive.service
 Restic offers multiple ways to restore your backups. You can restore a snapshot
 to a specific location with a `--target <id>` parameter.
 
-```
-restic -r rclone:gdrive:/backups restore <id> --target <path>`
+```shell
+$ restic -r rclone:gdrive:/backups restore <id> --target <path>`
 ```
 
 Which will restore the snapshot to the `<path>`. You can modify what will be
@@ -124,8 +124,8 @@ Aside from that, you can mount snapshot like a file system (so you can copy from
 it as usual). This is easily done with the `mount <mountpoint>` command. This will mount the
 repository on the mountpoint specified.
 
-```
- ls -al /tmp/backups/
+```shell
+$ ls -al /tmp/backups/
 total 48
 dr-xr-xr-x  1 francis francis     0 11 jan 23:37 ./
 drwxrwxrwt 36 root    root    45056 11 jan 23:37 ../
@@ -135,7 +135,7 @@ dr-xr-xr-x  1 francis francis     0 11 jan 23:37 snapshots/
 dr-xr-xr-x  1 francis francis     0 11 jan 23:37 tags/
 
 ~
-❯ ls -al /tmp/backups/snapshots/
+$ ls -al /tmp/backups/snapshots/
 total 0
 dr-xr-xr-x 1 francis francis 0 11 jan 23:37 ./
 dr-xr-xr-x 1 francis francis 0 11 jan 23:37 ../

@@ -38,7 +38,7 @@ I quickly read in my expenses into [a tiny
 program](https://github.com/fbegyn/aoc2020/blob/main/go/cmd/day01/main.go) and
 skim through them to see which ones add up to 2020.
 
-```[Go]
+```go
 func part1(expenses []int) (int, error) {
 	for i, v := range expenses {
 		for _, w := range expenses[i+1:] {
@@ -58,7 +58,7 @@ one if I help him find which `3`  entries sum to `2020` -again, why?-. Not one t
 let a challenge lay  around, I look back at the program to  see if I can't expand
 it.
 
-```[Go]
+```go
 func part2(expenses []int) (int, error) {
 	t := helpers.MinInt(expenses)
 	for i, v := range expenses {
@@ -81,7 +81,7 @@ combinations can be skipped in part 2?". I try to ignore it, but if something is
 worth doing, it's worth overdoing. I take another look at the code I had written
 before and insert 3 line:
 
-```[Go]
+```go
 func part2(expenses []int) (int, error) {
 	t := helpers.MinInt(expenses)
 	for i, v := range expenses {
@@ -122,7 +122,7 @@ there are passswords. the number indicate the lower and upper limit that the
 letter is allowed to occur in the password. Each policy matches to the password it shares
 a line with. Looking at this, I parse the policy into their respective elements:
 
-```[Go]
+```go
 type PasswordRule struct {
 	limits []int
 	letter string
@@ -151,7 +151,7 @@ func PasswordRuleFromLine(line string) (PasswordRule, string) {
 
 and write some small code to validate the password for a rule:
 
-```[Go]
+```go
 func (r *PasswordRule) ValidSled(p string) bool {
 	count := strings.Count(p, r.letter)
 	if count < r.limits[0] || r.limits[1] < count {
@@ -167,7 +167,7 @@ indication the upper and lower limit of the letter occurances, the policies
 indicate on which locations the letter can appear exclusively (so the letter can
 only occur on `1` of the `2` locations).
 
-```[Go]
+```go
 func (r *PasswordRule) ValidToboggan(p string) bool {
 	count := 0
 	for _, v := range r.limits {

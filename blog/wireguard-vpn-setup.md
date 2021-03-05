@@ -35,11 +35,11 @@ just do `yay -S wireguard-arch wireguard-tools` (or use whatever AUR helper you 
 For Debian-based systems, the installation is equally as simple. The `wireguard` package is available
 in the unstable repos of Debian. So it can easily be enabled with the following commands.
 
-```
-echo "deb http://deb.debian.org/debian/ unstable main" | sudo tee /etc/apt/sources.list.d/unstable-wireguard.list
-printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' | sudo tee /etc/apt/preferences.d/limit-unstable
-apt update
-apt install wireguard
+```shell
+$ echo "deb http://deb.debian.org/debian/ unstable main" | sudo tee /etc/apt/sources.list.d/unstable-wireguard.list
+$ printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' | sudo tee /etc/apt/preferences.d/limit-unstable
+$ apt update
+$ apt install wireguard
 ```
 
 These commands will enable the unstable repo, assign a priority to the unstable packages (determines
@@ -56,13 +56,13 @@ clients.
 
 First, we need to generate some keys for our server and the clients:
 
-```
-cd /etc/wireguard
-mkdir keys
-cd keys
-umask 077; wg genkey | tee server-priv-key | wg pubkey > server-pub-key
-umask 077; wg genkey | tee client-foo-priv-key | wg pubkey > client-foo-pub-key
-umask 077; wg genkey | tee client-bar-priv-key | wg pubkey > client-bar-pub-key
+```shell
+$ cd /etc/wireguard
+$ mkdir keys
+$ cd keys
+$ umask 077; wg genkey | tee server-priv-key | wg pubkey > server-pub-key
+$ umask 077; wg genkey | tee client-foo-priv-key | wg pubkey > client-foo-pub-key
+$ umask 077; wg genkey | tee client-bar-priv-key | wg pubkey > client-bar-pub-key
 ```
 
 If you want to ensure an additional layer of security of top of these keys, it is possible to also
@@ -96,7 +96,7 @@ So on the server side:
 
 An example configuration for the server side would be:
 
-```
+```shell
 /etc/wireguard/wg0.conf
 -----------------------
 [Interface]
@@ -147,7 +147,7 @@ Now let's look over the config for the `foo` client.
 
 Below is an example configuration for a client/peer of the VPN server above:
 
-```
+```shell
 foo.conf
 ----------------
 [Interface]
@@ -166,7 +166,7 @@ Endpoint = my.ddns.example.com:51820
 The client `bar` has almost identical setup as the client `foo`. It does not have the pre-shared
 secret and also only routes the `172.13.0.0/16` network over the VPN.
 
-```
+```shell
 bar.conf
 ----------------
 [Interface]

@@ -61,7 +61,7 @@ So, now we have an embedded device with Nixos, so lets turn this into a router.
 First thing we'll need to do is enable IP forwarding on this machine, since we'll
 definitely forward packets.
 
-```
+```nix
 boot.kernel.sysctl = {
   # if you use ipv4, this is all you need
   "net.ipv4.conf.all.forwarding" = true;
@@ -87,7 +87,7 @@ the `wan` VLAN and doesn't use DHCP since I'll be setting up PPPoE on top of it.
 And then we also have a `lan` and `iot` interface and VLAN, each we assign a
 static IP to.
 
-```
+```nix
 networking = {
   useDHCP = false;
   hostName = "router";
@@ -136,7 +136,7 @@ So after a `nixos-rebuild switch`, we should see all the interfaces and vlans
 appear with the settings we specified. As mentioned before, I need a PPPoE
 session. Luckily, Nixos makes this incredibly easy:
 
-```
+```nix
 # setup pppoe session
 services.pppd = {
   enable = true;
@@ -173,7 +173,7 @@ Now onto the firewall configuration. I prefer to use
 [nftables](https://wiki.nftables.org/wiki-nftables/index.php/Main_Page). So let's
 disable the Nixos firewall and enable nftables.
 
-```
+```nix
 networking = {
   ...
   nat.enable = false;
@@ -188,7 +188,7 @@ And then we can setup a straight forward `nftables` ruleset for a basic firewall
 The `iot` vlan will get locked down, when we add devices to this later, we'll
 open op the vlan as is needed.
 
-```
+```nix
 networking = {
   ...
   nftables = {
@@ -259,7 +259,7 @@ This should cover a fairly basic `nftables` ruleset that offers internet
 connectivity to `lan` and locks `iot` completely to local connections only. At
 the end, lets install some handy packages for a router.
 
-```
+```nix
 environment.systemPackages = with pkgs; [
   vim                 # my preferred editor
   htop                # to see the system load
@@ -276,7 +276,7 @@ So, now that we got the routing part set up, we need to make sure that devices
 that plug into these networks can get some IP addresses. For this, we spin up a
 quick DHCP server on the router (or any other compute connected to the networks).
 
-```
+```nix
 services.dhcpd4 = {
     enable = true;
     interfaces = [ "lan" "iot" ];
@@ -314,7 +314,7 @@ and
 Generally, you want to avoid CPU core handling the HW interrupts from SMP
 affinity for RPS.
 
-```
+```shell
 #! /usr/bin/env sh
 
 smp1=8
@@ -364,7 +364,7 @@ blog post and asking around a bit, I determined the following:
 To handle the mDNS, I set up a mDNS reflector using Avahi. Again, Nixos makes
 this almost too easy:
 
-```
+```nix
 services.avahi = {
   enable = true;
   reflector = true;

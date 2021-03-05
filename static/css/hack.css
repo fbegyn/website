@@ -21,11 +21,11 @@ body {
       color: black;
   }
   a {
-      color: #ff8100;
-      border-bottom: 1px solid #ff8100
+      color: #ba6600;
+      border-bottom: 1px solid #ba6600
   }
   a:hover {
-      background-color: #ff8100;
+      background-color: #ba6600;
       color: black
   }
   pre {
@@ -37,6 +37,9 @@ body {
   }
   table tbody td:first-child {
     color: #333;
+  }
+  h1,h2,h3,h4,h5,h6 {
+      color: #ba6600;
   }
 }
 
@@ -63,6 +66,9 @@ body {
 
   table tbody td:first-child {
     color: #c1c1c1
+  }
+  h1,h2,h3,h4,h5,h6 {
+      color: #ff8100;
   }
 }
 
