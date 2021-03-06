@@ -96,12 +96,14 @@ func (s *Site) renderPost(w http.ResponseWriter, r *http.Request) {
 		Date              string
 		Series, SeriesTag string
 		Tags              string
+		Prism             bool
 	}{
 		Title:    p.Title,
 		Link:     p.Link,
 		BodyHTML: p.BodyHTML,
 		Date:     internal.IOS13Detri(p.Date),
 		Tags:     tags,
+		Prism:    true,
 	}).ServeHTTP(w, r)
 	postViews.With(prometheus.Labels{"post": filepath.Base(p.Link)}).Inc()
 }

@@ -11,6 +11,7 @@
 <!-- Description -->
 <meta name="description" content="{{ .Title }} - Francis Begyn's thoughts" />
 <meta name="author" content="Francis Begyn">
+{{ if .Prism }}<link rel="stylesheet" href="/static/css/prism.css" />{{ end }}
 {{ end }}
 
 {{ define "content" }}
