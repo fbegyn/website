@@ -2,7 +2,7 @@
 title: Finding a problem in Go's rtnetlink (or how to nerdsnipe me)
 date: 2021-03-07
 tags: [ linux, networking, netlink ]
-draft: true
+draft: false
 ---
 
 # Finding a problem in Go's rtnetlink (or how to nerdsnipe me)
