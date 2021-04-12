@@ -237,6 +237,7 @@ networking = {
           } oifname {
                   "lan",
           } ct state established,related counter accept comment "Allow established back to LANs"
+        }
       }
 
       table ip nat {
