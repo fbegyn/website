@@ -1,6 +1,6 @@
 ---
 title: Being lost, career edition
-date: 2021-06-19
+date: 2021-08-05
 tags: [ jobs, culture ]
 draft: true
 ---
@@ -28,44 +28,106 @@ places. I rejected one job offer that had opportunity to be very diverse, which
 was probably what I needed and refusing it was a mistake.
 
 In the end, decided on a job that I got offered through an interview process at a
-government department. This was my second mistake, I did not interview for it,
-the process was very impromptu and some steps where skipped. I didn't do that job
-very long, as I never got into the flow and started slipping from a somewhat less
-than optimal mental state at the previous job, into a worse one. So I started
-looking again and I decided to pick something out of my comfort state, pure
-development as a backend developer. So far, my mental state has improved and I
-learned some things along the way as well, which I always try to. But lately I
-have this nagging feeling.
+company. This was my second mistake, I did not interview for it, the process was
+very impromptu and some steps where skipped. I didn't do that job very long, as I
+never got into the flow and started slipping from a somewhat less than optimal
+mental state at the previous job, into a worse one. So I started looking again
+and I decided to pick something out of my comfort state, pure development as a
+backend developer. So far, my mental state has improved and I learned some things
+along the way as well. But lately I have this nagging feeling.
 
-## Thought is frightening, but necessary
+## Taking some time to think
 
-You'll always hear of people talking about the things they always wanted to be:
-firemen, president, engineer, chef, store owner, ... and over the years these
-change as they become older and start setting out on their career paths. I never
-had that as far as I can remember. I knew what I wanted to study, but never what
-I would become after that. I still can't think of that answer. For somebody at
-the start of their career, this can be a problem. Interviewers sometimes ask
-"where do you see yourself in 5 years?" and I'd used answer them that I want to
-be solving problems that impact peoples lives on a daily basis, which is a
-terrible answer IMHO since a keen observer would see that there is little
-concrete substance to it. It doesn't show that I would like to be in some leading
-postion with expert technical knowledge.
+This nagging feeling has got me thinking again. What do I actually want to do as
+a job and how can I get there, without compromising too much on the other aspects
+I want in my life. So I took a week of for a staycation in my own town, trying
+out different styles of working and which one works te best for me.
 
-Which expert knowledge? Difficult to say, I dig into whatever subject matter that
-I'm intrested in, but my formal education would indicate the wonderfull world of
-ICT, embedded, IoT and software. But than I also hold keen intrest in
-mobility and sustainability. So I'm looking for something where I can
-combine all these.
+Some people just know what they want to do in life, very concretely. At some
+point they knew how to answer the question "what do you want to be?". I've come
+to realize that I didn't interpret that question correctly. I used to answer "an
+engineer" because I like solving concrete problems. Spoiler alert: I'm now an
+engineer and I don't know what I should do in life. Or more specific, I don't
+know what job I should do.
+
+I have a very broad field of interests, I dig into whatever subject matter that I
+find interesting at any time. My formal education is about embedded systems, IoT
+and ICT, but I've also always had an interest in mobility, sustainability and
+biomedical sciences. I used to believe that for a job, you should pick something
+that matches an interest and go with it. But lately I've come to realise that is
+it more important that the problems the job is trying to solve are within those
+fields of interest.
+
+## How to work
+
+For that past few days, I've been experimenting with some different styles of
+work. Work from home, work in a "office" based environment or (what I believe to
+be) full remote style. I did this for my own projects, so things I really like
+doing.
+
+_Work from home_: This means that most of the time you work from home within the
+normal office hours, sometimes you go the office to "bond" with people and handle
+meetings. The same rythm as the office still holds: standups, meetings,
+sychronous communication. This is the style that we use at the job now. Lately,
+some days we go back to the office, but generally most of the time is spend at
+home. This was working for me: there is some extra personal time (no commute) and
+during the normal breaks there is space to do personal tasks (groceries, meal
+prep, sport, ...), but the synchronous work flow leaves not enough space to
+completely work at your own pace and in your own time. But a couple of weeks ago
+productivity fell to the ground, tasks were getting slow, I started making
+excuses and I was becoming annoyed at myself. Even my own projects suffered from
+this. All sort of motivation for "productive" things was gone. Clearly, this was
+not working so I didn't do this during my time off.
+
+_Office style_: This is the "classic" work style. Within office hours people go
+to a place and work there together. It generally has some facilities available to
+the people. Before the pandemic I worked like this for a couple of weeks and I
+tried it again (I spent a couple days going to a coworking space). Conclussion: I
+dislike office settings. I dislike the time needed to go to them, I dislike the
+atmosphere in a lot of them, I dislike the interruptions they cause and I hate
+the layouts of most them. They require me to wear headphones, since the sounds
+are not background noise that easily fades away (phones going off, door opening
+and closing, coffee machines grinding away, ...). Sometimes you need to wait to
+get tea/coffee or for a bathroom break. Flex desks might be great, but it's no
+fun having to clean up after somebody. I think I can rant on for a while about
+offices.
+
+_My idea of remote_: Work happens more asynchronous here. There are tasks that
+need to be done by the end of the day a progress should be made, but it matters
+that it gets done, not when it gets done. Progress is logged centrally so people
+can see what happens and pick it up when I'm not working on it. Synchronous
+meetings do still happen, but they are planned ahead and have concrete agendas
+for them. The people are there to do something, they aren't there when it doesn't
+matter for them. This leaves a lot of room for personal time and tasks. It also
+comes with the added benefit of being able to work anywhere anytime. I can spend
+a morning at home, working or doing chores, but I might as well spend a morning
+in the local coffee bar around the corner. Or I can be somewhere in the
+mountains, enjoying the views while working. Or it can be the middle of the night
+when I can't sleep.
+
+For me (and I think from my writing) it's clear what I prefer: it's the remote
+one. I've started working on my personal projects again, picked up the slack on
+the volunteering that I do and even started writing these blog posts again. All
+things that I have not done productively and succesfully over the past 3 months.
 
 ## What's next?
 
-As I mentioned, I'm in a good mental space and I'm learning where I currently am.
-I think that's the metric that I'm gonna use for the moment: I need to enjoy what
-I am doing and I need to be learning. If either of those 2 start being
-unsatisfied, I'll start losing intrest and start slacking at work, which won't
-benefit me.
+As my time off is coming to an end, I'm gonna have to start looking to work this
+remote model into the job that I have at the moment. No more sitting on the
+side line waiting for opportunities to appear. I'm gonna pitch some ideas to the
+company and see what comes from it. If they don't work out, maybe I should start
+looking for a job that allows me to do these things.
 
 I've also decided to trust my gut feeling a bit more. In the past I've somewhat
 always withold myself. Afraid of being to forward or maybe just unsure of my
 thoughts. A recent experience has learned me that I can trust my gut and that
 thoughts are supposed to be shared.
+
+I also think that there is some stuff that I could do better than what is out
+there already. So maybe, just maybe I finally bite the bullet and start the
+freelance job that I've been wanting to do for a very long time. Take a shot at
+it and see where it ends up in a couple of months.
+
+In the end I'm glad to have taken some REAL time to reflect back on my life and
+where I am at the moment. Regardless of what comes next, I have a better idea of
+where I want to go.
