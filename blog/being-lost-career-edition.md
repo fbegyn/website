@@ -5,6 +5,11 @@ tags: [ jobs, culture ]
 draft: true
 ---
 
+_disclaimer_: This is not a techy post like the others. I mostly wrote this for
+myself to get my thoughts in order. Why publish it? Because I believe that I'm
+not alone and if this post can help even a single person (even if it's just the
+relief of not being alone), it was worth it.
+
 # Being lost, career edition
 
 I'll start of by just saying this, I don't have answers for you if you came
@@ -18,45 +23,19 @@ what path I want to take. I graduated last year, right with the Corona pandemic
 at the doorsteps. So I decided to play things safe, stick with the place that I
 worked at as a student and hold out the pandemic. Nobody could have guessed the
 duration of it, but few would have guessed that 18 months later, we'd still be in
-it (although things are looking up).
+it.
 
-After about a year, I started looking for companies to switch to. The company was
-great, but I wanted to work on things that I'm very passionate about: mobility,
-networking, infrastructure (both IT and non-IT) and work with programming
-languages that I love. I send out a lot of emails, interviewed at plenty of
-places. I rejected one job offer that had opportunity to be very diverse, which
-was probably what I needed and refusing it was a mistake.
+It was fine for about a year, after a year my mind started becoming restless. I
+started wondering what I wanted to do in my life and where I actually wanted to
+end up. Being young and dumb, I thought another job would help me find calrity
+and that I just needed a change of scenery. Now here I am: 6 months, 2 jobs and a
+whole many mistakes later. But still with the same issues.
 
-In the end, decided on a job that I got offered through an interview process at a
-company. This was my second mistake, I did not interview for it, the process was
-very impromptu and some steps where skipped. I didn't do that job very long, as I
-never got into the flow and started slipping from a somewhat less than optimal
-mental state at the previous job, into a worse one. So I started looking again
-and I decided to pick something out of my comfort state, pure development as a
-backend developer. So far, my mental state has improved and I learned some things
-along the way as well. But lately I have this nagging feeling.
-
-## Taking some time to think
-
-This nagging feeling has got me thinking again. What do I actually want to do as
-a job and how can I get there, without compromising too much on the other aspects
-I want in my life. So I took a week of for a staycation in my own town, trying
-out different styles of working and which one works te best for me.
-
-Some people just know what they want to do in life, very concretely. At some
-point they knew how to answer the question "what do you want to be?". I've come
-to realize that I didn't interpret that question correctly. I used to answer "an
-engineer" because I like solving concrete problems. Spoiler alert: I'm now an
-engineer and I don't know what I should do in life. Or more specific, I don't
-know what job I should do.
-
-I have a very broad field of interests, I dig into whatever subject matter that I
-find interesting at any time. My formal education is about embedded systems, IoT
-and ICT, but I've also always had an interest in mobility, sustainability and
-biomedical sciences. I used to believe that for a job, you should pick something
-that matches an interest and go with it. But lately I've come to realise that is
-it more important that the problems the job is trying to solve are within those
-fields of interest.
+I've learned along the way to trust more on my gut feeling and to be a bit more
+dearing in life, but I still haven't answered those questions: what do I want to
+do and where do I want to take my life. In search of at least some answers, I
+took some time off, because the questions have been nagging at my head for the
+past few weeks.
 
 ## How to work
 
@@ -90,7 +69,8 @@ are not background noise that easily fades away (phones going off, door opening
 and closing, coffee machines grinding away, ...). Sometimes you need to wait to
 get tea/coffee or for a bathroom break. Flex desks might be great, but it's no
 fun having to clean up after somebody. I think I can rant on for a while about
-offices.
+offices. I will admitt that offices have their use cases, but the decision to
+make use of them should come from the employees. 
 
 _My idea of remote_: Work happens more asynchronous here. There are tasks that
 need to be done by the end of the day a progress should be made, but it matters
