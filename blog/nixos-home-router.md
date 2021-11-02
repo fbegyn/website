@@ -112,7 +112,7 @@ networking = {
     # Don't request DHCP on the physical interfaces
     enp1s0.useDHCP = false;
     enp2s0.useDHCP = false;
-    enp2s0.useDHCP = false;
+    enp3s0.useDHCP = false;
     
     # Handle the VLANs
     wan.useDHCP = false;
@@ -128,7 +128,7 @@ networking = {
         prefixLength = 24;
       }];
     };
-  }:
+  };
 };
 ```
 
