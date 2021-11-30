@@ -153,7 +153,18 @@ func Build() (*Site, error) {
 			s.renderPageTemplate("error.html", "page not found: "+r.URL.Path).ServeHTTP(w, r)
 			return
 		}
-		s.renderPageTemplate("index.html", nil).ServeHTTP(w, r)
+
+		data := struct {
+			CFValidation string
+		}{""}
+		if r.Host == "francis.begyn.be" {
+			data.CFValidation = "eb5574d2c99a311"
+		}
+		if r.Host == "francis.begyn.eu" {
+			data.CFValidation = "3ab2cd3f20b9c15"
+		}
+
+		s.renderPageTemplate("index.html", data).ServeHTTP(w, r)
 	})
 
 	s.mux.Handle("/metrics", promhttp.Handler())
@@ -171,6 +182,21 @@ func Build() (*Site, error) {
 	})
 	s.mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/favicon.ico")
+	})
+
+	s.mux.HandleFunc("/.well-known/cf-2fa-verify.txt", func(w http.ResponseWriter, r *http.Request) {
+		data := struct {
+			CFValidation string
+		}{""}
+		if r.Host == "francis.begyn.be" {
+			data.CFValidation = "eb5574d2c99a311"
+		}
+		if r.Host == "francis.begyn.eu" {
+			data.CFValidation = "3ab2cd3f20b9c15"
+		}
+
+		w.Header().Set("Content-Type", "application/text")
+		w.Write([]byte(data.CFValidation))
 	})
 
 	// server static files
