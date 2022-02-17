@@ -3,6 +3,7 @@
     <head>
         {{ template "title" . }}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="cf-2fa-verify" content="{{ .CFValidation }}">
         <link rel="alternate" type="application/rss+xml" href="/blog.rss"/>
         <link rel="stylesheet" href="/static/css/hack.css" />
         <style>
