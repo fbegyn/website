@@ -1,5 +1,5 @@
 ---
-title: IPv6 on a Nixos router
+title: IPv6 on a NixOS router
 date: 2022-02-18
 tags: [ linux, networking, nixos, router, ipv6 ]
 draft: true
@@ -7,9 +7,9 @@ draft: true
 
 **DISCLAIMER: This is a WIP and is not finished yet**
 
-# IPv6 on a Nixos router
+# IPv6 on a NixOS router
 
-I've written before on how to use [a Nixos
+I've written before on how to use [a NixOS
 router](https://francis.begyn.be/blog/nixos-home-router) for my home network.
 Since that has been successful so far, I wanted to look into enabling IPv6 on my
 home network and since my ISP offers it, I might as well use it.
@@ -18,9 +18,9 @@ First off all, I needed to click on a checkbox on my ISPs admin page to enable
 IPv6 on my connection. After a few seconds my internet rebooted and it showed in
 the admin page that IPv6 was now enabled on my connection.
 
-# Convincing Nixos to use th IPv6
+# Convincing NixOS to use the IPv6
 
-Great, the ISP claims that I have IPv6, now to change some settings on the Nixos
+Great, the ISP claims that I have IPv6, now to change some settings on the NixOS
 router and see if I can actually connect to the IPv6 internet.
 
 As shown in the previous blog, my ISP uses PPPoE for my internet connection. So
@@ -74,7 +74,7 @@ round-trip min/avg/max/stddev = 33.240/42.754/51.320/6.410 ms
 Nice, our router is connected to the IPv6 internet now. But it gets this IP
 assigned through the `pppd` daemon. Since I want some more control over this,
 lets assign one through `dhcpcd`. This requires some tweaking to our `networking`
-settings of the Nixos router.
+settings of the NixOS router.
 
 ```nix
 networking = {
@@ -117,20 +117,29 @@ networking = {
 After applying these settings we should end up in the same state as before.
 Except I didn't, I lost the IPv6 settings and connectivity. After banging against
 several walls for way too much time, I realized my firewall settings. I block
-access to the router by default, but since I'm knowing requesting things from my
+access to the router by default, but since I'm now requesting things from my
 ISP, I need to allow certain services to my router.
 
 I made the following modifications to the `input` chain of the router:
 
-```plain
-# Always allow router solicitation from any LAN.
-ip6 nexthdr icmpv6 icmpv6 type nd-router-solicit counter accept
+```nix
+networking.nftables.ruleset = ''
+  table inet filter {
+    ...
+    chain input {
+        ...
+        # Always allow router solicitation from any LAN.
+        ip6 nexthdr icmpv6 icmpv6 type nd-router-solicit counter accept
 
-# Default route via NDP.
-ip6 nexthdr icmpv6 icmpv6 type nd-router-advert counter accept
+        # Default route via NDP.
+        ip6 nexthdr icmpv6 icmpv6 type nd-router-advert counter accept
 
-# DHCPv6
-udp dport dhcpv6-client udp sport dhcpv6-server counter accept comment "IPv6 DHCP"
+        # DHCPv6
+        udp dport dhcpv6-client udp sport dhcpv6-server counter accept comment "IPv6 DHCP"
+    }
+    ...
+  }
+'';
 ```
 
 After applying these settings, I did end up in the same state as before: the
