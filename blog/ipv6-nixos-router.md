@@ -1,6 +1,6 @@
 ---
 title: IPv6 on a Nixos router
-date: 2021-04-28
+date: 2022-02-18
 tags: [ linux, networking, nixos, router, ipv6 ]
 draft: true
 ---
@@ -9,7 +9,7 @@ draft: true
 
 # IPv6 on a Nixos router
 
-I recently wrote about how to use [a Nixos
+I've written before on how to use [a Nixos
 router](https://francis.begyn.be/blog/nixos-home-router) for my home network.
 Since that has been successful so far, I wanted to look into enabling IPv6 on my
 home network and since my ISP offers it, I might as well use it.
@@ -97,8 +97,8 @@ networking = {
 
        # We don't want to expose our hw addr from the router to the internet,
        # so we generate a RFC7217 address.
-       slaac private 
-       
+       slaac private
+
        # we only want to handle IPv6 with dhcpcd, the IPv4 is still done
        # through pppd daemon
        noipv6rs
@@ -185,5 +185,3 @@ These settings is all that stand between my devices and IPv6 connectivity. So
 after applying these I tested out the IPv6 connectivity on my laptop and it was successful!
 
 In a good evenings work I set up IPv6 for my home network.
-
-## Sources

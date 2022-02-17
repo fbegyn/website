@@ -404,6 +404,27 @@ chain forward {
 }
 ```
 
+# Update 2022-02-18
+
+I've updated the blog a couple of times in the past few months and hopefully
+filtered out some issues and errors. I also had a specific question about some
+`nftables` error:
+
+```
+Error: Could not process rule: No such file or directory
+ip protocol { tcp, udp } flow offload @f
+```
+
+I had to dive into some notes to find what this was about since I did remember
+encoutering it myself. As it turns out, this can occur when some error exists in
+the `nftables` configuration. In my case this was because `nftables ` was applied
+way before `ppp0` interface was online. Since this interface was mentioned in the
+flowtable (and didn't exist yet), the flowtable configuration was rejected by
+`nftables` and that causes the error.
+
+So if you encounter this error, double check the config and order in which the
+configurations are applied.
+
 ## Sources
 
 * [PCEngine APU site](https://pcengines.ch/apu2e4.htm)
