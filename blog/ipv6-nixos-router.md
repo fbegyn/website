@@ -1,11 +1,13 @@
 ---
 title: IPv6 on a NixOS router
-date: 2022-02-18
+date: 2022-02-25
 tags: [ linux, networking, nixos, router, ipv6 ]
-draft: true
 ---
 
-**DISCLAIMER: This is a WIP and is not finished yet**
+**DISCLAIMER:** I'm still working on the current setup for this router. I might
+update and clean up this blog at a later date when I'm fully happy with the state
+of my firewall and router settings. For now, this seems like a good starting
+point.
 
 # IPv6 on a NixOS router
 
@@ -127,7 +129,17 @@ networking.nftables.ruleset = ''
   table inet filter {
     ...
     chain input {
-        ...
+        type filter hook input priority filter; policy drop;
+
+        # Allow trusted networks to access the router
+        iifname {
+          "lan",
+        } counter accept
+
+        # Allow returning traffic from ppp0 and drop everthing else
+        iifname "ppp0" ct state { established, related } counter accept
+        iifname "ppp0" drop
+
         # Always allow router solicitation from any LAN.
         ip6 nexthdr icmpv6 icmpv6 type nd-router-solicit counter accept
 
