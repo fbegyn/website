@@ -1,11 +1,11 @@
 ---
-title: Using Nixos as a router
+title: Using NixOS as a router
 date: 2021-02-07
 tags: [ linux, networking, nixos, router]
 draft: false
 ---
 
-# Using Nixos as a router (NaaR)
+# Using NixOS as a router (NaaR)
 
 So, I moved places this year and for the first couple of weeks I used the
 fritzbox 7350 from my ISP. While it's good, it lacks the flexibility that I want
@@ -33,31 +33,31 @@ them, I ended up picking the [APU2E4](https://pcengines.ch/apu2e4.htm). This
 mainly because the ,theoretically more performant Intel i210AT NIC vs Intel
 i211AT NIC in the other models and with 3 ethernet ports I have enough.
 
-## Installing Nixos
+## Installing NixOS
 
 After waiting a couple of days, all equipment has arrived and I can start
-installing Nixos. This is easy enough:
+installing NixOS. This is easy enough:
 
 1. Construct the APU in it's enclosure and mount the mSata drive
-2. Flash Nixos image on USB drive
+2. Flash NixOS image on USB drive
 3. Insert USB drive in APU2
 4. Connect console cable to APU
 5. Boot (read the notes below)
 6. Select the USB drive
-7. Install Nixos according to the [installation guide](https://nixos.org/manual/nixos/stable/index.html#ch-installation).
+7. Install NixOS according to the [installation guide](https://nixos.org/manual/nixos/stable/index.html#ch-installation).
 
 Some remarks on the installation process:
-* When booting, hit tab to edit the boot entry. Normally Nixos does not output to
+* When booting, hit tab to edit the boot entry. Normally NixOS does not output to
   serial in the boot process, so we need to enable is by appending
   `console=ttyS0,115200` to the boot entry. All characters appear twice, so just
   make sure you type it correctyl ;) . `ctrl+l` can be used to refresh the screen.
 * After installing, you want to make sure that the [PCEngine
   APU](https://github.com/NixOS/nixos-hardware/blob/master/pcengines/apu/default.nix)
-  entry from the Nixos hardware repo is present, as it enables the console port.
+  entry from the NixOS hardware repo is present, as it enables the console port.
 
 ## Configuring as a router
 
-So, now we have an embedded device with Nixos, so lets turn this into a router.
+So, now we have an embedded device with NixOS, so lets turn this into a router.
 First thing we'll need to do is enable IP forwarding on this machine, since we'll
 definitely forward packets.
 
@@ -112,7 +112,7 @@ networking = {
     # Don't request DHCP on the physical interfaces
     enp1s0.useDHCP = false;
     enp2s0.useDHCP = false;
-    enp2s0.useDHCP = false;
+    enp3s0.useDHCP = false;
     
     # Handle the VLANs
     wan.useDHCP = false;
@@ -128,13 +128,13 @@ networking = {
         prefixLength = 24;
       }];
     };
-  }:
+  };
 };
 ```
 
 So after a `nixos-rebuild switch`, we should see all the interfaces and vlans
 appear with the settings we specified. As mentioned before, I need a PPPoE
-session. Luckily, Nixos makes this incredibly easy:
+session. Luckily, NixOS makes this incredibly easy:
 
 ```nix
 # setup pppoe session
@@ -171,7 +171,7 @@ the system when the PPPoE seesion comes online, it **will not** replace the
 degault gateway).  
 Now onto the firewall configuration. I prefer to use
 [nftables](https://wiki.nftables.org/wiki-nftables/index.php/Main_Page). So let's
-disable the Nixos firewall and enable nftables.
+disable the NixOS firewall and enable nftables.
 
 ```nix
 networking = {
@@ -194,7 +194,7 @@ networking = {
   nftables = {
     ...
     ruleset = ''
-      table ip filter {
+      table inet filter {
         # enable flow offloading for better throughput
         flowtable f {
           hook ingress priority 0;
@@ -217,7 +217,7 @@ networking = {
           iifname "ppp0" ct state { established, related } counter accept
           iifname "ppp0" drop
         }
-        
+
         chain forward {
           type filter hook forward priority filter; policy drop;
 
@@ -249,7 +249,7 @@ networking = {
         chain postrouting {
           type nat hook postrouting priority filter; policy accept;
           oifname "ppp0" masquerade
-        } 
+        }
       }
     '';
   };
@@ -362,7 +362,7 @@ blog post and asking around a bit, I determined the following:
 * high UDP ports `32768-61000` to and from the chromecast
 * mDNS is being used coming from the chromecast
 
-To handle the mDNS, I set up a mDNS reflector using Avahi. Again, Nixos makes
+To handle the mDNS, I set up a mDNS reflector using Avahi. Again, NixOS makes
 this almost too easy:
 
 ```nix
@@ -404,11 +404,32 @@ chain forward {
 }
 ```
 
+# Update 2022-02-18
+
+I've updated the blog a couple of times in the past few months and hopefully
+filtered out some issues and errors. I also had a specific question about some
+`nftables` error:
+
+```
+Error: Could not process rule: No such file or directory
+ip protocol { tcp, udp } flow offload @f
+```
+
+I had to dive into some notes to find what this was about since I did remember
+encoutering it myself. As it turns out, this can occur when some error exists in
+the `nftables` configuration. In my case this was because `nftables ` was applied
+way before `ppp0` interface was online. Since this interface was mentioned in the
+flowtable (and didn't exist yet), the flowtable configuration was rejected by
+`nftables` and that causes the error.
+
+So if you encounter this error, double check the config and order in which the
+configurations are applied.
+
 ## Sources
 
 * [PCEngine APU site](https://pcengines.ch/apu2e4.htm)
 * [Teklager APU products](https://teklager.se/en/products/routers/apu2e4-open-source-router)
 * [EDPnet site](https://www.edpnet.be/en/support/installation-and-usage/internet/learn-about-fiber-installation/i-have-a-fiber-connection-what-should-i-know-about-the-internal-cabling.html)
-* [Nixos APU install notes](https://gist.github.com/tomfitzhenry/35389b0907d9c9172e5d790ca9e0d0dc)
+* [NixOS APU install notes](https://gist.github.com/tomfitzhenry/35389b0907d9c9172e5d790ca9e0d0dc)
 * [nftables wiki](https://wiki.nftables.org/wiki-nftables/index.php/Main_Page)
 * [nftables flow offloading](https://wiki.nftables.org/wiki-nftables/index.php/Flowtable)

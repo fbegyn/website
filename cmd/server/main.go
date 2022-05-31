@@ -173,6 +173,11 @@ func Build() (*Site, error) {
 		http.ServeFile(w, r, "./static/favicon.ico")
 	})
 
+	s.mux.HandleFunc("/.well-known/cf-2fa-verify.txt", func(w http.ResponseWriter, r *http.Request) {
+
+		w.Header().Set("Content-Type", "application/text")
+	})
+
 	// server static files
 	s.mux.Handle("/static/", http.FileServer(http.Dir(".")))
 
