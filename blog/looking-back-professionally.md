@@ -2,7 +2,7 @@
 title: Looking back, professionally - part 1
 date: 2022-05-25
 tags: [ jobs, culture ]
-draft: true
+draft: false
 ---
 
 _disclaimer:_ This is not a techy post like the others. I mostly wrote this for myself to get
