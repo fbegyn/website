@@ -12,6 +12,6 @@ require (
 	github.com/snabb/sitemap v1.0.0
 	github.com/stretchr/testify v1.6.1 // indirect
 	golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297 // indirect
-	gopkg.in/yaml.v2 v2.2.7
+	gopkg.in/yaml.v2 v2.2.8
 	within.website/ln v0.7.0
 )
