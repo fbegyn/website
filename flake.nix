@@ -24,7 +24,7 @@
         name = "website";
         src = pkgs.stdenv.mkDerivation {
           name = "gosrc";
-          srcs = [ ./go.mod ./go.sum ./cmd ];
+          srcs = [ ./go.mod ./go.sum ./cmd ./vendor ];
           phases = "installPhase";
           installPhase = ''
             mkdir $out
