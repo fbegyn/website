@@ -3,7 +3,6 @@ module github.com/fbegyn/website
 go 1.18
 
 require (
-	christine.website v1.3.1
 	github.com/celrenheit/sandflake v0.0.0-20200828173344-9cede14c55f0
 	github.com/gorilla/feeds v1.1.1
 	github.com/prometheus/client_golang v1.14.0
