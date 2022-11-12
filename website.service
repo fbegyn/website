@@ -1,0 +1,10 @@
+[Service]
+Environment=SERVER_PORT=3114
+ExecStart=/usr/local/bin/website-start
+Group=thecy
+User=thecywebsite
+WorkingDirectory=/srv/thecy/website
+
+[Unit]
+After=network.target
+

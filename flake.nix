@@ -15,17 +15,17 @@
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
-      nixpkgs = import nixpkgs {
+      pkgs = import nixpkgs {
         inherit system;
-        config = import go.nix;
+        config = import ./go.nix;
       };
     in rec {
       packages = {
-        website = buildGoModule {
+        website = pkgs.buildGoModule {
           name = "website";
-          src = ./;
+          src = ./. ;
           CGO_ENABLED = 0;
-          vendorSha256 = "";
+          vendorSha256 = null;
           subPackages = [];
           ldFlages = [
             "-S" "-W"
