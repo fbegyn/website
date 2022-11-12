@@ -20,19 +20,27 @@
         config = import ./go.nix;
       };
     in rec {
-      packages = {
-        website = pkgs.buildGoModule {
-          name = "website";
-          src = ./. ;
-          CGO_ENABLED = 0;
-          vendorSha256 = null;
-          subPackages = [];
-          ldFlages = [
-            "-S" "-W"
-          ];
+      defaultPackage = pkgs.buildGoModule {
+        name = "website";
+        src = pkgs.stdenv.mkDerivation {
+          name = "gosrc";
+          srcs = [ ./go.mod ./go.sum ./cmd ];
+          phases = "installPhase";
+          installPhase = ''
+            mkdir $out
+            for src in $srcs; do
+              for srcFile in $src; do
+                cp -r $srcFile $out/$(stripHash $srcFile)
+              done
+            done
+          '';
         };
+        CGO_ENABLED = 0;
+        vendorSha256 = null;
+        ldFlages = [
+          "-S" "-W"
+        ];
       };
-      defaultPackage = packages.website;
       devShell = pkgs.mkShell rec {
         buildInputs = with pkgs; [
           go
