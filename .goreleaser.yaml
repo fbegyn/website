@@ -13,7 +13,7 @@ builds:
       - linux
     goarch:
       - amd64
-    main: ./cmd/website
+    main: ./cmd/server
 archives:
   - replacements:
       darwin: Darwin
@@ -44,7 +44,7 @@ nfpms:
       - src: ./website.service
         dst: /etc/systemd/system/website.service
     scripts:
-      postinstall: ./scripts/preinstall.sh
+      preinstall: ./scripts/preinstall.sh
       postinstall: ./scripts/postinstall.sh
       postremove: ./scripts/postremove.sh
     formats:
