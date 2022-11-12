@@ -1,5 +1,3 @@
-[![Build Status](https://drone.begyn.be/api/badges/fbegyn/website/status.svg)](https://drone.begyn.be/fbegyn/website)
-
 # Personal website
 
 This is where I will eventually have the source code for my own little place on the interwebs.
