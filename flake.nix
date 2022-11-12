@@ -55,5 +55,80 @@
           goreleaser
         ];
       };
+      nixosModules.website = { config, lib, pkgs, ...}:
+        with lib;
+        let
+          cfg = config.fbegyn.services.website;
+        in {
+          options.fbegyn.services.website = {
+            enable = mkEnableOption "enables fbegyn's personal website server";
+            domain = mkOption {
+              type = types.str;
+              default = "francis.begyn.be";
+              example = "francis.begyn.be";
+              description = "The domain NGINX should use.";
+            };
+            ACMEHost = mkOption {
+              type = types.str;
+              default = "francis.begyn.be";
+              example = "francis.begyn.be";
+              description = "The ACME host that should be used by NGINX";
+            };
+            home = mkOption {
+              type = types.str;
+              default = "/srv/fbegyn/website";
+              example = "/var/lib/website";
+              description = "Working directory of the website";
+            };
+            aliases = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "francis.begyn.eu" ];
+              description = "The aliases NGINX should use.";
+            };
+            port = mkOption {
+              type = types.int;
+              default = 3114;
+              example = 3114;
+              description = "The port number for the website server";
+            };
+          };
+
+          config = mkIf cfg.enable {
+            users.users.thecywebsite = {
+              createHome = true;
+              isSystemUser = true;
+              group = "thecy";
+              home = "${cfg.home}";
+              description = "francis.begyn.be";
+            };
+            systemd.services.website = {
+              enable = true;
+              serviceConfig = {
+                Environment="SERVER_PORT=${toString cfg.port}";
+                User = "thecywebsite";
+                Group = "thecy";
+                WorkingDirectory = "${cfg.home}";
+                ExecStart = "${defaultPackage}/bin/server";
+              };
+              wantedBy = [ "multi-user.target" ];
+              after = [ "network.target" ];
+            };
+            # francis.begyn.be website/blog
+            services.nginx.virtualHosts.francis = {
+              forceSSL = true;
+              serverName = "${cfg.domain}";
+              serverAliases = cfg.aliases;
+              useACMEHost = "${cfg.ACMEHost}";
+              root = "/var/www/${cfg.domain}";
+              locations."/" = {
+                proxyPass = "http://127.0.0.1:${toString cfg.port}";
+                extraConfig = ''
+                  add_header Permissions-Policy interest-cohort=();
+                '';
+              };
+            };
+          };
+        };
     });
 }
