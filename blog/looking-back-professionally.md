@@ -94,13 +94,16 @@ BANTER) about my transparency on them. People must know that not everybody comes
 out of school and knows where they want to work. Or what job they want to do.
 Other people think more about the jobs; I tend to learn through experience.
 
-| time period  | job title | company |
-|---|---|---|
-| oct 2019 - dec 2020  | devops engineer/system administrator | RV |
-| jan 2021 | services engineer | BN |
-| feb 2021 - nov 2021 | backend developer | Vec |
-| dec 2021 - feb 2022 | test engineer | Exc |
-| mar 2022 - current | project engineer | VO |
+*updated 2022-11-29*
+
+| time period  | job title |
+|---|---|
+| oct 2019 - dec 2020  | devops engineer/system administrator |
+| jan 2021 | services engineer |
+| feb 2021 - nov 2021 | backend developer |
+| dec 2021 - feb 2022 | test engineer |
+| mar 2022 - sep 2022 | project engineer |
+| sep 2022 - current | solutions engineer observability |
 
 Both professionally and personally, 2021 was NOT a good year for me. But in that
 year, I have grown as a person regardless of the troubles I encountered. I aim to
