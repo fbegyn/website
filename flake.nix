@@ -95,19 +95,20 @@
           };
 
           config = mkIf cfg.enable {
-            users.users.thecywebsite = {
+            users.users.fbegyn = {
               createHome = true;
               isSystemUser = true;
-              group = "thecy";
+              group = "fbegyn";
               home = "${cfg.home}";
               description = "francis.begyn.be";
             };
+            users.groups.fbegyn.members = [ "francis" ];
             systemd.services.website = {
               enable = true;
               serviceConfig = {
                 Environment="SERVER_PORT=${toString cfg.port}";
-                User = "thecywebsite";
-                Group = "thecy";
+                User = "fbegyn";
+                Group = "fbegyn";
                 WorkingDirectory = "${cfg.home}";
                 ExecStart = "${defaultPackage}/bin/server";
               };
