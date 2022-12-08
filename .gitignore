@@ -4,3 +4,4 @@ server
 bin/
 dist/
 result
+.env
