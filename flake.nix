@@ -106,7 +106,8 @@
             systemd.services.website = {
               enable = true;
               serviceConfig = {
-                Environment="SERVER_PORT=${toString cfg.port}";
+                Environment = "SERVER_PORT=${toString cfg.port}";
+                EnvironmentFile = "/srv/fbegyn/website/.env";
                 User = "fbegyn";
                 Group = "fbegyn";
                 WorkingDirectory = "${cfg.home}";

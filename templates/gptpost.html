@@ -1,0 +1,38 @@
+{{ define "title" }}
+<title>{{ .Title }}</title>
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@fbegyn" />
+<meta name="twitter:title" content="{{ .Title }}" />
+<meta name="twitter:description" content="Posted on {{ .Date }}" />
+<script src="/static/js/prism.js"></script>
+
+<!-- Description -->
+<meta name="description" content="{{ .Title }} - Francis Begyn's thoughts" />
+<meta name="author" content="Francis Begyn">
+{{ if .Prism }}<link rel="stylesheet" href="/static/css/prism.css" />{{ end }}
+{{ end }}
+
+{{ define "content" }}
+{{ .BodyHTML }}
+
+<hr/>
+
+<p><strong>DISCLAIMER: This article is randomly generated using OpenAI and a
+    topic generator from a friend. I'm not responsible for any of the output that
+    comes on this page, it was just a fun thing to do and the topics should not
+    cause offensive output. This is quite a slow page currently, please be gentle
+    and patient with it. The OpenAI is also rate limited, so if this breaks, you
+    get to keep all the pieces</strong></p>
+
+<p>This article was posted on {{ .Date }}. Some things may have changed since
+  then, please <a href="mailto:francis.begyn@gmail.com">mail</a>
+  or <a href="https://twitter.com/fbegyn">tweet</a> at me if you have a
+  correction or question.</p>
+
+{{ if ne .Tags "" }}
+<p>Tags:{{.Tags}}</p>
+{{ end }}
+
+{{ end }}

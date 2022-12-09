@@ -43,7 +43,7 @@ func main() {
 	})
 
 	// Create the site
-	s, err := Build()
+	s, err, _ := Build(ctx)
 	if err != nil {
 		ln.FatalErr(ctx, err, ln.Action("Build"))
 	}
@@ -82,7 +82,7 @@ func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // Build renders the entire website
-func Build() (*Site, error) {
+func Build(ctx context.Context) (*Site, error, chan int) {
 	// Define sitemap for the website
 	smap := sitemap.New()
 	smap.Add(&sitemap.URL{
@@ -94,7 +94,7 @@ func Build() (*Site, error) {
 	// Handle X-Forwarde-For headers
 	xffmw, err := xff.Default()
 	if err != nil {
-		return nil, err
+		return nil, err, nil
 	}
 
 	// Struct that represents the website
@@ -118,7 +118,7 @@ func Build() (*Site, error) {
 
 	posts, err := blog.LoadEntriesDir("./blog/", "blog")
 	if err != nil {
-		return nil, err
+		return nil, err, nil
 	}
 	s.Posts = posts
 
@@ -156,19 +156,28 @@ func Build() (*Site, error) {
 		s.renderPageTemplate("index.html", nil).ServeHTTP(w, r)
 	})
 
+	ln.Log(ctx, ln.Action("post_gen"), ln.Info("starting up GPT post rending in a gothread"))
+	GPTBuffer := make(chan blog.Entry, 5)
+	stop := make(chan int)
+	go GPTPostStreamer(GPTBuffer, stop)
+
 	s.mux.Handle("/metrics", promhttp.Handler())
 	s.mux.Handle("/about", middleware.Metrics("about", s.renderPageTemplate("about.html", nil)))
 	s.mux.Handle("/blog", middleware.Metrics("blog", s.renderPageTemplate("blogindex.html", s.Posts)))
+	s.mux.Handle("/blog/rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog/", middleware.Metrics("post", http.HandlerFunc(s.renderPost)))
-	s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
-		fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_eng.pdf"}).Inc()
-		http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")
-	})
-	s.mux.HandleFunc("/francis_begyn_cv_nl.pdf", func(w http.ResponseWriter, r *http.Request) {
-		fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_nl.pdf"}).Inc()
-		http.ServeFile(w, r, "./cv/francis_begyn_cv_nl.pdf")
-	})
+	s.mux.Handle("/random", middleware.Metrics("random", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		s.randomGPTPost(w, r, GPTBuffer)
+	})))
+	//s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
+	//	fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_eng.pdf"}).Inc()
+	//	http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")
+	//})
+	//s.mux.HandleFunc("/francis_begyn_cv_nl.pdf", func(w http.ResponseWriter, r *http.Request) {
+	//	fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_nl.pdf"}).Inc()
+	//	http.ServeFile(w, r, "./cv/francis_begyn_cv_nl.pdf")
+	//})
 	s.mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/favicon.ico")
 	})
@@ -181,5 +190,16 @@ func Build() (*Site, error) {
 	// server static files
 	s.mux.Handle("/static/", http.FileServer(http.Dir(".")))
 
-	return s, nil
+	return s, nil, stop
+}
+
+func GPTPostStreamer(GPTChan chan<- blog.Entry, stop <-chan int) {
+	for {
+		select {
+		case <-stop:
+			close(GPTChan)
+		default:
+			GPTChan <- GenGPTPost()
+		}
+	}
 }
