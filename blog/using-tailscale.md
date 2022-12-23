@@ -1,8 +1,8 @@
 ---
 title: Using Tailscale
-date: 2022-12-16
+date: 2022-12-18
 tags: [vpn, tailscale, wireguard, nixos]
-draft: true
+draft: false
 ---
 
 # Tailscale: the VPN almost indistinguishable from magic
