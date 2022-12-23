@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/fbegyn/website/cmd/server/internal/blog"
@@ -22,6 +23,9 @@ import (
 
 var (
 	port          = os.Getenv("SERVER_PORT")
+	gptPosts      = os.Getenv("GPT_POSTS")
+	deskHost      = os.Getenv("DESK_HOST")
+	hassHost      = os.Getenv("HASS_HOST")
 	arbDate       = time.Date(2020, time.January, 9, 0, 0, 0, 0, time.UTC)
 	fileDownloads = promauto.NewCounterVec(
 		prometheus.CounterOpts{
@@ -156,20 +160,26 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 		s.renderPageTemplate("index.html", nil).ServeHTTP(w, r)
 	})
 
-	ln.Log(ctx, ln.Action("post_gen"), ln.Info("starting up GPT post rending in a gothread"))
-	GPTBuffer := make(chan blog.Entry, 5)
-	stop := make(chan int)
-	go GPTPostStreamer(GPTBuffer, stop)
-
 	s.mux.Handle("/metrics", promhttp.Handler())
 	s.mux.Handle("/about", middleware.Metrics("about", s.renderPageTemplate("about.html", nil)))
 	s.mux.Handle("/blog", middleware.Metrics("blog", s.renderPageTemplate("blogindex.html", s.Posts)))
 	s.mux.Handle("/blog/rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog/", middleware.Metrics("post", http.HandlerFunc(s.renderPost)))
-	s.mux.Handle("/random", middleware.Metrics("random", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		s.randomGPTPost(w, r, GPTBuffer)
+	s.mux.Handle("/office", middleware.Metrics("office", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		s.officeStatus(w, r, deskHost, hassHost)
 	})))
+
+	// Random GPT post pipeline
+	stop := make(chan int)
+	if strings.ToLower(gptPosts) == "true" {
+		ln.Log(ctx, ln.Action("post_gen"), ln.Info("starting up GPT post rending in a gothread"))
+		GPTBuffer := make(chan blog.Entry, 5)
+		go GPTPostStreamer(GPTBuffer, stop)
+		s.mux.Handle("/random", middleware.Metrics("random", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			s.randomGPTPost(w, r, GPTBuffer)
+		})))
+	}
 	//s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
 	//	fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_eng.pdf"}).Inc()
 	//	http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")

@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/fbegyn/website/cmd/server/internal"
+	"github.com/fbegyn/website/cmd/server/internal/addons"
 	"github.com/fbegyn/website/cmd/server/internal/blog"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -194,4 +195,21 @@ func (s *Site) randomGPTPost(w http.ResponseWriter, r *http.Request, buffer <-ch
 		Prism:    true,
 	}).ServeHTTP(w, r)
 	postViews.With(prometheus.Labels{"post": filepath.Base(p.Link)}).Inc()
+}
+
+func (s *Site) officeStatus(w http.ResponseWriter, r *http.Request, deskHost, hassHost string) {
+	height, err := addons.GetDeskHeight(deskHost)
+	if err != nil {
+		fmt.Println(err)
+	}
+	s.renderPageTemplate("office.html", struct {
+		OfficeTemp     int
+		OfficeHumidity int
+		DeskHeight     int
+		DeskDur        int
+		DeskHeightUnit string
+	}{
+		DeskHeight:     height,
+		DeskHeightUnit: "cm",
+	}).ServeHTTP(w, r)
 }

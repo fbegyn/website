@@ -1,0 +1,28 @@
+{{ define "title" }}
+<title>Francis Begyn</title>
+<!-- Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@fbegyn" />
+<meta name="twitter:title" content="Francis Begyn" />
+
+<!-- Description -->
+<meta name="author" content="Francis Begyn">
+{{ end }}
+
+{{ define "content" }}
+<div class="grid">
+    <div class="cell -4of12 content">
+        <h1>Information</h1>
+        <h2>Room</h2>
+        <ul>
+            <li>Temperature: {{ .OfficeTemp}}</li>
+            <li>Humidity: {{ .OfficeHumidity}}</li>
+        </ul>
+        <h2>Desk</h2>
+        <ul>
+            <li>Height: {{ .DeskHeight}} {{ .DeskHeightUnit}}</li>
+            <li>Current state duration: {{ .DeskDur}}</li>
+        </ul>
+    </div>
+</div>
+{{ end }}
