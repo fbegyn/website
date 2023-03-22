@@ -167,9 +167,6 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 	s.mux.Handle("/blog/rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog/", middleware.Metrics("post", http.HandlerFunc(s.renderPost)))
-	s.mux.Handle("/random", middleware.Metrics("random", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		s.randomGPTPost(w, r, GPTBuffer)
-	})))
 	//s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
 	//	fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_eng.pdf"}).Inc()
 	//	http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")
