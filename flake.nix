@@ -36,7 +36,7 @@
           '';
         };
         CGO_ENABLED = 0;
-        vendorSha256 = null;
+        vendorSha256 = nixpkgs.lib.fakeSha256;
         ldFlages = [
           "-S" "-W"
         ];
