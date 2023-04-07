@@ -156,11 +156,6 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 		s.renderPageTemplate("index.html", nil).ServeHTTP(w, r)
 	})
 
-	ln.Log(ctx, ln.Action("post_gen"), ln.Info("starting up GPT post rending in a gothread"))
-	GPTBuffer := make(chan blog.Entry, 5)
-	stop := make(chan int)
-	go GPTPostStreamer(GPTBuffer, stop)
-
 	s.mux.Handle("/metrics", promhttp.Handler())
 	s.mux.Handle("/about", middleware.Metrics("about", s.renderPageTemplate("about.html", nil)))
 	s.mux.Handle("/blog", middleware.Metrics("blog", s.renderPageTemplate("blogindex.html", s.Posts)))
@@ -188,15 +183,4 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 	s.mux.Handle("/static/", http.FileServer(http.Dir(".")))
 
 	return s, nil, stop
-}
-
-func GPTPostStreamer(GPTChan chan<- blog.Entry, stop <-chan int) {
-	for {
-		select {
-		case <-stop:
-			close(GPTChan)
-		default:
-			GPTChan <- GenGPTPost()
-		}
-	}
 }

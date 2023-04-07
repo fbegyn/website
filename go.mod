@@ -7,7 +7,6 @@ require (
 	github.com/gorilla/feeds v1.1.1
 	github.com/prometheus/client_golang v1.14.0
 	github.com/russross/blackfriday v2.0.0+incompatible
-	github.com/sashabaranov/go-gpt3 v0.0.0-20221202105456-0f9f4aa343ad
 	github.com/sebest/xff v0.0.0-20210106013422-671bd2870b3a
 	github.com/snabb/sitemap v1.0.0
 	gopkg.in/yaml.v2 v2.4.0
