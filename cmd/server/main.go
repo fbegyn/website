@@ -156,6 +156,9 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 		s.renderPageTemplate("index.html", nil).ServeHTTP(w, r)
 	})
 
+	ln.Log(ctx, ln.Action("background_gen"), ln.Info("spinnign up background process channel"))
+	stop := make(chan int)
+
 	s.mux.Handle("/metrics", promhttp.Handler())
 	s.mux.Handle("/about", middleware.Metrics("about", s.renderPageTemplate("about.html", nil)))
 	s.mux.Handle("/blog", middleware.Metrics("blog", s.renderPageTemplate("blogindex.html", s.Posts)))
