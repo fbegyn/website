@@ -1,0 +1,17 @@
+{{ define "title" }}
+<title>Blog - Francis Begyn</title>
+{{ end }}
+
+{{ define "content" }}
+<h1>Talks</h1>
+
+<p> Below you can find a random collection of my talks/workshops.</p>
+
+<p>
+    <ul>
+        {{ range . }}
+            <li>{{ .Date }} <a href="{{ .Link }}">{{ .Title }}</a></li>
+        {{ end }}
+    </ul>
+</p>
+{{ end }}

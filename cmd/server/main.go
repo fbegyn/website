@@ -3,11 +3,14 @@ package main
 import (
 	"context"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/fbegyn/website/cmd/server/internal/blog"
+	"github.com/fbegyn/website/cmd/server/internal/front"
 	"github.com/fbegyn/website/cmd/server/internal/middleware"
 	"github.com/gorilla/feeds"
 	"github.com/prometheus/client_golang/prometheus"
@@ -60,12 +63,19 @@ func main() {
 // Site represents the website structure and data
 type Site struct {
 	Posts blog.Entries
+	Talks []Talk
 	About template.HTML
 
 	rssFeed *feeds.Feed
 
 	mux   *http.ServeMux
 	xffmw *xff.XFF
+}
+
+type Talk struct {
+	Title string
+	Date  string
+	Link  string
 }
 
 // Make so our site struct can serve http requests
@@ -122,6 +132,36 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 	}
 	s.Posts = posts
 
+	// TODO: work in progress to host PDFs on the site of talks/workshops
+	err = filepath.Walk("./talks", func(filePath string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		file, err := os.Open(filePath)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+
+		content, err := ioutil.ReadAll(file)
+		if err != nil {
+			return nil
+		}
+
+		var t Talk
+		_, err = front.Unmarshal(content, &t)
+		if err != nil {
+			return err
+		}
+		s.Talks = append(s.Talks, t)
+		return nil
+	})
+
 	for _, entry := range s.Posts {
 		if entry.Draft {
 			continue
@@ -165,6 +205,10 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 	s.mux.Handle("/blog/rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("/blog/", middleware.Metrics("post", http.HandlerFunc(s.renderPost)))
+	s.mux.Handle("/talks", middleware.Metrics("talk", s.renderPageTemplate("talks.html", s.Talks)))
+
+	handler := http.StripPrefix("/talk/", http.FileServer(http.Dir("static/pdf/talks")))
+	s.mux.Handle("/talk/", handler)
 	//s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
 	//	fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_eng.pdf"}).Inc()
 	//	http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")
