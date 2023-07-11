@@ -242,7 +242,7 @@ networking = {
 
       table ip nat {
         chain prerouting {
-          type nat hook output priority filter; policy accept;
+          type nat hook prerouting priority filter; policy accept;
         }
 
         # Setup NAT masquerading on the ppp0 interface
