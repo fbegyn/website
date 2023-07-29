@@ -5,3 +5,6 @@ bin/
 dist/
 result
 .env
+
+*.rpm
+*.deb
