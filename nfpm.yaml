@@ -1,0 +1,17 @@
+name: "website"
+arch: "amd64"
+platform: "linux"
+version: "v0.1.0"
+section: "default"
+priority: "extra"
+maintainer: "Francis Begyn <francis@begyn.be>"
+description: |
+  website server that hosts my own website. Packages for my convenience.
+vendor: "Francis"
+homepage: "https://github.com/fbegyn/website"
+license: "MIT"
+contents:
+  - src: ./website.service
+    dst: /etc/systemd/system/website.service
+  - src: ./bin/website
+    dst: /usr/local/bin/website

@@ -1,10 +1,11 @@
 [Service]
 Environment=SERVER_PORT=3114
-ExecStart=/usr/local/bin/website-start
-Group=thecy
-User=thecywebsite
-WorkingDirectory=/srv/thecy/website
+ExecStart=/usr/local/bin/website
+Group=fbegyn
+User=fbegyn
+WorkingDirectory=/srv/fbegyn/website
 
 [Unit]
 After=network.target
+WantedBy=multi-user.target
 
