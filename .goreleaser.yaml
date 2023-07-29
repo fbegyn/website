@@ -11,15 +11,14 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
+      - darwin
     goarch:
       - amd64
+      - arm64
     main: ./cmd/server
-archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      386: i386
-      amd64: x86_64
+    binary: bin/website
+    ldflags:
+      - -w -s
 checksum:
   name_template: 'checksums.txt'
 snapshot:
