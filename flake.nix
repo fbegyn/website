@@ -2,18 +2,27 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    devshell = {
+      url = "github:numtide/devshell";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
   };
 
   outputs = {
     self,
     nixpkgs,
     flake-utils,
+    devshell,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
         config = import ./go.nix;
+        overlays = [ devshell.overlays.default ];
       };
     in rec {
       defaultPackage = pkgs.buildGoModule {
@@ -37,20 +46,47 @@
           "-S" "-W"
         ];
       };
-      devShell = pkgs.mkShell rec {
-        buildInputs = with pkgs; [
-          go
-          nix
-          git
-          gotools
-          go-tools
-          gotestsum
-          gofumpt
-          golangci-lint
-          nfpm
-          goreleaser
-          nodejs
-        ];
+      devShells = rec {
+        default = website;
+        website = pkgs.devshell.mkShell {
+          name = "website";
+          packages = with pkgs; [
+            go
+            nix
+            git
+            gotools
+            go-tools
+            gotestsum
+            gofumpt
+            golangci-lint
+            nfpm
+            goreleaser
+
+            nodejs
+            deno
+          ];
+          commands = [
+            {
+              name = "tailwind:watch";
+              command = ''
+npx tailwindcss -i ./static/css/begyn.css -o static/css/output.css --watch
+              '';
+            }
+            {
+              name = "website:build";
+              command = ''
+make clean
+make build
+              '';
+            }
+            {
+              name = "website:package";
+              command = ''
+make package
+              '';
+            }
+          ];
+        };
       };
       nixosModules.website = { config, lib, pkgs, ...}:
         with lib;

@@ -8,6 +8,7 @@ build:
 
 clean:
 	rm -rf bin/website
+	rm -f website.{deb,rpm}
 
 package: build
 	nfpm pkg --target website.deb
