@@ -4,30 +4,12 @@
         {{ template "title" . }}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="alternate" type="application/rss+xml" href="/blog.rss"/>
-        <link rel="stylesheet" href="/static/css/hack.css" />
-        <style>
-         .hack h1 {
-             padding-top: 0;
-         }
-
-         footer.footer {
-             border-top: 1px solid #ccc;
-             margin-top: 80px;
-             margin-top: 5rem;
-             padding: 48px 0;
-             padding: 3rem 0;
-         }
-
-         img {
-             max-width: 100%;
-             padding: 1em;
-         }
-        </style>
+        <link rel="stylesheet" href="/static/css/output.css" />
         {{ template "styles" . }}
     </head>
     <body class="hack">
         <div class="container">
-            <header>
+            <header class="items-">
                 <p>
                   <a href="/">Francis Begyn</a> -
                   <a href="/blog">Blog</a> -

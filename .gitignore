@@ -1,8 +1,12 @@
 public
 website
 server
+
 bin/
 dist/
+.direnv/
+node_modules/
+
 result
 .env
 
