@@ -2,6 +2,7 @@ public
 website
 server
 bin/
+.direnv/
 dist/
 result
 .env

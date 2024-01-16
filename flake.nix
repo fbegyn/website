@@ -5,7 +5,6 @@
     devshell = {
       url = "github:numtide/devshell";
       inputs = {
-        flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
       };
     };
@@ -41,7 +40,7 @@
           '';
         };
         CGO_ENABLED = 0;
-        vendorSha256 = null;
+        vendorHash = null;
         ldFlages = [
           "-S" "-W"
         ];
