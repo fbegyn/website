@@ -100,7 +100,7 @@
               example = "francis.begyn.be";
               description = "The domain NGINX should use.";
             };
-            ACMEHost = mkOption {
+            useACMEHost = mkOption {
               type = types.str;
               default = "francis.begyn.be";
               example = "francis.begyn.be";
