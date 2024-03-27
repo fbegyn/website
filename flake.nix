@@ -68,20 +68,20 @@
             {
               name = "tailwind:watch";
               command = ''
-npx tailwindcss -i ./static/css/begyn.css -o static/css/output.css --watch
+                npx tailwindcss -i ./static/css/begyn.css -o static/css/output.css --watch
               '';
             }
             {
               name = "website:build";
               command = ''
-make clean
-make build
+                make clean
+                make build
               '';
             }
             {
               name = "website:package";
               command = ''
-make package
+                make package
               '';
             }
           ];
