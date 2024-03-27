@@ -153,7 +153,7 @@
               forceSSL = true;
               serverName = "${cfg.domain}";
               serverAliases = cfg.aliases;
-              useACMEHost = "${cfg.ACMEHost}";
+              useACMEHost = "${cfg.useACMEHost}";
               root = "/var/www/${cfg.domain}";
               locations."/" = {
                 proxyPass = "http://127.0.0.1:${toString cfg.port}";
