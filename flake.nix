@@ -26,9 +26,10 @@
     in rec {
       defaultPackage = pkgs.buildGoModule {
         name = "website";
+        pname = "server";
         src = ./.;
         CGO_ENABLED = 0;
-        vendorHash = null;
+        vendorHash = "sha256-6XLRNgBqLlaw34wrPMFeCnrlAMHfFSaApHwAKZsc4+c=";
         ldFlages = [
           "-S" "-W"
         ];
@@ -78,7 +79,7 @@
       nixosModules.website = { config, lib, pkgs, ...}:
         with lib;
         let
-          cfg = config.fbegyn.services.website;
+          cfg = config.services.fbegyn.website;
         in {
           options.services.fbegyn.website = {
             enable = mkEnableOption "enables fbegyn's personal website server";
