@@ -1,10 +1,11 @@
-public
+public/
 website
 server
 bin/
 .direnv/
 dist/
 node_modules/
+.direnv/
 result
 .env
 
