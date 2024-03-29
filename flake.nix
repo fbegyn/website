@@ -26,19 +26,7 @@
     in rec {
       defaultPackage = pkgs.buildGoModule {
         name = "website";
-        src = pkgs.stdenv.mkDerivation {
-          name = "gosrc";
-          srcs = [ ./go.mod ./go.sum ./cmd ./vendor ];
-          phases = "installPhase";
-          installPhase = ''
-            mkdir $out
-            for src in $srcs; do
-              for srcFile in $src; do
-                cp -r $srcFile $out/$(stripHash $srcFile)
-              done
-            done
-          '';
-        };
+        src = ./.;
         CGO_ENABLED = 0;
         vendorHash = null;
         ldFlages = [
@@ -92,7 +80,7 @@
         let
           cfg = config.fbegyn.services.website;
         in {
-          options.fbegyn.services.website = {
+          options.services.fbegyn.website = {
             enable = mkEnableOption "enables fbegyn's personal website server";
             domain = mkOption {
               type = types.str;
