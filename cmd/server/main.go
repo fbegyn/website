@@ -3,35 +3,27 @@ package main
 import (
 	"context"
 	"html/template"
-	"io/ioutil"
+	"io"
+	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
 
+	"github.com/fbegyn/website/cmd/server/internal"
 	"github.com/fbegyn/website/cmd/server/internal/blog"
 	"github.com/fbegyn/website/cmd/server/internal/front"
 	"github.com/fbegyn/website/cmd/server/internal/middleware"
 	"github.com/gorilla/feeds"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sebest/xff"
 	"github.com/snabb/sitemap"
-	"within.website/ln"
 	"within.website/ln/ex"
-	"within.website/ln/opname"
 )
 
 var (
-	port          = os.Getenv("SERVER_PORT")
-	arbDate       = time.Date(2020, time.January, 9, 0, 0, 0, 0, time.UTC)
-	fileDownloads = promauto.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: "file_downloads",
-			Help: "Number of times a file is downloaded",
-		}, []string{"file"},
-	)
+	port    = os.Getenv("SERVER_PORT")
+	arbDate = time.Date(2020, time.January, 9, 0, 0, 0, 0, time.UTC)
 )
 
 func main() {
@@ -41,14 +33,16 @@ func main() {
 	}
 
 	// create a context in which the website can run and add logging
-	ctx := ln.WithF(opname.With(context.Background(), "main"), ln.F{
-		"port": port,
-	})
+	ctx := context.Background()
+	logger := slog.Default()
+	slog.SetDefault(logger)
+	logger = slog.Default().With(slog.String("func", "main"))
 
 	// Create the site
-	s, err, _ := Build(ctx)
+	s, _, err := Build(ctx)
 	if err != nil {
-		ln.FatalErr(ctx, err, ln.Action("Build"))
+		logger.ErrorContext(ctx, "failed to build website", slog.Any("err", err), slog.String("action", "build"))
+		os.Exit(1)
 	}
 
 	// Create the webmux and attach it to the website
@@ -56,8 +50,12 @@ func main() {
 	mux.Handle("/", s)
 
 	// Enable logging and serve the website
-	ln.Log(ctx, ln.Action("http_listening"))
-	ln.FatalErr(ctx, http.ListenAndServe(":"+port, mux))
+	logger.InfoContext(ctx, "starting webserver", slog.String("action", "http_listen"))
+	if err = http.ListenAndServe(":"+port, mux); err != nil {
+		logger.ErrorContext(ctx, "web server shut down unexpectantly", slog.Any("err", err))
+	} else {
+		logger.InfoContext(ctx, "web server shut down clean")
+	}
 }
 
 // Site represents the website structure and data
@@ -81,18 +79,17 @@ type Talk struct {
 // Make so our site struct can serve http requests
 func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Create a context for the request
-	ctx := opname.With(r.Context(), "site.ServeHTTP")
-	ctx = ln.WithF(ctx, ln.F{
-		"user_agent": r.Header.Get("User-Agent"),
-	})
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, internal.ContextKey("func"), "site.ServeHTTP")
+	ctx = context.WithValue(ctx, internal.ContextKey("user_agent"), r.Header.Get("User-Agent"))
 	r = r.WithContext(ctx)
-
 	// Add a unique ID to each request
 	middleware.RequestID(s.xffmw.Handler(ex.HTTPLog(s.mux))).ServeHTTP(w, r)
 }
 
 // Build renders the entire website
-func Build(ctx context.Context) (*Site, error, chan int) {
+func Build(ctx context.Context) (*Site, chan int, error) {
+	ctx = context.WithValue(ctx, internal.ContextKey("func"), "Build")
 	// Define sitemap for the website
 	smap := sitemap.New()
 	smap.Add(&sitemap.URL{
@@ -104,7 +101,7 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 	// Handle X-Forwarde-For headers
 	xffmw, err := xff.Default()
 	if err != nil {
-		return nil, err, nil
+		return nil, nil, err
 	}
 
 	// Struct that represents the website
@@ -128,7 +125,7 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 
 	posts, err := blog.LoadEntriesDir("./blog/", "blog")
 	if err != nil {
-		return nil, err, nil
+		return nil, nil, err
 	}
 	s.Posts = posts
 
@@ -148,7 +145,7 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 		}
 		defer file.Close()
 
-		content, err := ioutil.ReadAll(file)
+		content, err := io.ReadAll(file)
 		if err != nil {
 			return nil
 		}
@@ -161,6 +158,9 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 		s.Talks = append(s.Talks, t)
 		return nil
 	})
+	if err != nil {
+		return nil, nil, err
+	}
 
 	for _, entry := range s.Posts {
 		if entry.Draft {
@@ -196,7 +196,7 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 		s.renderPageTemplate("index.html", nil).ServeHTTP(w, r)
 	})
 
-	ln.Log(ctx, ln.Action("background_gen"), ln.Info("spinnign up background process channel"))
+	slog.InfoContext(ctx, "spinning up background process channel", slog.String("action", "background_gen"))
 	stop := make(chan int)
 
 	s.mux.Handle("/metrics", promhttp.Handler())
@@ -209,14 +209,6 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 
 	handler := http.StripPrefix("/talk/", http.FileServer(http.Dir("static/pdf/talks")))
 	s.mux.Handle("/talk/", handler)
-	//s.mux.HandleFunc("/francis_begyn_cv_eng.pdf", func(w http.ResponseWriter, r *http.Request) {
-	//	fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_eng.pdf"}).Inc()
-	//	http.ServeFile(w, r, "./cv/francis_begyn_cv_eng.pdf")
-	//})
-	//s.mux.HandleFunc("/francis_begyn_cv_nl.pdf", func(w http.ResponseWriter, r *http.Request) {
-	//	fileDownloads.With(prometheus.Labels{"file": "francis_begyn_cv_nl.pdf"}).Inc()
-	//	http.ServeFile(w, r, "./cv/francis_begyn_cv_nl.pdf")
-	//})
 	s.mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/favicon.ico")
 	})
@@ -229,5 +221,5 @@ func Build(ctx context.Context) (*Site, error, chan int) {
 	// server static files
 	s.mux.Handle("/static/", http.FileServer(http.Dir(".")))
 
-	return s, nil, stop
+	return s, stop, nil
 }

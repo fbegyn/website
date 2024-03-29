@@ -1,10 +1,11 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/celrenheit/sandflake"
-	"within.website/ln"
+	"github.com/fbegyn/website/cmd/server/internal"
 )
 
 // RequestID appends a unique (sandflake) request ID to each request's
@@ -18,9 +19,7 @@ func RequestID(next http.Handler) http.Handler {
 			id = rid + "," + id
 		}
 
-		ctx := ln.WithF(r.Context(), ln.F{
-			"request_id": id,
-		})
+		ctx := context.WithValue(r.Context(), internal.ContextKey("request_id"), id)
 		r = r.WithContext(ctx)
 
 		w.Header().Set("X-Request-Id", id)

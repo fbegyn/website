@@ -2,8 +2,8 @@ package blog
 
 import (
 	"html/template"
-	"io/ioutil"
 	"os"
+	"io"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -60,7 +60,7 @@ func LoadEntriesDir(dirName string, prefix string) (Entries, error) {
 		}
 		defer file.Close()
 
-		content, err := ioutil.ReadAll(file)
+		content, err := io.ReadAll(file)
 		if err != nil {
 			return nil
 		}
