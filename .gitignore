@@ -4,6 +4,7 @@ server
 bin/
 .direnv/
 dist/
+node_modules/
 result
 .env
 
