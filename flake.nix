@@ -29,17 +29,19 @@
         pname = "server";
         src = ./.;
         CGO_ENABLED = 0;
+        doCheck = false;
         vendorHash = "sha256-6XLRNgBqLlaw34wrPMFeCnrlAMHfFSaApHwAKZsc4+c=";
         ldFlages = [
           "-S" "-W"
         ];
+        subPackages = [];
       };
       devShells = rec {
         default = website;
         website = pkgs.devshell.mkShell {
           name = "website";
           packages = with pkgs; [
-            go
+            go_1_23
             nix
             git
             gotools
@@ -49,7 +51,6 @@
             golangci-lint
             nfpm
             goreleaser
-
             nodejs
             deno
           ];
