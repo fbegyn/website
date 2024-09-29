@@ -30,7 +30,7 @@
         src = ./.;
         CGO_ENABLED = 0;
         doCheck = false;
-        vendorHash = "sha256-6XLRNgBqLlaw34wrPMFeCnrlAMHfFSaApHwAKZsc4+c=";
+        vendorHash = "sha256-xsvWI1K+eBlX5MXRyOA18WXowuExk6FCyiakqrAteYs";
         ldFlages = [
           "-S" "-W"
         ];
