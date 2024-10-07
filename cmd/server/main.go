@@ -3,16 +3,13 @@ package main
 import (
 	"context"
 	"html/template"
-	"io"
 	"log/slog"
 	"net/http"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/fbegyn/website/cmd/server/internal"
 	"github.com/fbegyn/website/cmd/server/internal/blog"
-	"github.com/fbegyn/website/cmd/server/internal/front"
 	"github.com/fbegyn/website/cmd/server/internal/middleware"
 	"github.com/gorilla/feeds"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -61,19 +58,13 @@ func main() {
 // Site represents the website structure and data
 type Site struct {
 	Posts blog.Entries
-	Talks []Talk
+	Talks blog.Talks
 	About template.HTML
 
 	rssFeed *feeds.Feed
 
 	mux   *http.ServeMux
 	xffmw *xff.XFF
-}
-
-type Talk struct {
-	Title string
-	Date  string
-	Link  string
 }
 
 // Make so our site struct can serve http requests
@@ -123,44 +114,18 @@ func Build(ctx context.Context) (*Site, chan int, error) {
 		},
 	}
 
+	// load the blog entries from disk
 	posts, err := blog.LoadEntriesDir("./blog/", "blog")
 	if err != nil {
 		return nil, nil, err
 	}
 	s.Posts = posts
-
-	// TODO: work in progress to host PDFs on the site of talks/workshops
-	err = filepath.Walk("./talks", func(filePath string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if info.IsDir() {
-			return nil
-		}
-
-		file, err := os.Open(filePath)
-		if err != nil {
-			return err
-		}
-		defer file.Close()
-
-		content, err := io.ReadAll(file)
-		if err != nil {
-			return nil
-		}
-
-		var t Talk
-		_, err = front.Unmarshal(content, &t)
-		if err != nil {
-			return err
-		}
-		s.Talks = append(s.Talks, t)
-		return nil
-	})
+	// load talk entries from disk
+	talks, err := blog.LoadTalksDir("./talks/", "talk")
 	if err != nil {
 		return nil, nil, err
 	}
+	s.Talks = talks
 
 	for _, entry := range s.Posts {
 		if entry.Draft {
@@ -199,27 +164,26 @@ func Build(ctx context.Context) (*Site, chan int, error) {
 	slog.InfoContext(ctx, "spinning up background process channel", slog.String("action", "background_gen"))
 	stop := make(chan int)
 
-	s.mux.Handle("/metrics", promhttp.Handler())
-	s.mux.Handle("/about", middleware.Metrics("about", s.renderPageTemplate("about.html", nil)))
-	s.mux.Handle("/blog", middleware.Metrics("blog", s.renderPageTemplate("blogindex.html", s.Posts)))
-	s.mux.Handle("/blog/rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
-	s.mux.Handle("/blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
-	s.mux.Handle("/blog/", middleware.Metrics("post", http.HandlerFunc(s.renderPost)))
-	s.mux.Handle("/talks", middleware.Metrics("talk", s.renderPageTemplate("talks.html", s.Talks)))
+	s.mux.Handle("GET /metrics", promhttp.Handler())
+	s.mux.Handle("GET /about", middleware.Metrics("about", s.renderPageTemplate("about.html", nil)))
+	s.mux.Handle("GET /blog", middleware.Metrics("blog", s.renderPageTemplate("blogindex.html", s.Posts)))
+	s.mux.Handle("GET /blog/rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
+	s.mux.Handle("GET /blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
+	s.mux.Handle("GET /blog/", middleware.Metrics("post", http.HandlerFunc(s.renderPost)))
+	s.mux.Handle("GET /talks", middleware.Metrics("talk", s.renderPageTemplate("talks.html", s.Talks)))
 
 	handler := http.StripPrefix("/talk/", http.FileServer(http.Dir("static/pdf/talks")))
-	s.mux.Handle("/talk/", handler)
+	s.mux.Handle("GET /talk/", handler)
 	s.mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/favicon.ico")
 	})
 
 	s.mux.HandleFunc("/.well-known/cf-2fa-verify.txt", func(w http.ResponseWriter, r *http.Request) {
-
 		w.Header().Set("Content-Type", "application/text")
 	})
 
 	// server static files
-	s.mux.Handle("/static/", http.FileServer(http.Dir(".")))
+	s.mux.Handle("GET /static/", http.FileServer(http.Dir(".")))
 
 	return s, stop, nil
 }
