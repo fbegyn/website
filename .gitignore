@@ -1,15 +1,16 @@
 .DS_Store
 
 public/
-website
-server
 bin/
 .direnv/
 dist/
 node_modules/
 .direnv/
-result
 .env
+
+/server
+/website
+/result
 
 *.rpm
 *.deb
