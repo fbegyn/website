@@ -152,7 +152,7 @@ func Build(ctx context.Context) (*Site, chan int, error) {
 	}
 
 	// Add HTTP routes here
-	s.mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	s.mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			w.WriteHeader(http.StatusNotFound)
 			s.renderPageTemplate("error.html", "page not found: "+r.URL.Path).ServeHTTP(w, r)
@@ -174,11 +174,11 @@ func Build(ctx context.Context) (*Site, chan int, error) {
 
 	handler := http.StripPrefix("/talk/", http.FileServer(http.Dir("static/pdf/talks")))
 	s.mux.Handle("GET /talk/", handler)
-	s.mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+	s.mux.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/favicon.ico")
 	})
 
-	s.mux.HandleFunc("/.well-known/cf-2fa-verify.txt", func(w http.ResponseWriter, r *http.Request) {
+	s.mux.HandleFunc("GET /.well-known/cf-2fa-verify.txt", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/text")
 	})
 
