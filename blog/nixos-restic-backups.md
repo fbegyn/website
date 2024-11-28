@@ -89,7 +89,7 @@ services.restic.backups = {
   gdrive = {
     ...
     timerConfig = {
-      onCalendar = "saturday 23:00";
+      OnCalendar = "saturday 23:00";
     };
   };
 };
