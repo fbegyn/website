@@ -6,12 +6,14 @@
 <meta name="twitter:site" content="@fbegyn" />
 <meta name="twitter:title" content="{{ .Title }}" />
 <meta name="twitter:description" content="Posted on {{ .Date }}" />
-<script src="/static/js/prism.js"></script>
 
 <!-- Description -->
 <meta name="description" content="{{ .Title }} - Francis Begyn's thoughts" />
 <meta name="author" content="Francis Begyn">
-{{ if .Prism }}<link rel="stylesheet" href="/static/css/prism.css" />{{ end }}
+{{ if .Prism }}
+<link rel="stylesheet" href="/static/css/prism.css" />
+<script src="/static/js/prism.js"></script>
+{{ end }}
 {{ end }}
 
 {{ define "content" }}
