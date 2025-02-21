@@ -35,7 +35,7 @@ func (e Entries) Less(i, j int) bool {
 }
 func (e Entries) Swap(i, j int) { e[i], e[j] = e[j], e[i] }
 
-func LoadEntriesDir(dirName string, prefix string) (Entries, error) {
+func LoadEntriesDir(dirName string, prefix string, publishDrafts bool) (Entries, error) {
 	type frontMatter struct {
 		Title string
 		Date  string
@@ -92,7 +92,7 @@ func LoadEntriesDir(dirName string, prefix string) (Entries, error) {
 			Draft:      fm.Draft,
 		}
 
-		if !entry.Draft {
+		if !entry.Draft || publishDrafts {
 		    entries = append(entries, entry)
 		}
 
