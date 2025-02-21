@@ -28,8 +28,8 @@
         name = "website";
         pname = "server";
         src = ./.;
-        CGO_ENABLED = 0;
-        vendorHash = "sha256-8w2zS+3YyBD+mTBXc3l574ru0gPWTmZtjwDm8cRqjYg";
+        env.CGO_ENABLED = 0;
+        vendorHash = "sha256-Em+JgHXYgcy8GLNCVDEqNPuJA9BAqbDE22bcfsbAcJE=";
         ldFlages = [
           "-S" "-W"
         ];
@@ -132,7 +132,7 @@
                 User = "fbegyn";
                 Group = "fbegyn";
                 WorkingDirectory = "${cfg.home}";
-                ExecStart = "${defaultPackage}/bin/server";
+                ExecStart = "${defaultPackage}/bin/server serve";
               };
               wantedBy = [ "multi-user.target" ];
               after = [ "network.target" ];
