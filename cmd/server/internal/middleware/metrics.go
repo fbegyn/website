@@ -37,7 +37,8 @@ func init() {
 func Metrics(family string, next http.Handler) http.Handler {
 	return promhttp.InstrumentHandlerDuration(
 		requestDuration.MustCurryWith(prometheus.Labels{"handler": family}),
-		promhttp.InstrumentHandlerCounter(requestCounter.MustCurryWith(prometheus.Labels{"handler": family}),
+		promhttp.InstrumentHandlerCounter(
+			requestCounter.MustCurryWith(prometheus.Labels{"handler": family}),
 			promhttp.InstrumentHandlerInFlight(requestInFlight.With(prometheus.Labels{"handler": family}), next),
 		),
 	)
