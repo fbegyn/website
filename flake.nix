@@ -29,7 +29,7 @@
         pname = "server";
         src = ./.;
         env.CGO_ENABLED = 0;
-        vendorHash = "sha256-Em+JgHXYgcy8GLNCVDEqNPuJA9BAqbDE22bcfsbAcJE=";
+        vendorHash = "sha256-SfUE4eioZqrpAE0ymZ6hDG4nzdgEy+4WthXKqtfjgSA=";
         ldFlages = [
           "-S" "-W"
         ];
