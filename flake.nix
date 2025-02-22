@@ -29,7 +29,7 @@
         pname = "server";
         src = ./.;
         env.CGO_ENABLED = 0;
-        vendorHash = "sha256-SfUE4eioZqrpAE0ymZ6hDG4nzdgEy+4WthXKqtfjgSA=";
+        vendorHash = "sha256-Em+JgHXYgcy8GLNCVDEqNPuJA9BAqbDE22bcfsbAcJE=";
         ldFlages = [
           "-S" "-W"
         ];
@@ -113,6 +113,25 @@
               example = 3114;
               description = "The port number for the website server";
             };
+            multiplex = {
+              enable = mkEnableOption "enables the multiplex server on this host under multiplex-server.service";
+              location = mkOption {
+                type = types.str;
+                default = "/socket.io";
+                example = "/multiplex/socket";
+                description = "nginx location to run the multiplex server on";
+              };
+              command = mkOption {
+                type = types.str;
+                description = "command to execute under de multiplex server systemd unit";
+              };
+              port = mkOption {
+                type = types.int;
+                default = 8000;
+                example = 8000;
+                description = "The port number for the multiplex server";
+              };
+            };
           };
 
           config = mkIf cfg.enable {
@@ -125,16 +144,25 @@
             };
             users.groups.fbegyn.members = [ "francis" ];
             systemd.services.website = {
-              enable = true;
               serviceConfig = {
                 Environment = "SERVER_PORT=${toString cfg.port}";
-                EnvironmentFile = "/srv/fbegyn/website/.env";
+                EnvironmentFile = "${cfg.home}/.env";
                 User = "fbegyn";
                 Group = "fbegyn";
                 WorkingDirectory = "${cfg.home}";
                 ExecStart = "${defaultPackage}/bin/server serve";
               };
               wantedBy = [ "multi-user.target" ];
+              after = [ "network.target" ];
+            };
+            systemd.services.multiplex-server = mkIf cfg.multiplex.enable {
+              serviceConfig = {
+                EnvironmentFile = "${cfg.multiplex.home}/.env";
+                User = "fbegyn";
+                Group = "fbegyn";
+                WorkingDirectory = "${cfg.multiplex.home}";
+                ExecStart = "${cfg.multiplex.command}";
+              };
               after = [ "network.target" ];
             };
             # francis.begyn.be website/blog
@@ -146,6 +174,12 @@
               root = "/var/www/${cfg.domain}";
               locations."/" = {
                 proxyPass = "http://127.0.0.1:${toString cfg.port}";
+                extraConfig = ''
+                  add_header Permissions-Policy interest-cohort=();
+                '';
+              };
+              locations."${cfg.multiplex.path}" = mkIf cfg.multiplex.enable {
+                proxyPass = "http://127.0.0.1:${toString cfg.multiplex.port}";
                 extraConfig = ''
                   add_header Permissions-Policy interest-cohort=();
                 '';
