@@ -55,16 +55,16 @@
           ];
           commands = [
             {
-              name = "tailwind:watch";
-              command = ''
-                npx tailwindcss -i ./static/css/begyn.css -o static/css/output.css --watch
-              '';
-            }
-            {
-              name = "website:build";
+              name = "website:build:bin";
               command = ''
                 make clean
                 make build
+              '';
+            }
+            {
+              name = "website:build:nix";
+              command = ''
+                nix build
               '';
             }
             {
