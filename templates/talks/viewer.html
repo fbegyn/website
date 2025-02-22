@@ -21,7 +21,7 @@
         </section>
     </div>
 </div>
-<script src="/static/js/dist/reveal.js"></script>
+<script src="/static/js/reveal-js/dist/reveal.js"></script>
 <script src="/static/js/reveal-js/plugin/markdown/markdown.js"></script>
 <script src="/static/js/reveal-js/plugin/highlight/highlight.js"></script>
 <script src="/static/js/reveal-js/plugin/zoom/zoom.js"></script>
@@ -45,6 +45,15 @@
          RevealNotes,
          RevealMath,
      ],
+     multiplex: {
+         secret: null,
+         id: '{{.Multiplex.SocketID}}',
+         url: '/'
+     },
+     dependencies: [
+         { src: '/static/js/socketio/dist/socket.io.js', async: true },
+         { src: '/static/js/reveal-multiplex/client.js', async: true },
+     ]
  });
 </script>
 {{ end }}
