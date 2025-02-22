@@ -20,16 +20,18 @@ type Globals struct {
 }
 
 type ServeCmd struct {
-	Port  int    `help:"http port for website endpoint (default: 8080)" default:"8080"`
-	Host  string `help:"http host for website endpoint (default: localhost)" default:"localhost"`
-	Drafts bool   `help:"publish drafts (default: false)" default:"false"`
+	Port      int    `help:"http port for website endpoint (default: 8080)" default:"8080"`
+	Host      string `help:"http host for website endpoint (default: localhost)" default:"localhost"`
+	Drafts    bool   `help:"publish drafts (default: false)" default:"false"`
+	Multiplex bool   `help:"run the socketio server for reveal-multiplex (default: false)" default:"false"`
+	MultiplexSecret string   `help:"secret to run the socketio with (default:\"\")" default:""`
 }
 
 func (c *ServeCmd) Run(globals *Globals) error {
 	ctx := context.Background()
 	logger := slog.Default()
 	// Create the site
-	s, _, err := Build(ctx, c.Drafts)
+	s, _, err := Build(ctx, c.Drafts, c.Multiplex, c.MultiplexSecret)
 	if err != nil {
 		logger.ErrorContext(ctx, "failed to build website", slog.Any("err", err), slog.String("action", "build"))
 		os.Exit(1)

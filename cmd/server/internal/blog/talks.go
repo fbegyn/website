@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"log/slog"
+	"net/http"
 	"os"
 	"path/filepath"
 	"sort"
@@ -147,27 +149,27 @@ type TalkFile struct {
 }
 
 func (file *TalkFile) Seek(offset int64, whence int) (int64, error) {
-    switch whence {
-    case io.SeekStart:
-        file.offset = offset
-    case io.SeekCurrent:
-        file.offset += offset
-    case io.SeekEnd:
-        // This requires knowing the file size
-        info, err := file.Stat()
-        if err != nil {
-            return 0, err
-        }
-        file.offset = info.Size() + offset
-    default:
-        return 0, fmt.Errorf("invalid whence: %d", whence)
-    }
+	switch whence {
+	case io.SeekStart:
+		file.offset = offset
+	case io.SeekCurrent:
+		file.offset += offset
+	case io.SeekEnd:
+		// This requires knowing the file size
+		info, err := file.Stat()
+		if err != nil {
+			return 0, err
+		}
+		file.offset = info.Size() + offset
+	default:
+		return 0, fmt.Errorf("invalid whence: %d", whence)
+	}
 
-    if file.offset < 0 {
-        return 0, fmt.Errorf("negative offset")
-    }
+	if file.offset < 0 {
+		return 0, fmt.Errorf("negative offset")
+	}
 
-    return file.offset, nil
+	return file.offset, nil
 }
 
 func (file *TalkFile) Read(p []byte) (n int, err error) {
@@ -202,3 +204,23 @@ func (info TalkMeta) Mode() fs.FileMode  { return 0 }
 func (info TalkMeta) ModTime() time.Time { return time.Now() }
 func (info TalkMeta) IsDir() bool        { return false }
 func (info TalkMeta) Sys() any           { return info.file }
+
+type WebsiteResponseWriter struct {
+	http.ResponseWriter
+	status int
+}
+
+func (w *WebsiteResponseWriter) WriteHeader(status int) {
+	w.status = status
+	w.ResponseWriter.WriteHeader(status)
+}
+
+func TalkFSHandler(h http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		temp := &WebsiteResponseWriter{ResponseWriter: w}
+		h.ServeHTTP(temp, r)
+		if temp.status >= 400 {
+			slog.ErrorContext(r.Context(), "failed to open TalkFS and serve talk", "status", temp.status)
+		}
+	}
+}

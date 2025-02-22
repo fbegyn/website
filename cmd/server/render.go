@@ -98,7 +98,7 @@ func (s *Site) renderPost(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	s.renderPageTemplate("blogpost.html", struct {
+	s.renderPageTemplate("entries/entry.html", struct {
 		Title             string
 		Link              string
 		BodyHTML          template.HTML
@@ -140,7 +140,7 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.renderTalkTemplate("talk.html", struct {
+	s.renderTalkTemplate("talks/talk.html", struct {
 		Title   string
 		Date    string
 		Slug    string
@@ -158,7 +158,7 @@ func (s *Site) renderTalkTemplate(templateFile string, data interface{}) http.Ha
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var t *template.Template
 		var err error
-		t, err = template.ParseFiles("templates/talkbase.html", "templates/"+templateFile)
+		t, err = template.ParseFiles("templates/talks/base.html", "templates/"+templateFile)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			slog.Error(
