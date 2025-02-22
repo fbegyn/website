@@ -12,6 +12,7 @@ import (
 	"cuelang.org/go/cue/load"
 	"github.com/fbegyn/website/cmd/server/internal"
 	"github.com/fbegyn/website/cmd/server/internal/blog"
+	"github.com/fbegyn/website/cmd/server/internal/multiplex"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -125,6 +126,7 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 
 	cmp := r.PathValue("slug")
 	year := r.PathValue("year")
+	secret := r.PathValue("secret")
 	var p blog.Talk
 	var found bool
 	for _, pst := range s.Talks {
@@ -140,16 +142,26 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.renderTalkTemplate("talks/talk.html", struct {
+	base := "talks/viewer.html"
+	if secret == "francispresenteert" {
+		base = "talks/presenter.html"
+	}
+
+	s.renderTalkTemplate(base, struct {
 		Title   string
 		Date    string
 		Slug    string
 		Path    string
+		Multiplex multiplex.MultiplexData
 	}{
 		Title:   p.Title,
 		Slug:    p.Slug,
 		Date:    internal.IOS13Detri(p.Date),
 		Path:    p.Path,
+		Multiplex: multiplex.MultiplexData{
+			Secret: "hello",
+			SocketID: p.Slug,
+		},
 	}).ServeHTTP(w, r)
 	talkViews.With(prometheus.Labels{"talk": filepath.Base(p.Slug)}).Inc()
 }

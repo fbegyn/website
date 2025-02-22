@@ -18,14 +18,8 @@ import (
 	"within.website/ln/ex"
 )
 
-//go:embed static/js/reveal-js
-var revealFS embed.FS
-
-//go:embed static/js/reveal-multiplex
-var multiplexFS embed.FS
-
-//go:embed static/js/socketio
-var socketiojsFS embed.FS
+//go:embed static/js
+var jsFS embed.FS
 
 // Site represents the website structure and data
 type Site struct {
@@ -53,7 +47,7 @@ func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // Build renders the entire website
-func Build(ctx context.Context, publishDrafts, multiplexSocket bool, ms string) (*Site, chan int, error) {
+func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 	ctx = context.WithValue(ctx, internal.ContextKey("func"), "Build")
 	// Define sitemap for the website
 	smap := sitemap.New()
@@ -168,27 +162,19 @@ func Build(ctx context.Context, publishDrafts, multiplexSocket bool, ms string) 
 
 	// server static files
 	s.mux.Handle("GET /static/", http.StripPrefix("/static", http.FileServer(http.Dir("./static"))))
+	s.mux.Handle("GET /static/js/", http.FileServerFS(jsFS))
 	s.mux.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/favicon.ico")
 	})
 
 	// handle the socketio setup for presenting talks
-	if multiplexSocket {
-		slog.Info("spinning up socketio setup for reveal-multiplex")
-		socketioServer := multiplex.SocketIOSetup()
-		// s.mux.Handle("/-/talks/master/{year}/{slug}", http.StripPrefix("/-/talks/master/", ))
-		s.mux.Handle("/-/static/js/socketio/", http.StripPrefix(
-			"/-/",
-			http.FileServerFS(socketiojsFS),
-		))
-		s.mux.Handle("/-/static/js/reveal-multiplex/", http.StripPrefix(
-			"/-/",
-			http.FileServerFS(multiplexFS),
-		))
-		s.mux.Handle("/-/talks/socketio", http.StripPrefix(
-			"/-/",
-			socketioServer,
-		))
+	if ms != "" {
+		// basic auth presenter control
+		s.mux.Handle("GET /talks/viewer/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(s.renderTalk)))
+		s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
+			internal.BasicAuth("foo", "bar", s.renderTalk),
+		)))
+		slog.Info("presenter control available at /talks/presenter/...")
 	}
 
 	return s, stop, nil
