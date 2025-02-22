@@ -176,7 +176,7 @@ func (w *WebsiteResponseWriter) WriteHeader(status int) {
 }
 
 func TalkFSHandler(h http.Handler) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request){
+	return func(w http.ResponseWriter, r *http.Request) {
 		temp := &WebsiteResponseWriter{ResponseWriter: w}
 		h.ServeHTTP(temp, r)
 		if temp.status >= 400 {
