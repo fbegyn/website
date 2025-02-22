@@ -5,7 +5,7 @@ author: Francis Begyn
 email: francis@begyn.be
 institute: Zeus WPI
 site: https://francis.begyn.be
-draft: true
+draft: false
 ---
 
 # Plain text accounting

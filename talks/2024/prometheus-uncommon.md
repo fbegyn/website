@@ -3,7 +3,7 @@ title: Prometheus (Un)common Knowledge
 author: Francis Begyn
 date: 2024-09-24
 aspectratio: "169"
-draft: true
+draft: false
 ---
 
 # Prometheus uncommon knowledge
@@ -53,7 +53,7 @@ Prometheus Components
 
 ## Prometheus Components
 
-![Component Overview](/static/img/talks/2024/prometheus_overall_architecture.svg)
+![Component Overview](/static/img/talks/2024/prometheus_overall_architecture.svg) <!-- .element height="550px" -->
 
 ---
 
@@ -63,7 +63,7 @@ Prometheus
 
 ## Prometheus and service discovery
 
-![Prometheus SD](/static/img/talks/2024/prometheus_service_discovery_focus.svg)
+![Prometheus SD](/static/img/talks/2024/prometheus_service_discovery_focus.svg) <!-- .element height="450px" -->
 
 ---
 
@@ -101,7 +101,7 @@ Prometheus
 
 ## Labels ... ? What Are Labels?
 
-![promtheus relabel](/static/img/talks/2024/prometheus_relabel_flow.svg)
+![promtheus relabel](/static/img/talks/2024/prometheus_relabel_flow.svg)  <!-- .element height="550px" -->
 
 ---
 
@@ -119,7 +119,7 @@ Prometheus
 
 ## Relabeler Webapp
 
-![Relabeler QR](/static/img/talks/2024/relaber-site.png)
+![Relabeler QR](/static/img/talks/2024/relaber-site.png)  <!-- .element height="550px" -->
 
 ---
 
@@ -133,7 +133,7 @@ Prometheus Exporters
   1. Exporters that expose data of their own
   2. Exporters that expose data they collect from other targets
 
-![Prometheus Exporter](/static/img/talks/2024/prometheus_exporter_focus.svg)
+![Prometheus Exporter](/static/img/talks/2024/prometheus_exporter_focus.svg)  <!-- .element height="475px" -->
 
 ---
 
@@ -164,7 +164,7 @@ Prometheus Remote Write
 
 ## Prometheus Remote Write
 
-![Prometheus Remote Write](/static/img/talks/2024/prometheus_remote_focus.svg)
+![Prometheus Remote Write](/static/img/talks/2024/prometheus_remote_focus.svg) <!-- .element height="600px" -->
 
 ---
 
@@ -184,13 +184,13 @@ PromQL
 
 ## Querying
 
-![Query Docs](/static/img/talks/2024/docs-query.png)
+![Query Docs](/static/img/talks/2024/docs-query.png) <!-- .element height="550px" -->
 
 ---
 
 ## PromQL
 
-![PromQL Instant Query](/static/img/talks/2024/series_baseline.svg)
+![PromQL Instant Query](/static/img/talks/2024/series_baseline.svg) <!-- .element height="550px" -->
 
 ---
 
@@ -198,7 +198,7 @@ PromQL
 
 Instant query `node_cpu_seconds`
 
-![PromQL Instant Query](/static/img/talks/2024/series_instant_basics.svg)
+![PromQL Instant Query](/static/img/talks/2024/series_instant_basics.svg) <!-- .element height="550px" -->
 
 ---
 
@@ -206,7 +206,7 @@ Instant query `node_cpu_seconds`
 
 Range query `node_cpu_seconds[10m]`
 
-![PromQL Range Query](/static/img/talks/2024/series_range_query.svg)
+![PromQL Range Query](/static/img/talks/2024/series_range_query.svg) <!-- .element height="550px" -->
 
 ---
 
@@ -244,7 +244,7 @@ Prometheus tooling
 
 ## Promlabs guide
 
-![promlabs YT](/static/img/talks/2024/promlabs-youtube.png)
+![promlabs YT](/static/img/talks/2024/promlabs-youtube.png) <!-- .element height="550px" -->
 
 ---
 
