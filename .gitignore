@@ -12,10 +12,12 @@ node_modules/
 /website
 /result
 
-static/img/
-static/pdf/
-templates/resume.html
+**/static/img
+**/static/pdf
+
 cue/
+
+templates/resume.html
 
 *.rpm
 *.deb

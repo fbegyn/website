@@ -1,0 +1,50 @@
+{{ define "title" }}
+<title>Talk - Francis Begyn - {{ .Title }}</title>
+{{ end }}
+
+{{ define "head" }}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" href="/static/js/reveal-js/dist/reveal.css" />
+<link rel="stylesheet" href="/static/js/reveal-js/dist/theme/night.css" />
+{{ end }}
+
+{{ define "content" }}
+<div class="reveal">
+    <div class="slides">
+        <section
+            data-markdown="/static/talks/{{ .Path }}"
+            data-separator="^\r?\n---\r?\n$"
+            data-separator-vertical="^\r?\n--\r?\n$"
+            data-separator-notes="^Notes:"
+        >
+        </section>
+    </div>
+</div>
+<script src="/static/js/reveal-js/dist/reveal.js"></script>
+<script src="/static/js/reveal-js/plugin/markdown/markdown.js"></script>
+<script src="/static/js/reveal-js/plugin/highlight/highlight.js"></script>
+<script src="/static/js/reveal-js/plugin/zoom/zoom.js"></script>
+<script src="/static/js/reveal-js/plugin/notes/notes.js"></script>
+<script src="/static/js/reveal-js/plugin/math/math.js"></script>
+<script>
+ Reveal.initialize({
+     history: true,
+     width: 1280,
+     height: 720,
+     margin: 0.04,
+     minScale: 0.2,
+     maxScale: 1.5,
+     slideNumber: "c/t",
+     defaultTiming: 90,
+     transition: "fade",
+     plugins: [
+         RevealMarkdown,
+         RevealHighlight,
+         RevealZoom,
+         RevealNotes,
+         RevealMath,
+     ],
+ });
+</script>
+{{ end }}
