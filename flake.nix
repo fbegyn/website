@@ -186,6 +186,7 @@
               };
               locations."${cfg.multiplex.location}" = mkIf cfg.multiplex.enable {
                 proxyPass = "http://127.0.0.1:${toString cfg.multiplex.port}";
+                proxyWebsockets = true;
                 extraConfig = ''
                   add_header Permissions-Policy interest-cohort=();
                 '';
