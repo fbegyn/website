@@ -178,7 +178,7 @@
                   add_header Permissions-Policy interest-cohort=();
                 '';
               };
-              locations."${cfg.multiplex.path}" = mkIf cfg.multiplex.enable {
+              locations."${cfg.multiplex.location}" = mkIf cfg.multiplex.enable {
                 proxyPass = "http://127.0.0.1:${toString cfg.multiplex.port}";
                 extraConfig = ''
                   add_header Permissions-Policy interest-cohort=();
