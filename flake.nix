@@ -131,6 +131,12 @@
                 example = 8000;
                 description = "The port number for the multiplex server";
               };
+              home = mkOption {
+                type = types.str;
+                default = "/srv/fbegyn/multiplex-ts-server";
+                example = "/var/lib/website";
+                description = "Working directory of the website";
+              };
             };
           };
 
