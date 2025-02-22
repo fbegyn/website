@@ -161,7 +161,8 @@ func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 
 	// server static files
 	s.mux.Handle("GET /static/", http.StripPrefix("/static", http.FileServer(http.Dir("./static"))))
-	s.mux.Handle("GET /static/js/", http.FileServerFS(jsFS))
+	// TODO: figure out how the hell this is supposed to work in buildGoModule
+	// s.mux.Handle("GET /static/js/", http.FileServerFS(jsFS))
 	s.mux.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./static/favicon.ico")
 	})
