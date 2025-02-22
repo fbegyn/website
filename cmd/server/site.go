@@ -10,7 +10,6 @@ import (
 	"github.com/fbegyn/website/cmd/server/internal"
 	"github.com/fbegyn/website/cmd/server/internal/blog"
 	"github.com/fbegyn/website/cmd/server/internal/middleware"
-	"github.com/fbegyn/website/cmd/server/internal/multiplex"
 	"github.com/gorilla/feeds"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sebest/xff"
@@ -168,14 +167,12 @@ func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 	})
 
 	// handle the socketio setup for presenting talks
-	if ms != "" {
-		// basic auth presenter control
-		s.mux.Handle("GET /talks/viewer/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(s.renderTalk)))
-		s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
-			internal.BasicAuth("foo", "bar", s.renderTalk),
-		)))
-		slog.Info("presenter control available at /talks/presenter/...")
-	}
+	// basic auth presenter control
+	s.mux.Handle("GET /talks/viewer/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(s.renderTalk)))
+	s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
+		internal.BasicAuth("foo", "bar", s.renderTalk),
+	)))
+	slog.Info("presenter control available at /talks/presenter/...")
 
 	return s, stop, nil
 }
