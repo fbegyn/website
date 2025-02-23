@@ -47,8 +47,8 @@
      ],
      multiplex: {
          secret: null,
-         id: '{{.Multiplex.SocketID}}',
-         url: '/'
+         id: '{{.MSocketID}}',
+         url: '{{.MURL}}'
      },
      dependencies: [
          { src: '/static/js/socketio/dist/socket.io.js', async: true },

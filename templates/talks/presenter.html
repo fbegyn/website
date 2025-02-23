@@ -12,6 +12,10 @@
 {{ define "content" }}
 <div class="reveal">
     <div class="slides">
+        <section>
+            <h1>Follow along with this presentation</h1>
+            <a href="{{.ViewerURL}}">{{.ViewerURL}}</a>
+        </section>
         <section
             data-markdown="/static/talks/{{ .Path }}"
             data-separator="^\r?\n---\r?\n$"
@@ -46,9 +50,9 @@
          RevealMath,
      ],
      multiplex: {
-         secret: '{{.Multiplex.Secret}}',
-         id: '{{.Multiplex.SocketID}}',
-         url: '/'
+         secret: '{{.MSecret}}',
+         id: '{{.MSocketID}}',
+         url: '{{.MURL}}'
      },
      dependencies: [
          { src: '/static/js/socketio/dist/socket.io.js', async: true },

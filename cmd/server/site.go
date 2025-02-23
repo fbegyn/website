@@ -169,9 +169,11 @@ func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 
 	// handle the socketio setup for presenting talks
 	// basic auth presenter control
-	s.mux.Handle("GET /talks/viewer/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(s.renderTalk)))
+	s.mux.Handle("GET /talks/viewer/{year}/{slug}/{socketID}", middleware.Metrics("talks", http.HandlerFunc(
+		s.renderTalk,
+	)))
 	s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
-		internal.BasicAuth("foo", "bar", s.renderTalk),
+		internal.BasicAuth("foo", "bar", middleware.MultiplexCreateCredentials(s.renderTalk)),
 	)))
 	slog.Info("presenter control available at /talks/presenter/...")
 

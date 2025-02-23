@@ -12,6 +12,7 @@ import (
 	"cuelang.org/go/cue/load"
 	"github.com/fbegyn/website/cmd/server/internal"
 	"github.com/fbegyn/website/cmd/server/internal/blog"
+	"github.com/fbegyn/website/cmd/server/internal/middleware"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -123,6 +124,17 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var tmplData struct {
+		Title     string
+		Date      string
+		Slug      string
+		Path      string
+		MSecret   string
+		MSocketID string
+		MURL      string
+		ViewerURL string
+	}
+
 	cmp := r.PathValue("slug")
 	year := r.PathValue("year")
 	var p blog.Talk
@@ -133,24 +145,47 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 			found = true
 		}
 	}
-
 	if !found {
 		w.WriteHeader(http.StatusNotFound)
 		s.renderPageTemplate("error.html", "no such talk found: "+r.RequestURI).ServeHTTP(w, r)
 		return
 	}
 
-	s.renderTalkTemplate("talks/talk.html", struct {
-		Title string
-		Date  string
-		Slug  string
-		Path  string
-	}{
-		Title: p.Title,
-		Slug:  p.Slug,
-		Date:  internal.IOS13Detri(p.Date),
-		Path:  p.Path,
-	}).ServeHTTP(w, r)
+	// lookup role type
+	presenter, viewer := false, false
+	secret := r.Context().Value(middleware.MultiplexKey("secret"))
+	if secret != nil {
+		tmplData.MSecret = secret.(string)
+		presenter = true
+	}
+	socketID := r.Context().Value(middleware.MultiplexKey("socketID"))
+	if socketID == nil {
+		r = middleware.MultiplexViewerToContext(r)
+		socketID = r.Context().Value(middleware.MultiplexKey("socketID"))
+	}
+	if socketID != nil {
+		tmplData.MSocketID = socketID.(string)
+		tmplData.ViewerURL = strings.Replace(r.URL.String(), "presenter", "viewer", 1) + "/" + socketID.(string)
+		viewer = true
+	}
+
+	var base string
+	if presenter {
+		base = "talks/presenter.html"
+	} else if viewer {
+		base = "talks/viewer.html"
+	} else {
+		base = "talks/talk.html"
+	}
+
+	tmplData.Title = p.Title
+	tmplData.Slug = p.Slug
+	tmplData.Date = internal.IOS13Detri(p.Date)
+	tmplData.Path = p.Path
+	tmplData.Title = p.Title
+	tmplData.MURL = "https://francis.begyn.be/-/multiplex/socket"
+
+	s.renderTalkTemplate(base, tmplData).ServeHTTP(w, r)
 	talkViews.With(prometheus.Labels{"talk": filepath.Base(p.Slug)}).Inc()
 }
 
