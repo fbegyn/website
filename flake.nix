@@ -121,6 +121,12 @@
                 example = "/multiplex/socket";
                 description = "nginx location to run the multiplex server on";
               };
+              proxyPass = mkOption {
+                type = types.str;
+                default = "http://127.0.0.1:${toString cfg.multiplex.port}/";
+                example = "http://127.0.0.1:3000/";
+                description = "nginx location to run the multiplex server on";
+              };
               command = mkOption {
                 type = types.str;
                 description = "command to execute under de multiplex server systemd unit";
@@ -185,7 +191,7 @@
                 '';
               };
               locations."${cfg.multiplex.location}" = mkIf cfg.multiplex.enable {
-                proxyPass = "http://127.0.0.1:${toString cfg.multiplex.port}/";
+                proxyPass = "${cfg.multiplex.proxyPass}";
                 proxyWebsockets = true;
                 extraConfig = ''
                   add_header Permissions-Policy interest-cohort=();
