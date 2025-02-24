@@ -8,3 +8,6 @@
 [submodule "static/js/socketio"]
 	path = cmd/server/static/js/socketio
 	url = git@github.com:socketio/socket.io-client.git
+[submodule "cmd/server/static/js/qrcodejs"]
+	path = cmd/server/static/js/qrcodejs
+	url = git@github.com:davidshimjs/qrcodejs.git
