@@ -4,7 +4,7 @@
 	branch = 6b8c64ffa8fddd9ed4bcd92bcfd37b67ba410244
 [submodule "static/js/reveal-multiplex"]
 	path = cmd/server/static/js/reveal-multiplex
-	url = git@github.com:reveal/multiplex.git
+	url = git@github.com:fbegyn/multiplex.git
 [submodule "static/js/socketio"]
 	path = cmd/server/static/js/socketio
 	url = git@github.com:socketio/socket.io-client.git
