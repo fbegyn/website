@@ -154,6 +154,10 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 	// lookup role type
 	presenter, viewer := false, false
 	secret := r.Context().Value(middleware.MultiplexKey("secret"))
+	if secret == nil {
+		r = middleware.MultiplexPresenterToContext(r)
+		secret = r.Context().Value(middleware.MultiplexKey("secret"))
+	}
 	if secret != nil {
 		tmplData.MSecret = secret.(string)
 		presenter = true
@@ -165,7 +169,7 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 	}
 	if socketID != nil {
 		tmplData.MSocketID = socketID.(string)
-		tmplData.ViewerURL = strings.Replace(r.URL.String(), "presenter", "viewer", 1) + "/" + socketID.(string)
+		tmplData.ViewerURL = strings.Replace(r.URL.String(), "/presenter/", "/", 1) + "/" + socketID.(string)
 		viewer = true
 	}
 

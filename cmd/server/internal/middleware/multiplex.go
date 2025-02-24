@@ -42,6 +42,14 @@ func MultiplexViewerToContext(r *http.Request) *http.Request {
 	}
 	return r
 }
+func MultiplexPresenterToContext(r *http.Request) *http.Request {
+	socketID := r.PathValue("secret")
+	if socketID != "" {
+		temp := r.WithContext(context.WithValue(r.Context(), MultiplexKey("secret"), socketID))
+		return temp
+	}
+	return r
+}
 
 func MultiplexCreateCredentials(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

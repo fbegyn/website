@@ -150,6 +150,9 @@ func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 	t := blog.TalkFS{}
 	s.mux.Handle("GET /talks", middleware.Metrics("talk", s.renderPageTemplate("talks/overview.html", s.Talks)))
 	s.mux.Handle("GET /talks/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(s.renderTalk)))
+	s.mux.Handle("GET /talks/{year}/{slug}/{socketID}", middleware.Metrics("talks", http.HandlerFunc(
+		s.renderTalk,
+	)))
 	s.mux.Handle("GET /static/talks/", http.StripPrefix(
 		"/static/",
 		blog.TalkFSHandler(http.FileServerFS(t)),
@@ -169,10 +172,10 @@ func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 
 	// handle the socketio setup for presenting talks
 	// basic auth presenter control
-	s.mux.Handle("GET /talks/viewer/{year}/{slug}/{socketID}", middleware.Metrics("talks", http.HandlerFunc(
-		s.renderTalk,
-	)))
 	s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
+		internal.BasicAuth("foo", "bar", middleware.MultiplexCreateCredentials(s.renderTalk)),
+	)))
+	s.mux.Handle("GET /talks/presenter/{year}/{slug}/{socketID}/{secret}", middleware.Metrics("talks", http.HandlerFunc(
 		internal.BasicAuth("foo", "bar", middleware.MultiplexCreateCredentials(s.renderTalk)),
 	)))
 	slog.Info("presenter control available at /talks/presenter/...")

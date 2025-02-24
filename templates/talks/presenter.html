@@ -62,6 +62,6 @@
          { src: '/static/js/reveal-multiplex/master.js', async: true },
      ]
  });
- console.info("{{.ViewerURL}}/{{.MSecret}}")
+ console.info("/talks/presenter/{{.Slug}}/{{.MSocketID}}/{{.MSecret}}")
 </script>
 {{ end }}
