@@ -13,9 +13,9 @@
 <div class="reveal">
     <div class="slides">
         <section>
-            <h1>Follow along with this slides</h1>
+            <p>Follow along with these slides</p>
             <div id="qrcode"></div>
-            <a href="{{.ViewerURL}}">{{.ViewerURL}}</a>
+            <a id="qrcode-link" href="{{.ViewerURL}}">{{.ViewerURL}}</a>
         </section>
         <section
             data-markdown="/static/talks/{{ .Path }}"
@@ -62,5 +62,6 @@
          { src: '/static/js/reveal-multiplex/master.js', async: true },
      ]
  });
+ console.info("{{.ViewerURL}}/{{.MSecret}}")
 </script>
 {{ end }}
