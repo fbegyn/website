@@ -126,7 +126,6 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 
 	var tmplData struct {
 		Title     string
-		Date      string
 		Slug      string
 		Path      string
 		MSecret   string
@@ -184,10 +183,9 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 
 	tmplData.Title = p.Title
 	tmplData.Slug = p.Slug
-	tmplData.Date = internal.IOS13Detri(p.Date)
 	tmplData.Path = p.Path
 	tmplData.Title = p.Title
-	tmplData.MURL = "https://francis.begyn.be/-/multiplex/socket"
+	tmplData.MURL = "https://francis.begyn.be/"
 
 	s.renderTalkTemplate(base, tmplData).ServeHTTP(w, r)
 	talkViews.With(prometheus.Labels{"talk": filepath.Base(p.Slug)}).Inc()
