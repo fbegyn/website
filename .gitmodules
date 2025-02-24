@@ -11,3 +11,6 @@
 [submodule "cmd/server/static/js/qrcodejs"]
 	path = cmd/server/static/js/qrcodejs
 	url = git@github.com:davidshimjs/qrcodejs.git
+[submodule "talks"]
+	path = talks
+	url = git@github.com:fbegyn/talks

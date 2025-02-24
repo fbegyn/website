@@ -58,6 +58,10 @@ func LoadTalksDir(dirName, prefix string, publishDrafts bool) (Talks, error) {
 			return nil
 		}
 
+		if filepath.Ext(filePath) != ".md" {
+			return nil
+		}
+
 		file, err := os.Open(filePath)
 		if err != nil {
 			return err
