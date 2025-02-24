@@ -139,7 +139,7 @@
               };
               home = mkOption {
                 type = types.str;
-                default = "/srv/fbegyn/multiplex-ts-server";
+                default = "/srv/fbegyn/multiplex-server";
                 example = "/var/lib/website";
                 description = "Working directory of the website";
               };
