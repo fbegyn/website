@@ -15,8 +15,11 @@
     <div class="slides">
         <section>
             <p>Follow along with these slides</p>
-            <div id="qrcode"></div>
-            <a id="qrcode-link" href="{{.ViewerURL}}">{{.ViewerURL}}</a>
+            <div id="qrcode" style="display: flex; justify-content: center; text-align: center;"></div>
+            <a id="qrcode-link" href="{{.ViewerURL}}">viewer link</a>
+            <a id="qrcode-link" href="/talks/presenter/{{ .Path }}/{{ .MSocketID }}/{{ .MSecret }}">
+                rejoin for presenter
+            </a>
         </section>
         <section
             data-markdown="/static/talks/{{ .Path }}"
