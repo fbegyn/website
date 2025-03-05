@@ -17,9 +17,12 @@
             <p>Follow along with these slides</p>
             <div id="qrcode" style="display: flex; justify-content: center; text-align: center;"></div>
             <a id="qrcode-link" href="{{.ViewerURL}}">viewer link</a>
+            <!-- -
+            TODO: fix this so the link actually works and doesnt decent into madness
             <a id="qrcode-link" href="/talks/presenter/{{ .Path }}/{{ .MSocketID }}/{{ .MSecret }}">
                 rejoin for presenter
             </a>
+            -->
         </section>
         <section
             data-markdown="/static/talks/{{ .Path }}"
