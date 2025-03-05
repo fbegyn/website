@@ -159,7 +159,7 @@ func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 	))
 	s.mux.Handle("GET /static/talks/img/", http.StripPrefix(
 		"/static/talks/img/",
-		http.FileServer(http.Dir("./static/talks/img")),
+		http.FileServer(http.Dir("./talks/static/talks/img")),
 	))
 
 	// server static files
