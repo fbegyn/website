@@ -119,19 +119,16 @@ func (fsys TalkFS) Open(name string) (fs.File, error) {
 		return nil, &fs.PathError{Op: "open", Path: name, Err: errors.New("failed to open talksfs")}
 	}
 
-	info, _ := file.Stat()
-	fmt.Println(info.Size())
-
 	// TODO: clean this up further, but for now this seems to work
 	// This can probably be solved by implementing a better io.Seeker but I need to learn about it a bit more
 	content, err := io.ReadAll(file)
 	if err != nil {
-		return nil, err
+		return nil, &fs.PathError{Op: "open", Path: name, Err: errors.New("failed to open talksfs")}
 	}
 	var temp TalkFile
 	talk, err := front.Unmarshal(content, &temp)
 	if err != nil {
-		return nil, err
+		return nil, &fs.PathError{Op: "open", Path: name, Err: errors.New("failed to open talksfs")}
 	}
 
 	temp.Content = talk
