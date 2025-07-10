@@ -20,7 +20,7 @@ type Globals struct {
 }
 
 type ServeCmd struct {
-	Port      int    `help:"http port for website endpoint (default: 8080)" default:"8080"`
+	Port      int    `help:"http port for website endpoint (default: 3114)" default:"3114"`
 	Host      string `help:"http host for website endpoint (default: localhost)" default:"localhost"`
 	Drafts    bool   `help:"publish drafts (default: false)" default:"false"`
 }
