@@ -20,7 +20,7 @@
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
-        config = import ./go.nix;
+        # config = import ./go.nix;
         overlays = [ devshell.overlays.default ];
       };
     in rec {
@@ -28,7 +28,6 @@
         name = "website";
         pname = "server";
         src = ./.;
-        env.CGO_ENABLED = 0;
         vendorHash = "sha256-Em+JgHXYgcy8GLNCVDEqNPuJA9BAqbDE22bcfsbAcJE=";
         ldFlages = [
           "-S" "-W"
@@ -40,7 +39,7 @@
         website = pkgs.devshell.mkShell {
           name = "website";
           packages = with pkgs; [
-            go_1_23
+            go_1_24
             nix
             git
             gotools
