@@ -1,5 +1,17 @@
-html {
-    font-size: 16px
+:root {
+    font-size: 1rem;
+    lint-height: 1.5rem;
+    margin: 0;
+    font-family: Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
+    word-wrap: break-word;
+
+    color-scheme: light dark;
+    &:has(#theme-light:checked) {
+      color-scheme: light;
+    }
+    &:has(#theme-dark:checked) {
+      color-scheme: dark;
+    }
 }
 
 * {
@@ -8,68 +20,107 @@ html {
 }
 
 body {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    background-color: light-dark(#f0f0f0, #333333);
+    color: light-dark(black, #f1f1f1);
+}
+a {
+    color: light-dark(#ba6600, #ff8100);
+    border-bottom: 1px solid light-dark(#ba6600, #ff8100)
+}
+a:hover {
+    background-color: light-dark(#ba6600, #ff8100);
+    color: light-dark(black, #d6d6d6)
+}
+pre {
+  background-color: light-dark(#fff, #484848);
+  border: 1px solid light-dark(#ccc, #ccc);
+}
+table {
+  color: light-dark(##778087, #778087);
+}
+table tbody td:first-child {
+  color: light-dark(#333, #c1c1c1);
+}
+h1,h2,h3,h4,h5,h6 {
+    color: light-dark(#ba6600, #ff8100);
+}
+
+.container {
+    max-width: 90dvw;
+    max-height: 98dvh
+}
+
+.container,.container-fluid {
+    margin: 0 auto;
+    padding: 0 1rem
+}
+
+blockquote {
+    position: relative;
+    padding-left: 17px;
+    padding-left: 2ch;
+    overflow: hidden
+}
+
+blockquote:after {
+    content: ">\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>";
+    white-space: pre;
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 20px
+}
+
+site-nav {
+    float: none;
     margin: 0;
-    font-family: Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
-    word-wrap: break-word
+    padding: 0
 }
 
-@media (prefers-color-scheme: light) {
-  body {
-      background-color: #f0f0f0;
-      color: black;
-  }
-  a {
-      color: #ba6600;
-      border-bottom: 1px solid #ba6600
-  }
-  a:hover {
-      background-color: #ba6600;
-      color: black
-  }
-  pre {
-    background-color: #fff;
-    border: 1px solid #ccc;
-  }
-  table {
-    color: ##778087;
-  }
-  table tbody td:first-child {
-    color: #333;
-  }
-  h1,h2,h3,h4,h5,h6 {
-      color: #ba6600;
-  }
+site-content {
+    display: flex;
+    flex-wrap: wrap;
+    @media (width < 900px) {
+        flex-direction: column;
+    };
+    @media (width > 900px) {
+        flex-direction: row;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-      background-color: #333333;
-      color: #f1f1f1;
-  }
-  a {
-      color: #ff8100;
-      border-bottom: 1px solid #ff8100;
-  }
-  a:hover {
-      background-color: #ff8100;
-      color: #d6d6d6;
-  }
-  pre {
-    background-color: #484848;
-    border: 1px solid #ccc;
-  }
-  table {
-    color: ##778087;
-  }
+landing-profile {
+    display: flex;
+    flex: 0 1 25%;
+    align-items: center;
+}
 
-  table tbody td:first-child {
-    color: #c1c1c1
-  }
-  h1,h2,h3,h4,h5,h6 {
-      color: #ff8100;
-  }
+landing-text {
+    display: flex;
+    flex: 0 1 60%;
+    flex-direction: column;
+    padding: 0 20px;
+
+    landing-section {
+    }
+}
+
+/*h1:after {
+    content: "==========================================================";
+    position: relative;
+    bottom: -2rem;
+    left: 0
+}*/
+h2:before,h3:before {
+    display: inline
+}
+h2:before {
+    content: "## "
+}
+h3:before {
+    content: "### "
+}
+
+profile-picture {
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -97,13 +148,6 @@ code[class*=language-],pre[class*=language-],pre code {
 a {
     cursor: pointer;
     text-decoration: none;
-}
-
-.grid {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap
 }
 
 .grid.\-top {
@@ -332,22 +376,6 @@ a {
     counter-increment: a
 }
 
-.hack blockquote {
-    position: relative;
-    padding-left: 17px;
-    padding-left: 2ch;
-    overflow: hidden
-}
-
-.hack blockquote:after {
-    content: ">\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>";
-    white-space: pre;
-    position: absolute;
-    top: 0;
-    left: 0;
-    line-height: 20px
-}
-
 .hack em:after,.hack em:before {
     content: "*";
     display: inline
@@ -396,15 +424,6 @@ a {
 
 p {
     margin: 0 0 1.75rem
-}
-
-.container {
-    max-width: 70rem
-}
-
-.container,.container-fluid {
-    margin: 0 auto;
-    padding: 0 1rem
 }
 
 .inner {

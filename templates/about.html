@@ -10,36 +10,39 @@
 {{ end }}
 
 {{ define "content" }}
-<div class="grid">
-  <section class="cell -6of12 -top">
+<about-section>
     <h1 id="name">Francis Begyn</h1>
-    <img src="./static/img/profile.webp" height=300 alt="Profile picture">
-    <p>ICT engineer with a problem-solving mindset. Likes being
-       challenged on both personal and technical aspects and not
-       afraid to challenge others. I love to analyze systems to find out
-       how they work and how we can improve them, even more enthusiastic when
-       communication is involved.</p>
-  </section>
-  <section class="cell -6of12">
-    <h2 id="skills">Skills:</h2>
-    <ul>
-      <li><strong>Programming:</strong><br>Go, Python, C and other languages</li>
-      <li><strong>Frameworks:</strong><br>Kubernetes, Django, Google cloud</li>
-      <li><strong>OS:</strong><br>Debian, Ubuntu, Nixos, Arch Linux</li>
-      <li><strong>Software:</strong><br>Linux networking, Git, Docker, Prometheus, Grafana, Ansible, Nginx</li>
-      <li><strong>Languages:</strong>
+    <picture-section>
+        <profile-picture>
+            <img src="./static/img/profile.webp" height=300 alt="Profile picture">
+        </profile-picture>
+        <picture-subtext>
+            <p>ICT engineer with a problem-solving mindset. Likes being
+             challenged on both personal and technical aspects and not
+             afraid to challenge others. I love to analyze systems to find out
+             how they work and how we can improve them, even more enthusiastic when
+             communication is involved.</p>
+        </picture-subtext>
+    </picture-section>
+    <skill-section>
+        <h2>Skills:</h2>
         <ul>
-          <li>Dutch - native</li>
-          <li>English - professional</li>
-          <li>French -  intermediate (oral)/novice (written)</li>
-          <li>German - novice</li>
+            <li><strong>Programming:</strong><br>Go, Python, C and other languages</li>
+            <li><strong>Frameworks:</strong><br>Kubernetes, Django, Google cloud</li>
+            <li><strong>OS:</strong><br>Debian, Ubuntu, Nixos, Arch Linux</li>
+            <li><strong>Software:</strong><br>Linux networking, Git, Docker, Prometheus, Grafana, Ansible, Nginx</li>
+            <li><strong>Languages:</strong></li>
+            <ul>
+              <li>Dutch - native</li>
+              <li>English - professional</li>
+              <li>French -  intermediate (oral)/novice (written)</li>
+              <li>German - novice</li>
+            </ul>
         </ul>
-      </li>
-    </ul>
-  </section>
-</div>
+    </skill-section>
+</about-section>
 <div class="grid">
-  <section class="cell -6of12">
+  <section class="cell">
     <h2 id="experience">Experience:</h2>
     <ul>
       <li>professional:
@@ -131,7 +134,7 @@
       </li>
     </ul>
   </section>
-  <section class="cell -6of12">
+  <section class="cell">
     <h2 id="education">Education:</h2>
     <ul>
       <li>
