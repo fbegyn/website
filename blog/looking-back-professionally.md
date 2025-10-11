@@ -94,7 +94,7 @@ BANTER) about my transparency on them. People must know that not everybody comes
 out of school and knows where they want to work. Or what job they want to do.
 Other people think more about the jobs; I tend to learn through experience.
 
-*updated 2022-11-29*
+*updated 2025-09-01*
 
 | time period  | job title |
 |---|---|
@@ -103,7 +103,8 @@ Other people think more about the jobs; I tend to learn through experience.
 | feb 2021 - nov 2021 | backend developer |
 | dec 2021 - feb 2022 | test engineer |
 | mar 2022 - sep 2022 | project engineer |
-| sep 2022 - current | solutions engineer observability |
+| sep 2022 - aug 2025 | solutions engineer observability |
+| sep 2025 - current | HPC and infra automation engineer |
 
 Both professionally and personally, 2021 was NOT a good year for me. But in that
 year, I have grown as a person regardless of the troubles I encountered. I aim to

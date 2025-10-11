@@ -2,6 +2,7 @@
 title: IPv6 on a NixOS router
 date: 2022-02-25
 tags: [ linux, networking, nixos, router, ipv6 ]
+draft: false
 ---
 
 **DISCLAIMER:** I'm still working on the current setup for this router. I might
