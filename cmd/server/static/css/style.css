@@ -23,6 +23,7 @@ body {
     background-color: light-dark(#f0f0f0, #333333);
     color: light-dark(black, #f1f1f1);
 }
+
 a {
     color: light-dark(#ba6600, #ff8100);
     border-bottom: 1px solid light-dark(#ba6600, #ff8100)
@@ -31,29 +32,52 @@ a:hover {
     background-color: light-dark(#ba6600, #ff8100);
     color: light-dark(black, #d6d6d6)
 }
+
 pre {
   background-color: light-dark(#fff, #484848);
   border: 1px solid light-dark(#ccc, #ccc);
 }
+
 table {
   color: light-dark(##778087, #778087);
 }
 table tbody td:first-child {
   color: light-dark(#333, #c1c1c1);
 }
+
 h1,h2,h3,h4,h5,h6 {
     color: light-dark(#ba6600, #ff8100);
 }
 
 header {
-    flex-direction: row;
+    display: block;
+}
+
+footer {
+    display: block;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 .container {
-    max-width: 90dvw;
-    max-height: 98dvh
+    display: flex;
+    flex-direction: column;
+    width: 70rem;
+    max-width: 90svw;
+    max-height: 98svh;
+    height: min-content;
     margin: 0 auto;
-    padding: 0 1rem
+    padding: 0 0.5rem;
+}
+
+site-content {
+    display: block;
+    align-content: center;
+    justify-content: center;
 }
 
 blockquote {
@@ -73,44 +97,128 @@ blockquote:after {
 }
 
 site-nav {
-    float: none;
+    display: block;
+    float: inline-start;
     margin: 0;
     padding: 0
 }
 
-theme-picket {
-    justify-self: right;
+theme-picker {
+    display: block;
+    float: inline-end;
 }
 
-site-content {
+img {
+    &[profile] {
+        display: inline-flex;
+        flex: 0 1 auto;
+        height: 55%;
+        @media ( width < 401px) {
+            max-height: 300px;
+        }
+        justify-self: center;
+        align-self: center;
+    }
+}
+
+flex-page {
     display: flex;
+    width: 100%;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    flex: 0 0 auto;
 }
 
-landing-page {
+flex-section {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    @media ( width < 800px) {
+    flex: 0 0 auto;
+    align-items: center;
+    &[column] {
+        flex-direction: column;
+    }
+    @media ( width < 401px) {
         flex-direction: column;
     }
 }
 
-landing-section {
-    display: inline-flex;
-    align-self: center;
-    flex: 1 1 auto;
-    img {
-        &[profile] {
-            flex: 0 1 auto;
-            width: 25%;
-            justify-self: center;
-            align-self: center;
-        }
+block-section {
+    display: block;
+    align-content: center;
+    float: none;
+}
+
+.width {
+    @media ( width < 401px) {
+        width: 99%;
     }
-    &[column] {
+    &.small {
+        width: 33%;
+    }
+    &.large {
+        width: 66%;
+    }
+    &.quarter {
+        width: 25%;
+    }
+    &.half {
+        width: 50%;
+    }
+    &.full {
+        width: 100%;
+    }
+}
+
+.height {
+    &.small {
+        height: 33%;
+    }
+    &.large {
+        height: 66%;
+    }
+    &.half {
+        height: 50%;
+    }
+    &.full {
+        height: 100%;
+    }
+}
+
+.padding {
+    &.none {
+        padding: 0;
+    }
+    &.right{
+        padding-right: 16px;
+    }
+    &.bottom{
+        padding-bottom: 16px;
+    }
+}
+
+.flex {
+    &.start {
+        align-items: flex-start;
+    }
+    &.center {
+        align-items: flex-start;
+    }
+    &.end {
+        align-items: flex-end;
+    }
+    &.shrink {
+        flex-shrink: 1;
+    }
+    &.grow {
+        flex-grow: 1;
+    }
+}
+
+
+.landing {
+    flex-direction: row;
+    width: 50%;
+    @media ( width < 401px) {
         flex-direction: column;
     }
 }
@@ -149,10 +257,12 @@ profile-picture {
 
 about-page {
     display: flex;
+    width: 80%;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    @media ( width < 800px) {
+    flex: 1 0 auto;
+    @media ( width < 401px) {
         flex-direction: column;
     }
 }
@@ -160,10 +270,16 @@ about-page {
 about-section {
     display: inline-flex;
     flex-direction: row;
+    @media ( width < 401px) {
+        flex-direction: column;
+    }
     align-self: center;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     &[column] {
         flex-direction: column;
+    }
+    .test {
+        width: 50%;
     }
 
     img {

@@ -10,40 +10,44 @@
 {{ end }}
 
 {{ define "content" }}
-<about-page>
-    <about-section>
-      <about-section column>
+<flex-page>
+    <flex-section class="flex start">
+      <block-section class="width small">
           <h1>Francis Begyn</h1>
-          <img profile src="./static/img/profile.webp">
+          <img src="./static/img/profile.webp" class="height small padding none right bottom">
           <p>ICT engineer with a problem-solving mindset. Likes being
            challenged on both personal and technical aspects and not
            afraid to challenge others. I love to analyze systems to find out
            how they work and how we can improve them, even more enthusiastic when
            communication is involved.</p>
-      </about-section>
-      <about-section>
-          <skill-section>
-              <h2>Skills:</h2>
+      </block-section>
+      <block-section class="width large">
+        <h2 id="contact">Information:</h1>
+        <ul>
+          <li>date of birth: 23 December 1995</li>
+          <li>email: <a href="">francis.begyn @ gmail.com</a> </li>
+          <li>website: <a href="https://francis.begyn.be">https://francis.begyn.be</a></li>
+          <li>location: <a href="https://goo.gl/maps/xez4TUEsNeQADP7UA">Ghent, Belgium</a></li>
+        </ul>
+          <h2>Skills:</h2>
+          <ul>
+              <li><strong>Programming:</strong><br>Go, Python, C and other languages</li>
+              <li><strong>Frameworks:</strong><br>Kubernetes, Django, Google cloud</li>
+              <li><strong>OS:</strong><br>Debian, Ubuntu, Nixos, Arch Linux</li>
+              <li><strong>Software:</strong><br>Linux networking, Git, Docker, Prometheus, Grafana, Ansible, Nginx</li>
+              <li><strong>Languages:</strong></li>
               <ul>
-                  <li><strong>Programming:</strong><br>Go, Python, C and other languages</li>
-                  <li><strong>Frameworks:</strong><br>Kubernetes, Django, Google cloud</li>
-                  <li><strong>OS:</strong><br>Debian, Ubuntu, Nixos, Arch Linux</li>
-                  <li><strong>Software:</strong><br>Linux networking, Git, Docker, Prometheus, Grafana, Ansible, Nginx</li>
-                  <li><strong>Languages:</strong></li>
-                  <ul>
-                    <li>Dutch - native</li>
-                    <li>English - professional</li>
-                    <li>French -  intermediate (oral)/novice (written)</li>
-                    <li>German - novice</li>
-                  </ul>
+                <li>Dutch - native</li>
+                <li>English - professional</li>
+                <li>French -  intermediate (oral)/novice (written)</li>
+                <li>German - novice</li>
               </ul>
-          </skill-section>
-      </about-section>
-    </about-section>
-    <about-section>
-    <div class="grid">
-      <section class="cell">
-        <h2 id="experience">Experience:</h2>
+          </ul>
+      </block-section>
+    </flex-section>
+    <flex-section class="flex start">
+        <block-section class="width half">
+        <h2>Experience:</h2>
         <ul>
           <li>professional:
             <ul>
@@ -133,29 +137,26 @@
             </ul>
           </li>
         </ul>
-      </section>
-    </div>
-    </about-section>
-    <about-section>
-      <section class="cell">
-        <h2 id="education">Education:</h2>
-        <ul>
-          <li>
-            <strong>Engineering technology: electronics/ICT</strong> at Ghent University
-            <ul>
-              <li><strong>Msc</strong> 2018-2020<br>
-              master dissertation: interference detection in sub-GHz networks with machine
-              learning. Development of a set of tools for the
-              collection and processing of QI samples from an SDR.
-              Research into ML model for the identification of sub-GHz
-              technology.</li>
-              <li><strong>Bsc</strong> 2013-2019<br>
-              bachelor paper: online with LoRaWAN: development of CO2
-              sensor with LoRaWAN technology. Development of a Go
-              application to collect and expose sensor data.</li>
-            </ul>
-          </li>
-        </ul>
+        </block-section>
+        <block-section class="width half">
+          <h2>Education:</h2>
+          <ul>
+              <li>
+                <strong>Engineering technology: electronics/ICT</strong> at Ghent University
+                <ul>
+                    <li><strong>Msc</strong> 2018-2020<br>
+                    master dissertation: interference detection in sub-GHz networks with machine
+                    learning. Development of a set of tools for the
+                    collection and processing of QI samples from an SDR.
+                    Research into ML model for the identification of sub-GHz
+                    technology.</li>
+                    <li><strong>Bsc</strong> 2013-2019<br>
+                    bachelor paper: online with LoRaWAN: development of CO2
+                    sensor with LoRaWAN technology. Development of a Go
+                    application to collect and expose sensor data.</li>
+                </ul>
+              </li>
+          </ul>
         <h2 class="publications">Publications/Presentations:</h2>
         <ul>
           <li>
@@ -195,17 +196,10 @@
           <li><strong>Playing</strong> games and music</li>
           <li><strong>Getting lost</strong> in books</li>
         </ul>
-        <h2 id="contact">Information:</h1>
-        <ul>
-          <li>date of birth: 23 December 1995</li>
-          <li>email: <a href="mailto:francis.begyn@gmail.com">francis.begyn@gmail.com</a> </li>
-          <li>website: <a href="https://francis.begyn.be">https://francis.begyn.be</a></li>
-          <li>location: <a href="https://goo.gl/maps/xez4TUEsNeQADP7UA">Ghent, Belgium</a></li>
-        </ul>
-      </section>
-    </about-section>
-    <about-section>
+        </block-section>
+    </flex-section>
+    <block-section>
         <p>Intrested in my profile? <a href="mailto:francis.begyn@gmail.com">contact me</a></p>
-    </about-section>
-</about-page>
+    </block-section>
+</flex-page>
 {{ end }}
