@@ -45,12 +45,13 @@ h1,h2,h3,h4,h5,h6 {
     color: light-dark(#ba6600, #ff8100);
 }
 
+header {
+    flex-direction: row;
+}
+
 .container {
     max-width: 90dvw;
     max-height: 98dvh
-}
-
-.container,.container-fluid {
     margin: 0 auto;
     padding: 0 1rem
 }
@@ -77,29 +78,48 @@ site-nav {
     padding: 0
 }
 
+theme-picket {
+    justify-self: right;
+}
+
 site-content {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    @media (width < 900px) {
+}
+
+landing-page {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    @media ( width < 800px) {
         flex-direction: column;
-    };
-    @media (width > 900px) {
-        flex-direction: row;
     }
 }
 
-landing-profile {
-    display: flex;
-    flex: 0 1 25%;
-    align-items: center;
+landing-section {
+    display: inline-flex;
+    align-self: center;
+    flex: 1 1 auto;
+    img {
+        &[profile] {
+            flex: 0 1 auto;
+            width: 25%;
+            justify-self: center;
+            align-self: center;
+        }
+    }
+    &[column] {
+        flex-direction: column;
+    }
 }
 
 landing-text {
     display: flex;
-    flex: 0 1 60%;
+    flex: 0 2 auto;
     flex-direction: column;
-    padding: 0 20px;
-
+    align-self: auto;
     landing-section {
     }
 }
@@ -121,7 +141,41 @@ h3:before {
 }
 
 profile-picture {
+    display: flex;
+    align-self: center;
+    flex: 0 1 auto;
+    width: 25%;
 }
+
+about-page {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    @media ( width < 800px) {
+        flex-direction: column;
+    }
+}
+
+about-section {
+    display: inline-flex;
+    flex-direction: row;
+    align-self: center;
+    flex: 1 1 auto;
+    &[column] {
+        flex-direction: column;
+    }
+
+    img {
+        &[profile] {
+            flex: 0 1 auto;
+            width: 25%;
+            justify-self: center;
+            align-self: center;
+        }
+    }
+}
+
 
 h1,h2,h3,h4,h5,h6 {
     line-height: 1.3em

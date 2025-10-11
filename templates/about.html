@@ -10,200 +10,202 @@
 {{ end }}
 
 {{ define "content" }}
-<about-section>
-    <h1 id="name">Francis Begyn</h1>
-    <picture-section>
-        <profile-picture>
-            <img src="./static/img/profile.webp" height=300 alt="Profile picture">
-        </profile-picture>
-        <picture-subtext>
-            <p>ICT engineer with a problem-solving mindset. Likes being
-             challenged on both personal and technical aspects and not
-             afraid to challenge others. I love to analyze systems to find out
-             how they work and how we can improve them, even more enthusiastic when
-             communication is involved.</p>
-        </picture-subtext>
-    </picture-section>
-    <skill-section>
-        <h2>Skills:</h2>
+<about-page>
+    <about-section>
+      <about-section column>
+          <h1>Francis Begyn</h1>
+          <img profile src="./static/img/profile.webp">
+          <p>ICT engineer with a problem-solving mindset. Likes being
+           challenged on both personal and technical aspects and not
+           afraid to challenge others. I love to analyze systems to find out
+           how they work and how we can improve them, even more enthusiastic when
+           communication is involved.</p>
+      </about-section>
+      <about-section>
+          <skill-section>
+              <h2>Skills:</h2>
+              <ul>
+                  <li><strong>Programming:</strong><br>Go, Python, C and other languages</li>
+                  <li><strong>Frameworks:</strong><br>Kubernetes, Django, Google cloud</li>
+                  <li><strong>OS:</strong><br>Debian, Ubuntu, Nixos, Arch Linux</li>
+                  <li><strong>Software:</strong><br>Linux networking, Git, Docker, Prometheus, Grafana, Ansible, Nginx</li>
+                  <li><strong>Languages:</strong></li>
+                  <ul>
+                    <li>Dutch - native</li>
+                    <li>English - professional</li>
+                    <li>French -  intermediate (oral)/novice (written)</li>
+                    <li>German - novice</li>
+                  </ul>
+              </ul>
+          </skill-section>
+      </about-section>
+    </about-section>
+    <about-section>
+    <div class="grid">
+      <section class="cell">
+        <h2 id="experience">Experience:</h2>
         <ul>
-            <li><strong>Programming:</strong><br>Go, Python, C and other languages</li>
-            <li><strong>Frameworks:</strong><br>Kubernetes, Django, Google cloud</li>
-            <li><strong>OS:</strong><br>Debian, Ubuntu, Nixos, Arch Linux</li>
-            <li><strong>Software:</strong><br>Linux networking, Git, Docker, Prometheus, Grafana, Ansible, Nginx</li>
-            <li><strong>Languages:</strong></li>
+          <li>professional:
             <ul>
-              <li>Dutch - native</li>
-              <li>English - professional</li>
-              <li>French -  intermediate (oral)/novice (written)</li>
-              <li>German - novice</li>
-            </ul>
-        </ul>
-    </skill-section>
-</about-section>
-<div class="grid">
-  <section class="cell">
-    <h2 id="experience">Experience:</h2>
-    <ul>
-      <li>professional:
-        <ul>
-          <li>
-            <strong>Solutions engineer (sept 2022 - current)<br>
-              <a href="https://inuits.eu//">Inuits</a> - <a href="https://o11y.eu//">o11y</a>
-            </strong>
-            <p>Provide support for Prometheus installations at customers and drive forward the observability
-               ecosystem within the company.</p>
-          </li>
-          <li>
-            <strong>Project engineer (march 2022 - sept 2022)<br>
-              <a href="https://wegenenverkeer.be/">Flemmish government - AWV</a>
-            </strong>
-            <p>Manage installation of trajectory speed control systems in East- and West-Flanders,
-              data management and analysis. Temporary management of the renewal of several WIM sites
-              throughout Flanders.</p>
-          </li>
-          <li>
-            <strong>RF & Network engineer (jan 2022 - feb 2022)<br>
-              <a href="https://www.excentis.com/">Excentis</a>
-            </strong>
-            <p>DOCSIS test execution and automation for consumer and operator
-               side of RF networks.</p>
-          </li>
-          <li>
-            <strong>Backend developer (feb 2021 - dec 2021)<br>
-              <a href="https://go.vectera.com/">Vectera</a>
-            </strong>
-            <p>Backend development in Django. Improve observability and
-            automatization. Develop tooling for colleagues. DevOps enthusiast.</p>
-          </li>
-          <li>
-            <strong>DevOps engineer (sept 2019 - dec 2020)<br>
-              <a href="https://robovision.be/">Robovision</a>
-            </strong>
-            <p>Design CI/CD systems and offer internal support for
-            an ML platform running on Kubernetes. Maintain GPU
-            Kubernetes clusters and critical infrastructure.</p>
-          </li>
-        </ul>
-      </li>
-      <li>student:
-        <ul>
-          <li>
-            <strong>System engineer (2019)<br>
-              <a href="https://www.axians.be/">Axians</a>
-            </strong>
-            <p>Internship for designing and implementing intrusion detection
-            systems based on aggregated logging. Tested and deployed EFK and ELK
-            stacks in a high traffic environment.</p>
-          </li>
-          <li>
-            <strong>Assistant theatre technician (2013 - 2017)<br>
-              <a href="https://www.gcdekluize.be/">GC De Kluize</a>
-            </strong>
-            <p>Assist with load-in and load-out of theatre shows and
-            performances. Sound and lighting board operation with an emphasis on
-            lighting design.</p>
-          </li>
-        </ul>
-      </li>
-      <li> volunteering:
-        <ul>
-          <li>
-            <strong>Board of directors (2021 - current)<br>
-              <a href="https://studentkickoff.be">Student Kick-Off</a>
-            </strong>
-            <p>Oversee and help set the strategical goals of the organization.
-               Help construct policies related to information, training and
-               security. Provide legal support.</p>
-            <ul class="sub -top">
-              <li>team lead Site&Safety - 2018/2019</li>
-              <li>electricity coordinator - 2017</li>
-              <li>crew lead Site&Safety - 2016</li>
+              <li>
+                <strong>Solutions engineer (sept 2022 - current)<br>
+                  <a href="https://inuits.eu//">Inuits</a> - <a href="https://o11y.eu//">o11y</a>
+                </strong>
+                <p>Provide support for Prometheus installations at customers and drive forward the observability
+                   ecosystem within the company.</p>
+              </li>
+              <li>
+                <strong>Project engineer (march 2022 - sept 2022)<br>
+                  <a href="https://wegenenverkeer.be/">Flemmish government - AWV</a>
+                </strong>
+                <p>Manage installation of trajectory speed control systems in East- and West-Flanders,
+                  data management and analysis. Temporary management of the renewal of several WIM sites
+                  throughout Flanders.</p>
+              </li>
+              <li>
+                <strong>RF & Network engineer (jan 2022 - feb 2022)<br>
+                  <a href="https://www.excentis.com/">Excentis</a>
+                </strong>
+                <p>DOCSIS test execution and automation for consumer and operator
+                   side of RF networks.</p>
+              </li>
+              <li>
+                <strong>Backend developer (feb 2021 - dec 2021)<br>
+                  <a href="https://go.vectera.com/">Vectera</a>
+                </strong>
+                <p>Backend development in Django. Improve observability and
+                automatization. Develop tooling for colleagues. DevOps enthusiast.</p>
+              </li>
+              <li>
+                <strong>DevOps engineer (sept 2019 - dec 2020)<br>
+                  <a href="https://robovision.be/">Robovision</a>
+                </strong>
+                <p>Design CI/CD systems and offer internal support for
+                an ML platform running on Kubernetes. Maintain GPU
+                Kubernetes clusters and critical infrastructure.</p>
+              </li>
             </ul>
           </li>
-          <li>
-            <strong>crew member - network (2016 - current)<br>
-              <a href="https://fom.be">Frag-o-matic</a>
-            </strong>
-            <p>Set up and maintain the network of one of Belgium's largest LAN
-            parties. Configuration of switches and routers. Development of
-            software to improve the observability and management of network
-            components.</p>
+          <li>student:
+            <ul>
+              <li>
+                <strong>System engineer (2019)<br>
+                  <a href="https://www.axians.be/">Axians</a>
+                </strong>
+                <p>Internship for designing and implementing intrusion detection
+                systems based on aggregated logging. Tested and deployed EFK and ELK
+                stacks in a high traffic environment.</p>
+              </li>
+              <li>
+                <strong>Assistant theatre technician (2013 - 2017)<br>
+                  <a href="https://www.gcdekluize.be/">GC De Kluize</a>
+                </strong>
+                <p>Assist with load-in and load-out of theatre shows and
+                performances. Sound and lighting board operation with an emphasis on
+                lighting design.</p>
+              </li>
+            </ul>
+          </li>
+          <li> volunteering:
+            <ul>
+              <li>
+                <strong>Board of directors (2021 - current)<br>
+                  <a href="https://studentkickoff.be">Student Kick-Off</a>
+                </strong>
+                <p>Oversee and help set the strategical goals of the organization.
+                   Help construct policies related to information, training and
+                   security. Provide legal support.</p>
+                <ul class="sub -top">
+                  <li>team lead Site&Safety - 2018/2019</li>
+                  <li>electricity coordinator - 2017</li>
+                  <li>crew lead Site&Safety - 2016</li>
+                </ul>
+              </li>
+              <li>
+                <strong>crew member - network (2016 - current)<br>
+                  <a href="https://fom.be">Frag-o-matic</a>
+                </strong>
+                <p>Set up and maintain the network of one of Belgium's largest LAN
+                parties. Configuration of switches and routers. Development of
+                software to improve the observability and management of network
+                components.</p>
+              </li>
+            </ul>
           </li>
         </ul>
-      </li>
-    </ul>
-  </section>
-  <section class="cell">
-    <h2 id="education">Education:</h2>
-    <ul>
-      <li>
-        <strong>Engineering technology: electronics/ICT</strong> at Ghent University
+      </section>
+    </div>
+    </about-section>
+    <about-section>
+      <section class="cell">
+        <h2 id="education">Education:</h2>
         <ul>
-          <li><strong>Msc</strong> 2018-2020<br>
-          master dissertation: interference detection in sub-GHz networks with machine
-          learning. Development of a set of tools for the
-          collection and processing of QI samples from an SDR.
-          Research into ML model for the identification of sub-GHz
-          technology.</li>
-          <li><strong>Bsc</strong> 2013-2019<br>
-          bachelor paper: online with LoRaWAN: development of CO2
-          sensor with LoRaWAN technology. Development of a Go
-          application to collect and expose sensor data.</li>
+          <li>
+            <strong>Engineering technology: electronics/ICT</strong> at Ghent University
+            <ul>
+              <li><strong>Msc</strong> 2018-2020<br>
+              master dissertation: interference detection in sub-GHz networks with machine
+              learning. Development of a set of tools for the
+              collection and processing of QI samples from an SDR.
+              Research into ML model for the identification of sub-GHz
+              technology.</li>
+              <li><strong>Bsc</strong> 2013-2019<br>
+              bachelor paper: online with LoRaWAN: development of CO2
+              sensor with LoRaWAN technology. Development of a Go
+              application to collect and expose sensor data.</li>
+            </ul>
+          </li>
         </ul>
-      </li>
-    </ul>
-    <h2 class="publications">Publications/Presentations:</h2>
-    <ul>
-      <li>
-        <a href="https://francis.begyn.be/blog/nixos-home-router">Nixos as a Router (NaaR)</a>
-      </li>
-      <li>
-        <a href="https://github.com/fbegyn/tc_exporter">TC exporter for Linux QoS</a>
-      </li>
-      <li>
-        <a href="https://libstore.ugent.be/fulltxt/RUG01/002/945/979/RUG01-002945979_2021_0001_AC.pdf">Interference Detection in sub-GHz IoT Networks on Constrained Devices</a>
-      </li>
-      <li>
-        <a href="https://www.linkedin.com/posts/inuits_open-source-cafe-ghent-activity-7174325817345277952-HH2f">Intro to Open Source Observability</a>
-      </li>
-      <li>
-        <a href="https://www.linkedin.com/posts/inuits_bootcamp-september-2024-activity-7196409416898805760-THK0">Monitoring & Observability Bootcamp</a>
-      </li>
-      <li>
-        Zeus WPI Lightning Talks - Prometheus, A Short Intro
-      </li>
-      <li>
-        <a href="https://zeus.ugent.be/events/22-23/lightningtalks/">How to Route Traffic for LAN Parties</a>
-      </li>
-    </ul>
-    <h2 class="conferences">Conferences:</h2>
-    <ul>
-      <li><a href="https://promcon.io/">Promcon</a> 2022</li>
-      <li><a href="https://cfgmgmtcamp.org/">CfgMgmtCamp</a> 2023, 2024, 2025</li>
-      <li><a href="https://fosdem.org/2025/">FOSDEM</a> 2019, 2022, 2023, 2024, 2025</li>
-    </ul>
-    <h2 id="hobbies">Free time:</h2>
-    <ul>
-      <li>Developing <strong>open source software</strong></li>
-      <li><strong>Discovering</strong> the world and new technologies</li>
-      <li><strong>Connecting</strong> people with sensors and software</li>
-      <li><strong>Creating</strong> software and experiences</li>
-      <li><strong>Playing</strong> games and music</li>
-      <li><strong>Getting lost</strong> in books</li>
-    </ul>
-    <h2 id="contact">Information:</h1>
-    <ul>
-      <li>date of birth: 23 December 1995</li>
-      <li>email: <a href="mailto:francis.begyn@gmail.com">francis.begyn@gmail.com</a> </li>
-      <li>website: <a href="https://francis.begyn.be">https://francis.begyn.be</a></li>
-      <li>location: <a href="https://goo.gl/maps/xez4TUEsNeQADP7UA">Ghent, Belgium</a></li>
-    </ul>
-  </section>
-</div>
-<div class="grid">
-  <section class="cell">
-    <p>Intrested in my profile? <a href="mailto:francis.begyn@gmail.com">contact me</a>
-  </section>
-</div>
+        <h2 class="publications">Publications/Presentations:</h2>
+        <ul>
+          <li>
+            <a href="https://francis.begyn.be/blog/nixos-home-router">Nixos as a Router (NaaR)</a>
+          </li>
+          <li>
+            <a href="https://github.com/fbegyn/tc_exporter">TC exporter for Linux QoS</a>
+          </li>
+          <li>
+            <a href="https://libstore.ugent.be/fulltxt/RUG01/002/945/979/RUG01-002945979_2021_0001_AC.pdf">Interference Detection in sub-GHz IoT Networks on Constrained Devices</a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/posts/inuits_open-source-cafe-ghent-activity-7174325817345277952-HH2f">Intro to Open Source Observability</a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/posts/inuits_bootcamp-september-2024-activity-7196409416898805760-THK0">Monitoring & Observability Bootcamp</a>
+          </li>
+          <li>
+            Zeus WPI Lightning Talks - Prometheus, A Short Intro
+          </li>
+          <li>
+            <a href="https://zeus.ugent.be/events/22-23/lightningtalks/">How to Route Traffic for LAN Parties</a>
+          </li>
+        </ul>
+        <h2 class="conferences">Conferences:</h2>
+        <ul>
+          <li><a href="https://promcon.io/">Promcon</a> 2022</li>
+          <li><a href="https://cfgmgmtcamp.org/">CfgMgmtCamp</a> 2023, 2024, 2025</li>
+          <li><a href="https://fosdem.org/2025/">FOSDEM</a> 2019, 2022, 2023, 2024, 2025</li>
+        </ul>
+        <h2 id="hobbies">Free time:</h2>
+        <ul>
+          <li>Developing <strong>open source software</strong></li>
+          <li><strong>Discovering</strong> the world and new technologies</li>
+          <li><strong>Connecting</strong> people with sensors and software</li>
+          <li><strong>Creating</strong> software and experiences</li>
+          <li><strong>Playing</strong> games and music</li>
+          <li><strong>Getting lost</strong> in books</li>
+        </ul>
+        <h2 id="contact">Information:</h1>
+        <ul>
+          <li>date of birth: 23 December 1995</li>
+          <li>email: <a href="mailto:francis.begyn@gmail.com">francis.begyn@gmail.com</a> </li>
+          <li>website: <a href="https://francis.begyn.be">https://francis.begyn.be</a></li>
+          <li>location: <a href="https://goo.gl/maps/xez4TUEsNeQADP7UA">Ghent, Belgium</a></li>
+        </ul>
+      </section>
+    </about-section>
+    <about-section>
+        <p>Intrested in my profile? <a href="mailto:francis.begyn@gmail.com">contact me</a></p>
+    </about-section>
+</about-page>
 {{ end }}
