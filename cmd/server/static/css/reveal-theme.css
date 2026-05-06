@@ -25,22 +25,22 @@
 .reveal {
     --r-background-color: var(--site-bg);
     --r-main-font: var(--site-mono);
-    --r-main-font-size: 38px;
+    --r-main-font-size: 46px;
     --r-main-color: var(--site-fg);
-    --r-block-margin: 20px;
-    --r-heading-margin: 0 0 20px 0;
+    --r-block-margin: 24px;
+    --r-heading-margin: 0 0 30px 0;
     --r-heading-font: var(--site-mono);
     --r-heading-color: var(--site-accent);
-    --r-heading-line-height: 1.3;
+    --r-heading-line-height: 1.2;
     --r-heading-letter-spacing: normal;
     --r-heading-text-transform: none;
     --r-heading-text-shadow: none;
     --r-heading-font-weight: 700;
     --r-heading1-text-shadow: none;
-    --r-heading1-size: 2.2em;
-    --r-heading2-size: 1.5em;
-    --r-heading3-size: 1.2em;
-    --r-heading4-size: 1em;
+    --r-heading1-size: 2.4em;
+    --r-heading2-size: 1.7em;
+    --r-heading3-size: 1.3em;
+    --r-heading4-size: 1.1em;
     --r-code-font: var(--site-mono);
     --r-link-color: var(--site-accent);
     --r-link-color-dark: var(--site-accent-dim);
@@ -51,6 +51,33 @@
     --r-overlay-element-fg-color: 0, 0, 0;
     color: var(--site-fg);
     font-family: var(--site-mono);
+    font-size: var(--r-main-font-size);
+}
+
+/* Lists. Force inline-block + text-align:left so the <ul> shrink-wraps
+ * around its content. Without this rule the markdown plugin's <ul>
+ * inherits the slide's text-align:center and the bullets end up
+ * marooned at the slide's left edge while the text floats centre. */
+.reveal ul,
+.reveal ol,
+.reveal dl {
+    display: inline-block;
+    text-align: left;
+    margin: 0 0 0 1em;
+    padding-left: 1em;
+}
+.reveal li {
+    margin: 0.25em 0;
+    line-height: 1.45;
+}
+.reveal li > ul,
+.reveal li > ol {
+    margin-left: 1em;
+    margin-top: 0.25em;
+}
+.reveal p {
+    line-height: 1.45;
+    margin: 0 0 var(--r-block-margin);
 }
 
 .reveal a {
@@ -130,7 +157,9 @@
     color: var(--site-accent);
 }
 
-/* Controls / progress / slide number — orange accent throughout. */
+/* Controls / progress / slide number — orange accent throughout. The
+ * slide number sits at top-right so it doesn't fight with the
+ * navigation arrows in the bottom-right corner. */
 .reveal .controls {
     color: var(--site-accent);
 }
@@ -142,12 +171,26 @@
 .reveal .progress span {
     background: var(--site-accent);
 }
-.reveal .slide-number {
+.reveal .slide-number,
+.reveal.has-dark-background .slide-number,
+.reveal.has-light-background .slide-number {
+    bottom: auto;
+    right: 16px;
+    top: 12px;
+    left: auto;
     background: transparent;
     color: var(--site-accent-dim);
     font-family: var(--site-mono);
-    font-size: 14px;
+    font-size: 22px;
+    padding: 0;
 }
+.reveal .slide-number a {
+    color: var(--site-accent-dim);
+    border-bottom: none;
+    background: transparent;
+}
+/* Reveal renders "c/t" via separate <a> elements with a delimiter span
+ * — when slideNumber: "c" is set the delimiter and total are absent. */
 
 /* Speaker-notes overlay (S key) — match colours so it doesn't clash. */
 .reveal .speaker-notes {
@@ -182,10 +225,13 @@
     display: block;
 }
 .reveal section.qr-landing .viewer-url {
-    display: block;
+    /* inline-block + auto margins centres the anchor while letting the
+     * hover background hug the text instead of stretching across the
+     * whole slide. Color/hover come from the global .reveal a rules. */
+    display: inline-block;
+    max-width: 90%;
     margin: 0.8em auto 0.2em;
     font-family: var(--site-mono);
-    color: var(--site-accent);
     word-break: break-all;
 }
 .reveal section.qr-landing .hint {
