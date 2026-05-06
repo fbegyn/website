@@ -128,6 +128,7 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 		Title     string
 		Slug      string
 		Path      string
+		Mode      string // "plain" | "presenter" | "viewer"
 		MSecret   string
 		MSocketID string
 		MURL      string
@@ -150,45 +151,56 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// lookup role type
-	presenter, viewer := false, false
-	secret := r.Context().Value(middleware.MultiplexKey("secret"))
-	if secret == nil {
-		r = middleware.MultiplexPresenterToContext(r)
-		secret = r.Context().Value(middleware.MultiplexKey("secret"))
+	// Pull any multiplex creds out of the request context (presenter
+	// path) or path values (viewer path).
+	if v := r.Context().Value(middleware.MultiplexKey("secret")); v != nil {
+		tmplData.MSecret = v.(string)
 	}
-	if secret != nil {
-		tmplData.MSecret = secret.(string)
-		presenter = true
+	if v := r.Context().Value(middleware.MultiplexKey("socketID")); v != nil {
+		tmplData.MSocketID = v.(string)
 	}
-	socketID := r.Context().Value(middleware.MultiplexKey("socketID"))
-	if socketID == nil {
+	if tmplData.MSocketID == "" {
 		r = middleware.MultiplexViewerToContext(r)
-		socketID = r.Context().Value(middleware.MultiplexKey("socketID"))
-	}
-	if socketID != nil {
-		tmplData.MSocketID = socketID.(string)
-		tmplData.ViewerURL = strings.Replace(r.URL.String(), "/presenter/", "/", 1) + "/" + socketID.(string)
-		viewer = true
+		if v := r.Context().Value(middleware.MultiplexKey("socketID")); v != nil {
+			tmplData.MSocketID = v.(string)
+		}
 	}
 
-	var base string
-	if presenter {
-		base = "talks/presenter.html"
-	} else if viewer {
-		base = "talks/viewer.html"
-	} else {
-		base = "talks/talk.html"
+	switch {
+	case tmplData.MSecret != "" && tmplData.MSocketID != "":
+		tmplData.Mode = "presenter"
+	case tmplData.MSocketID != "":
+		tmplData.Mode = "viewer"
+	default:
+		tmplData.Mode = "plain"
 	}
 
 	tmplData.Title = p.Title
 	tmplData.Slug = p.Slug
 	tmplData.Path = p.Path
-	tmplData.Title = p.Title
-	tmplData.MURL = "https://francis.begyn.be/"
+	tmplData.MURL = originURL(r)
 
-	s.renderTalkTemplate(base, tmplData).ServeHTTP(w, r)
+	if tmplData.Mode == "presenter" {
+		viewerPath := strings.Replace(r.URL.Path, "/presenter/", "/", 1) + "/" + tmplData.MSocketID
+		tmplData.ViewerURL = tmplData.MURL + strings.TrimPrefix(viewerPath, "/")
+	}
+
+	s.renderTalkTemplate("talks/talk.html", tmplData).ServeHTTP(w, r)
 	talkViews.With(prometheus.Labels{"talk": filepath.Base(p.Slug)}).Inc()
+}
+
+// originURL returns "<scheme>://<host>/" for the incoming request,
+// honouring X-Forwarded-Proto when present (we sit behind xff.Default
+// so that header is trusted at this point).
+func originURL(r *http.Request) string {
+	scheme := "http"
+	if r.TLS != nil {
+		scheme = "https"
+	}
+	if proto := r.Header.Get("X-Forwarded-Proto"); proto != "" {
+		scheme = proto
+	}
+	return scheme + "://" + r.Host + "/"
 }
 
 func (s *Site) renderTalkTemplate(templateFile string, data interface{}) http.Handler {

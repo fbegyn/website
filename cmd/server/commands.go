@@ -20,23 +20,28 @@ type Globals struct {
 }
 
 type ServeCmd struct {
-	Port      int    `help:"http port for website endpoint (default: 3114)" default:"3114"`
-	Host      string `help:"http host for website endpoint (default: localhost)" default:"localhost"`
-	Drafts    bool   `help:"publish drafts (default: false)" default:"false"`
+	Port          int    `help:"http port for website endpoint (default: 3114)" default:"3114"`
+	Host          string `help:"http host for website endpoint (default: localhost)" default:"localhost"`
+	Drafts        bool   `help:"publish drafts (default: false)" default:"false"`
+	PresenterUser string `help:"basic-auth username gating /talks/presenter/* (empty = disable)" env:"WEBSITE_PRESENTER_USER" default:""`
+	PresenterPass string `help:"basic-auth password gating /talks/presenter/* (empty = disable)" env:"WEBSITE_PRESENTER_PASS" default:""`
 }
 
 func (c *ServeCmd) Run(globals *Globals) error {
 	ctx := context.Background()
 	logger := slog.Default()
 	// Create the site
-	s, _, err := Build(ctx, c.Drafts)
+	s, _, err := Build(ctx, c.Drafts, c.PresenterUser, c.PresenterPass)
 	if err != nil {
 		logger.ErrorContext(ctx, "failed to build website", slog.Any("err", err), slog.String("action", "build"))
 		os.Exit(1)
 	}
 
-	// Create the webmux and attach it to the website
+	// Create the webmux and attach it to the website. Multiplex routes
+	// (token / SSE / WS) sit on the outer mux so they skip ex.HTTPLog,
+	// whose response wrapper would block the WebSocket Hijack.
 	mux := http.NewServeMux()
+	s.Multiplex().Register(mux)
 	mux.Handle("/", s)
 
 	// Enable logging and serve the website

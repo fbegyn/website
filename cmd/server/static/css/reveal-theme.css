@@ -1,0 +1,208 @@
+/* reveal-theme.css
+ *
+ * Custom reveal.js theme matching francis.begyn.be: monospace, dark
+ * background, orange accent. Layered on top of reveal's own stylesheet
+ * (link them both from the talk template, this one second).
+ */
+
+:root {
+    /* Site palette */
+    --site-bg: #1a1a1a;
+    --site-fg: #f1f1f1;
+    --site-accent: #ff8100;
+    --site-accent-dim: #ba6600;
+    --site-panel: #2a2a2a;
+    --site-mono: Menlo, Monaco, "Lucida Console", "Liberation Mono",
+                 "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+                 "Courier New", monospace;
+}
+
+.reveal-viewport {
+    background: var(--site-bg);
+    background-color: var(--site-bg);
+}
+
+.reveal {
+    --r-background-color: var(--site-bg);
+    --r-main-font: var(--site-mono);
+    --r-main-font-size: 38px;
+    --r-main-color: var(--site-fg);
+    --r-block-margin: 20px;
+    --r-heading-margin: 0 0 20px 0;
+    --r-heading-font: var(--site-mono);
+    --r-heading-color: var(--site-accent);
+    --r-heading-line-height: 1.3;
+    --r-heading-letter-spacing: normal;
+    --r-heading-text-transform: none;
+    --r-heading-text-shadow: none;
+    --r-heading-font-weight: 700;
+    --r-heading1-text-shadow: none;
+    --r-heading1-size: 2.2em;
+    --r-heading2-size: 1.5em;
+    --r-heading3-size: 1.2em;
+    --r-heading4-size: 1em;
+    --r-code-font: var(--site-mono);
+    --r-link-color: var(--site-accent);
+    --r-link-color-dark: var(--site-accent-dim);
+    --r-link-color-hover: var(--site-fg);
+    --r-selection-background-color: var(--site-accent);
+    --r-selection-color: var(--site-bg);
+    --r-overlay-element-bg-color: 240, 240, 240;
+    --r-overlay-element-fg-color: 0, 0, 0;
+    color: var(--site-fg);
+    font-family: var(--site-mono);
+}
+
+.reveal a {
+    color: var(--site-accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--site-accent-dim);
+    transition: none;
+}
+.reveal a:hover {
+    color: var(--site-bg);
+    background-color: var(--site-accent);
+    border-bottom-color: var(--site-accent);
+    text-shadow: none;
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+    color: var(--site-accent);
+    font-family: var(--site-mono);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: normal;
+    text-transform: none;
+    text-shadow: none;
+    word-wrap: break-word;
+}
+
+/* The site's blog/notes prepend "## ", "### " to headings; mirror that
+ * inside slides so a talk feels recognisably "francis.begyn.be". */
+.reveal h2:before { content: "## "; opacity: 0.6; }
+.reveal h3:before { content: "### "; opacity: 0.6; }
+
+.reveal blockquote {
+    background: var(--site-panel);
+    border-left: 3px solid var(--site-accent);
+    box-shadow: none;
+    color: var(--site-fg);
+    padding: 0.6em 1em;
+    width: auto;
+    max-width: 90%;
+}
+
+.reveal pre {
+    background: var(--site-panel);
+    border: 1px solid #444;
+    box-shadow: none;
+    font-size: 0.55em;
+    line-height: 1.3;
+    width: 100%;
+}
+.reveal code {
+    font-family: var(--site-mono);
+}
+.reveal pre code {
+    color: var(--site-fg);
+    padding: 1em;
+    max-height: 500px;
+}
+
+/* Inline code: subtle highlight so it pops without being loud. */
+.reveal :not(pre) > code {
+    background: var(--site-panel);
+    color: var(--site-accent);
+    padding: 0.05em 0.4em;
+    border-radius: 2px;
+}
+
+.reveal table {
+    border-collapse: collapse;
+    margin: auto;
+}
+.reveal table th,
+.reveal table td {
+    border: 1px solid #555;
+    padding: 0.3em 0.6em;
+}
+.reveal table th {
+    color: var(--site-accent);
+}
+
+/* Controls / progress / slide number — orange accent throughout. */
+.reveal .controls {
+    color: var(--site-accent);
+}
+.reveal .progress {
+    color: var(--site-accent);
+    background: rgba(255, 129, 0, 0.15);
+    height: 4px;
+}
+.reveal .progress span {
+    background: var(--site-accent);
+}
+.reveal .slide-number {
+    background: transparent;
+    color: var(--site-accent-dim);
+    font-family: var(--site-mono);
+    font-size: 14px;
+}
+
+/* Speaker-notes overlay (S key) — match colours so it doesn't clash. */
+.reveal .speaker-notes {
+    background: var(--site-panel);
+    color: var(--site-fg);
+    border-color: #444;
+    font-family: var(--site-mono);
+}
+
+/* Print/PDF export — keep slides on a near-black canvas so the PDF
+ * matches what the audience saw. */
+.reveal.pdf .slide-background {
+    background: var(--site-bg);
+}
+
+/* ---- QR landing slide (presenter mode) -------------------------- */
+
+.reveal section.qr-landing {
+    text-align: center;
+}
+.reveal section.qr-landing h2 {
+    margin-bottom: 0.6em;
+}
+.reveal section.qr-landing .qr {
+    display: inline-block;
+    background: #fff;
+    padding: 16px;
+    border: 2px solid var(--site-accent);
+}
+.reveal section.qr-landing .qr img,
+.reveal section.qr-landing .qr canvas {
+    display: block;
+}
+.reveal section.qr-landing .viewer-url {
+    display: block;
+    margin: 0.8em auto 0.2em;
+    font-family: var(--site-mono);
+    color: var(--site-accent);
+    word-break: break-all;
+}
+.reveal section.qr-landing .hint {
+    color: #aaa;
+    font-size: 0.5em;
+    margin-top: 0.4em;
+}
+
+/* ---- Viewer landing slide --------------------------------------- */
+
+.reveal section.viewer-landing {
+    text-align: center;
+}
+.reveal section.viewer-landing h2 {
+    margin-bottom: 0.6em;
+}
+.reveal section.viewer-landing p {
+    color: #aaa;
+    font-size: 0.7em;
+}

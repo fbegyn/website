@@ -13,6 +13,7 @@ require (
 	github.com/russross/blackfriday v2.0.0+incompatible
 	github.com/sebest/xff v0.0.0-20210106013422-671bd2870b3a
 	github.com/snabb/sitemap v1.0.4
+	golang.org/x/net v0.46.0
 	gopkg.in/yaml.v2 v2.4.0
 	within.website/ln v0.10.0
 )
@@ -24,7 +25,6 @@ require (
 	github.com/cockroachdb/apd/v3 v3.2.1 // indirect
 	github.com/emicklei/proto v1.14.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
@@ -40,7 +40,6 @@ require (
 	github.com/snabb/diagio v1.0.4 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	golang.org/x/mod v0.29.0 // indirect
-	golang.org/x/net v0.46.0 // indirect
 	golang.org/x/oauth2 v0.32.0 // indirect
 	golang.org/x/sync v0.17.0 // indirect
 	golang.org/x/sys v0.37.0 // indirect

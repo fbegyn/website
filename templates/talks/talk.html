@@ -5,14 +5,28 @@
 {{ define "head" }}
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<link rel="stylesheet" href="/static/js/reveal-js/dist/reveal.css"/>
-<link rel="stylesheet" href="/static/js/reveal-js/dist/theme/night.css"/>
-<link rel="stylesheet" href="/static/js/reveal-js/plugin/highlight/monokai.css"/>
+<link rel="stylesheet" href="/static/js/reveal-js/dist/reset.css" />
+<link rel="stylesheet" href="/static/js/reveal-js/dist/reveal.css" />
+<link rel="stylesheet" href="/static/js/reveal-js/plugin/highlight/monokai.css" />
+<link rel="stylesheet" href="/static/css/reveal-theme.css" />
 {{ end }}
 
 {{ define "content" }}
 <div class="reveal">
     <div class="slides">
+        {{ if eq .Mode "presenter" }}
+        <section class="qr-landing">
+            <h2>follow along</h2>
+            <div id="qrcode" class="qr"></div>
+            <a id="qrcode-link" class="viewer-url" href="{{ .ViewerURL }}">{{ .ViewerURL }}</a>
+            <p class="hint">scan the code or open the link on your phone</p>
+        </section>
+        {{ else if eq .Mode "viewer" }}
+        <section class="viewer-landing">
+            <h2>following the presenter</h2>
+            <p>your slides will advance when the presenter advances theirs.</p>
+        </section>
+        {{ end }}
         <section
             data-markdown="/static/talks/{{ .Path }}"
             data-separator="^\r?\n---\r?\n$"
@@ -22,12 +36,29 @@
         </section>
     </div>
 </div>
+
+{{ if eq .Mode "presenter" }}
+<script src="/static/js/qrcodejs/qrcode.min.js"></script>
+<script src="/static/js/viewer-qr.js"></script>
+{{ end }}
+
 <script src="/static/js/reveal-js/dist/reveal.js"></script>
 <script src="/static/js/reveal-js/plugin/markdown/markdown.js"></script>
 <script src="/static/js/reveal-js/plugin/highlight/highlight.js"></script>
 <script src="/static/js/reveal-js/plugin/zoom/zoom.js"></script>
 <script src="/static/js/reveal-js/plugin/notes/notes.js"></script>
 <script src="/static/js/reveal-js/plugin/math/math.js"></script>
+
+{{ if ne .Mode "plain" }}
+<script>
+ window.RevealMultiplex = {
+     secret: {{ .MSecret }},
+     id: {{ .MSocketID }},
+     url: {{ .MURL }}
+ };
+</script>
+{{ end }}
+
 <script>
  Reveal.initialize({
      history: true,
@@ -48,4 +79,10 @@
      ],
  });
 </script>
+
+{{ if eq .Mode "presenter" }}
+<script src="/static/js/multiplex/master.js"></script>
+{{ else if eq .Mode "viewer" }}
+<script src="/static/js/multiplex/client.js"></script>
+{{ end }}
 {{ end }}

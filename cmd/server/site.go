@@ -10,6 +10,7 @@ import (
 	"github.com/fbegyn/website/cmd/server/internal"
 	"github.com/fbegyn/website/cmd/server/internal/blog"
 	"github.com/fbegyn/website/cmd/server/internal/middleware"
+	"github.com/fbegyn/website/cmd/server/internal/multiplex"
 	"github.com/gorilla/feeds"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sebest/xff"
@@ -30,9 +31,14 @@ type Site struct {
 
 	rssFeed *feeds.Feed
 
-	mux   *http.ServeMux
-	xffmw *xff.XFF
+	mux       *http.ServeMux
+	xffmw     *xff.XFF
+	multiplex *multiplex.Hub
 }
+
+// Multiplex exposes the in-process multiplex Hub so the outer mux can
+// mount its routes ahead of the logging chain.
+func (s *Site) Multiplex() *multiplex.Hub { return s.multiplex }
 
 // Make so our site struct can serve http requests
 func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -45,8 +51,10 @@ func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	middleware.RequestID(s.xffmw.Handler(ex.HTTPLog(s.mux))).ServeHTTP(w, r)
 }
 
-// Build renders the entire website
-func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
+// Build renders the entire website. presenterUser/presenterPass guard
+// the /talks/presenter routes; if both are empty the routes are not
+// registered.
+func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass string) (*Site, chan int, error) {
 	ctx = context.WithValue(ctx, internal.ContextKey("func"), "Build")
 	// Define sitemap for the website
 	smap := sitemap.New()
@@ -64,8 +72,9 @@ func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 
 	// Struct that represents the website
 	s := &Site{
-		mux:   http.NewServeMux(),
-		xffmw: xffmw,
+		mux:       http.NewServeMux(),
+		xffmw:     xffmw,
+		multiplex: multiplex.New(),
 		rssFeed: &feeds.Feed{
 			Title: "Francis Begyn's thoughts",
 			Link: &feeds.Link{
@@ -170,15 +179,25 @@ func Build(ctx context.Context, publishDrafts bool) (*Site, chan int, error) {
 		http.ServeFile(w, r, "./static/favicon.ico")
 	})
 
-	// handle the socketio setup for presenting talks
-	// basic auth presenter control
-	s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
-		internal.BasicAuth("foo", "bar", middleware.MultiplexCreateCredentials(s.renderTalk)),
-	)))
-	s.mux.Handle("GET /talks/presenter/{year}/{slug}/{socketID}/{secret}", middleware.Metrics("talks", http.HandlerFunc(
-		internal.BasicAuth("foo", "bar", middleware.MultiplexCreateCredentials(s.renderTalk)),
-	)))
-	slog.Info("presenter control available at /talks/presenter/...")
+	// Multiplex routes are mounted on the *outer* mux by ServeCmd.Run
+	// so they bypass within.website/ln/ex.HTTPLog — that logger wraps
+	// the response writer without exposing http.Hijacker, which the WS
+	// upgrade needs. See Site.Multiplex().
+
+	// Presenter control. Routes are only registered when credentials are
+	// configured; otherwise we keep the surface area minimal in case the
+	// site is exposed publicly without intending to host live talks.
+	if presenterUser != "" && presenterPass != "" {
+		s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
+			internal.BasicAuth(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
+		)))
+		s.mux.Handle("GET /talks/presenter/{year}/{slug}/{socketID}/{secret}", middleware.Metrics("talks", http.HandlerFunc(
+			internal.BasicAuth(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
+		)))
+		slog.Info("presenter control available at /talks/presenter/...")
+	} else {
+		slog.Info("presenter control disabled (set --presenter-user/--presenter-pass to enable)")
+	}
 
 	return s, stop, nil
 }
