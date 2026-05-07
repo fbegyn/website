@@ -1,4 +1,5 @@
-package internal
+// Package auth provides HTTP authentication helpers.
+package auth
 
 import (
 	"crypto/sha256"
@@ -6,7 +7,8 @@ import (
 	"net/http"
 )
 
-func BasicAuth(user, pass string, next http.HandlerFunc) http.HandlerFunc {
+// Basic gates next behind constant-time-compared HTTP Basic Auth.
+func Basic(user, pass string, next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		username, password, ok := r.BasicAuth()
 		if ok {
@@ -14,8 +16,8 @@ func BasicAuth(user, pass string, next http.HandlerFunc) http.HandlerFunc {
 			passwordHash := sha256.Sum256([]byte(password))
 			expectedUsernameHash := sha256.Sum256([]byte(user))
 			expectedPasswordHash := sha256.Sum256([]byte(pass))
-			usernameMatch := (subtle.ConstantTimeCompare(usernameHash[:], expectedUsernameHash[:]) == 1)
-			passwordMatch := (subtle.ConstantTimeCompare(passwordHash[:], expectedPasswordHash[:]) == 1)
+			usernameMatch := subtle.ConstantTimeCompare(usernameHash[:], expectedUsernameHash[:]) == 1
+			passwordMatch := subtle.ConstantTimeCompare(passwordHash[:], expectedPasswordHash[:]) == 1
 			if usernameMatch && passwordMatch {
 				next.ServeHTTP(w, r)
 				return

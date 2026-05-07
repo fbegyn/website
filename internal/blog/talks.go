@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fbegyn/website/cmd/talk/internal/front"
+	"github.com/fbegyn/website/internal/front"
 )
 
 // Talk representents a workshop or presentation. It's a placeholder with some
@@ -40,9 +40,11 @@ func (e Talks) Less(i, j int) bool {
 }
 func (e Talks) Swap(i, j int) { e[i], e[j] = e[j], e[i] }
 
+// LoadTalksDir walks dirName for *.md talk files. The slug is always
+// rooted at "talks/" so /talks/{year}/{slug} URLs work regardless of
+// where the talks actually live on disk.
 func LoadTalksDir(dirName, prefix string, publishDrafts bool) (Talks, error) {
 	var talks Talks
-	// Normalize the directory name to ensure consistent path handling
 	dirName = filepath.Clean(dirName) + string(filepath.Separator)
 
 	type frontMatter struct {
@@ -56,11 +58,9 @@ func LoadTalksDir(dirName, prefix string, publishDrafts bool) (Talks, error) {
 		if err != nil {
 			return err
 		}
-
 		if info.IsDir() {
 			return nil
 		}
-
 		if filepath.Ext(filePath) != ".md" {
 			return nil
 		}
@@ -88,10 +88,7 @@ func LoadTalksDir(dirName, prefix string, publishDrafts bool) (Talks, error) {
 			return err
 		}
 
-		// Generate a relative path from the talks directory
 		relPath := strings.TrimPrefix(filePath, dirName)
-		// Normalize the Slug to always use "talks/" prefix for URL consistency
-		// This ensures /talks/{year}/{slug} URLs work regardless of actual directory
 		slug := "talks/" + strings.TrimSuffix(relPath, filepath.Ext(relPath))
 
 		talk := Talk{
@@ -117,17 +114,18 @@ func LoadTalksDir(dirName, prefix string, publishDrafts bool) (Talks, error) {
 	return talks, nil
 }
 
+// TalkFS exposes talk markdown files via an fs.FS. When BaseDir is
+// non-empty, an incoming path "talks/<rest>" is rewritten to
+// "<BaseDir>/<rest>" before opening; with BaseDir empty the name is
+// passed straight to os.Open (the legacy behaviour).
 type TalkFS struct {
 	fs.FS
 	BaseDir string
 }
 
 func (fsys TalkFS) Open(name string) (fs.File, error) {
-	// If BaseDir is set, resolve the path relative to it
-	// The name comes in as "talks/..." from the HTTP handler, so we need to adjust it
 	fullPath := name
 	if fsys.BaseDir != "" {
-		// Strip the "talks/" prefix and prepend BaseDir
 		relativePath := strings.TrimPrefix(name, "talks/")
 		fullPath = filepath.Join(fsys.BaseDir, relativePath)
 	}
@@ -138,8 +136,6 @@ func (fsys TalkFS) Open(name string) (fs.File, error) {
 		return nil, &fs.PathError{Op: "open", Path: name, Err: errors.New("failed to open talksfs")}
 	}
 
-	// TODO: clean this up further, but for now this seems to work
-	// This can probably be solved by implementing a better io.Seeker but I need to learn about it a bit more
 	content, err := io.ReadAll(file)
 	if err != nil {
 		return nil, &fs.PathError{Op: "open", Path: name, Err: errors.New("failed to open talksfs")}
@@ -175,7 +171,6 @@ func (file *TalkFile) Seek(offset int64, whence int) (int64, error) {
 	case io.SeekCurrent:
 		file.offset += offset
 	case io.SeekEnd:
-		// This requires knowing the file size
 		info, err := file.Stat()
 		if err != nil {
 			return 0, err

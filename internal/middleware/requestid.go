@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/celrenheit/sandflake"
-	"github.com/fbegyn/website/cmd/talk/internal"
+	"github.com/fbegyn/website/internal/contextkey"
 )
 
 // RequestID appends a unique (sandflake) request ID to each request's
@@ -19,7 +19,7 @@ func RequestID(next http.Handler) http.Handler {
 			id = rid + "," + id
 		}
 
-		ctx := context.WithValue(r.Context(), internal.ContextKey("request_id"), id)
+		ctx := context.WithValue(r.Context(), contextkey.Key("request_id"), id)
 		r = r.WithContext(ctx)
 
 		w.Header().Set("X-Request-Id", id)

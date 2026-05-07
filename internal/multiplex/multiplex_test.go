@@ -66,7 +66,6 @@ func TestPresenterFanoutToViewers(t *testing.T) {
 	}
 	defer ws.Close()
 
-	// Subscribe a viewer over SSE.
 	req, _ := http.NewRequest(http.MethodGet, srv.URL+"/multiplex/"+tok.SocketID+"/events", nil)
 	resp, err := srv.Client().Do(req)
 	if err != nil {
@@ -74,14 +73,11 @@ func TestPresenterFanoutToViewers(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	// Drain the initial ": connected" comment so the next data: frame
-	// is the broadcast we expect.
 	br := bufio.NewReader(resp.Body)
 	if _, err := readEvent(br); err != nil {
 		t.Fatalf("read initial: %v", err)
 	}
 
-	// Give the subscribe a moment so the broadcast lands after.
 	time.Sleep(20 * time.Millisecond)
 
 	frame := presenterFrame{
@@ -144,7 +140,6 @@ func TestPresenterRejectsWrongSecret(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// No frame should arrive within the deadline.
 	type result struct {
 		s   string
 		err error
@@ -187,7 +182,6 @@ func TestUnsubscribeOnViewerDisconnect(t *testing.T) {
 
 	resp.Body.Close()
 
-	// Allow the SSE handler goroutine to notice disconnect and clean up.
 	deadline := time.Now().Add(500 * time.Millisecond)
 	for time.Now().Before(deadline) {
 		h.mu.RLock()
@@ -201,9 +195,6 @@ func TestUnsubscribeOnViewerDisconnect(t *testing.T) {
 	t.Fatalf("subs after disconnect = %d, want 0", got)
 }
 
-// readEvent reads bytes until a blank-line terminator, skipping
-// SSE comment lines (those starting with ':'). Returns the joined
-// data: payload.
 func readEvent(br *bufio.Reader) (string, error) {
 	var data strings.Builder
 	for {

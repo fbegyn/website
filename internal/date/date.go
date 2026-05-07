@@ -1,4 +1,5 @@
-package internal
+// Package date holds small date-formatting helpers.
+package date
 
 import "time"
 

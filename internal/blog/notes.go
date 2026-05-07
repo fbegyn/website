@@ -2,14 +2,14 @@ package blog
 
 import (
 	"html/template"
-	"os"
 	"io"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"time"
 
-	"github.com/fbegyn/website/cmd/server/internal/front"
+	"github.com/fbegyn/website/internal/front"
 	"github.com/russross/blackfriday"
 )
 
@@ -92,7 +92,7 @@ func LoadNotesDir(dirName string, prefix string, publishDrafts bool) (Notes, err
 		}
 
 		if !note.Draft || publishDrafts {
-		    notes = append(notes, note)
+			notes = append(notes, note)
 		}
 
 		return nil

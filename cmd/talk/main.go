@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/alecthomas/kong"
-	"github.com/fbegyn/website/cmd/talk/internal"
-	"github.com/fbegyn/website/cmd/talk/internal/blog"
-	"github.com/fbegyn/website/cmd/talk/internal/middleware"
-	"github.com/fbegyn/website/cmd/talk/internal/multiplex"
+	"github.com/fbegyn/website/internal/auth"
+	"github.com/fbegyn/website/internal/blog"
+	"github.com/fbegyn/website/internal/contextkey"
+	"github.com/fbegyn/website/internal/middleware"
+	"github.com/fbegyn/website/internal/multiplex"
+	"github.com/fbegyn/website/internal/talkrender"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -103,8 +104,8 @@ func (s *TalkServer) Multiplex() *multiplex.Hub { return s.multiplex }
 // ServeHTTP makes TalkServer implement http.Handler
 func (s *TalkServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, internal.ContextKey("func"), "talkserver.ServeHTTP")
-	ctx = context.WithValue(ctx, internal.ContextKey("user_agent"), r.Header.Get("User-Agent"))
+	ctx = context.WithValue(ctx, contextkey.Key("func"), "talkserver.ServeHTTP")
+	ctx = context.WithValue(ctx, contextkey.Key("user_agent"), r.Header.Get("User-Agent"))
 	r = r.WithContext(ctx)
 	middleware.RequestID(s.xffmw.Handler(ex.HTTPLog(s.mux))).ServeHTTP(w, r)
 }
@@ -113,7 +114,7 @@ func (s *TalkServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // and presenterPass guard the /talks/presenter routes; if both are
 // empty the routes are not registered.
 func BuildTalkServer(ctx context.Context, talksDir, staticDir string, publishDrafts bool, presenterUser, presenterPass string) (*TalkServer, error) {
-	ctx = context.WithValue(ctx, internal.ContextKey("func"), "BuildTalkServer")
+	ctx = context.WithValue(ctx, contextkey.Key("func"), "BuildTalkServer")
 
 	// Handle X-Forwarded-For headers
 	xffmw, err := xff.Default()
@@ -173,10 +174,10 @@ func BuildTalkServer(ctx context.Context, talksDir, staticDir string, publishDra
 
 	if presenterUser != "" && presenterPass != "" {
 		s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
-			internal.BasicAuth(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
+			auth.Basic(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
 		)))
 		s.mux.Handle("GET /talks/presenter/{year}/{slug}/{socketID}/{secret}", middleware.Metrics("talks", http.HandlerFunc(
-			internal.BasicAuth(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
+			auth.Basic(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
 		)))
 		slog.Info("presenter control available at /talks/presenter/...")
 	} else {
@@ -223,113 +224,14 @@ func (s *TalkServer) renderTalk(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/talks", http.StatusSeeOther)
 		return
 	}
-
-	var tmplData struct {
-		Title     string
-		Slug      string
-		Path      string
-		Mode      string // "plain" | "presenter" | "viewer"
-		MSecret   string
-		MSocketID string
-		MURL      string
-		ViewerURL string
-	}
-
-	cmp := r.PathValue("slug")
-	year := r.PathValue("year")
-	var p blog.Talk
-	var found bool
-	for _, pst := range s.Talks {
-		if pst.Slug == ("talks/" + year + "/" + cmp) {
-			p = pst
-			found = true
-		}
-	}
-	if !found {
+	p, ok := talkrender.Find(s.Talks, r.PathValue("year"), r.PathValue("slug"))
+	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		s.renderPageTemplate("error.html", "no such talk found: "+r.RequestURI).ServeHTTP(w, r)
 		return
 	}
-
-	if v := r.Context().Value(middleware.MultiplexKey("secret")); v != nil {
-		tmplData.MSecret = v.(string)
-	}
-	if v := r.Context().Value(middleware.MultiplexKey("socketID")); v != nil {
-		tmplData.MSocketID = v.(string)
-	}
-	if tmplData.MSocketID == "" {
-		r = middleware.MultiplexViewerToContext(r)
-		if v := r.Context().Value(middleware.MultiplexKey("socketID")); v != nil {
-			tmplData.MSocketID = v.(string)
-		}
-	}
-
-	switch {
-	case tmplData.MSecret != "" && tmplData.MSocketID != "":
-		tmplData.Mode = "presenter"
-	case tmplData.MSocketID != "":
-		tmplData.Mode = "viewer"
-	default:
-		tmplData.Mode = "plain"
-	}
-
-	tmplData.Title = p.Title
-	tmplData.Slug = p.Slug
-	tmplData.Path = p.Path
-	tmplData.MURL = originURL(r)
-
-	if tmplData.Mode == "presenter" {
-		viewerPath := strings.Replace(r.URL.Path, "/presenter/", "/", 1) + "/" + tmplData.MSocketID
-		tmplData.ViewerURL = tmplData.MURL + strings.TrimPrefix(viewerPath, "/")
-	}
-
-	s.renderTalkTemplate("talks/talk.html", tmplData).ServeHTTP(w, r)
+	talkrender.Render(w, r, p)
 	talkViews.With(prometheus.Labels{"talk": filepath.Base(p.Slug)}).Inc()
-}
-
-// originURL returns "<scheme>://<host>/" for the incoming request,
-// honouring X-Forwarded-Proto when present (we sit behind xff.Default
-// so that header is trusted at this point).
-func originURL(r *http.Request) string {
-	scheme := "http"
-	if r.TLS != nil {
-		scheme = "https"
-	}
-	if proto := r.Header.Get("X-Forwarded-Proto"); proto != "" {
-		scheme = proto
-	}
-	return scheme + "://" + r.Host + "/"
-}
-
-func (s *TalkServer) renderTalkTemplate(templateFile string, data interface{}) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var t *template.Template
-		var err error
-		t, err = template.ParseFiles("templates/talks/base.html", "templates/"+templateFile)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			slog.Error(
-				"failed to render page",
-				"error", err,
-				"action", "renderPageTemplate",
-				"page", templateFile,
-			)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		w.Header().Add("Cache-Control", "max-age=86400")
-
-		err = t.Execute(w, data)
-		if err != nil {
-			slog.Error(
-				"failed to execute template",
-				"error", err,
-				"action", "executeTemplate",
-				"page", templateFile,
-			)
-		}
-		pageViews.With(prometheus.Labels{"page": templateFile}).Inc()
-	})
 }
 
 func main() {

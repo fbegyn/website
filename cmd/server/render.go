@@ -10,9 +10,9 @@ import (
 
 	"cuelang.org/go/cue/cuecontext"
 	"cuelang.org/go/cue/load"
-	"github.com/fbegyn/website/cmd/server/internal"
-	"github.com/fbegyn/website/cmd/server/internal/blog"
-	"github.com/fbegyn/website/cmd/server/internal/middleware"
+	"github.com/fbegyn/website/internal/blog"
+	"github.com/fbegyn/website/internal/date"
+	"github.com/fbegyn/website/internal/talkrender"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -111,7 +111,7 @@ func (s *Site) renderPost(w http.ResponseWriter, r *http.Request) {
 		Title:    p.Title,
 		Link:     p.Link,
 		BodyHTML: p.BodyHTML,
-		Date:     internal.IOS13Detri(p.Date),
+		Date:     date.IOS13Detri(p.Date),
 		Tags:     tags,
 		Prism:    true,
 	}).ServeHTTP(w, r)
@@ -123,114 +123,14 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/talk", http.StatusSeeOther)
 		return
 	}
-
-	var tmplData struct {
-		Title     string
-		Slug      string
-		Path      string
-		Mode      string // "plain" | "presenter" | "viewer"
-		MSecret   string
-		MSocketID string
-		MURL      string
-		ViewerURL string
-	}
-
-	cmp := r.PathValue("slug")
-	year := r.PathValue("year")
-	var p blog.Talk
-	var found bool
-	for _, pst := range s.Talks {
-		if pst.Slug == ("talks/" + year + "/" + cmp) {
-			p = pst
-			found = true
-		}
-	}
-	if !found {
+	p, ok := talkrender.Find(s.Talks, r.PathValue("year"), r.PathValue("slug"))
+	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		s.renderPageTemplate("error.html", "no such talk found: "+r.RequestURI).ServeHTTP(w, r)
 		return
 	}
-
-	// Pull any multiplex creds out of the request context (presenter
-	// path) or path values (viewer path).
-	if v := r.Context().Value(middleware.MultiplexKey("secret")); v != nil {
-		tmplData.MSecret = v.(string)
-	}
-	if v := r.Context().Value(middleware.MultiplexKey("socketID")); v != nil {
-		tmplData.MSocketID = v.(string)
-	}
-	if tmplData.MSocketID == "" {
-		r = middleware.MultiplexViewerToContext(r)
-		if v := r.Context().Value(middleware.MultiplexKey("socketID")); v != nil {
-			tmplData.MSocketID = v.(string)
-		}
-	}
-
-	switch {
-	case tmplData.MSecret != "" && tmplData.MSocketID != "":
-		tmplData.Mode = "presenter"
-	case tmplData.MSocketID != "":
-		tmplData.Mode = "viewer"
-	default:
-		tmplData.Mode = "plain"
-	}
-
-	tmplData.Title = p.Title
-	tmplData.Slug = p.Slug
-	tmplData.Path = p.Path
-	tmplData.MURL = originURL(r)
-
-	if tmplData.Mode == "presenter" {
-		viewerPath := strings.Replace(r.URL.Path, "/presenter/", "/", 1) + "/" + tmplData.MSocketID
-		tmplData.ViewerURL = tmplData.MURL + strings.TrimPrefix(viewerPath, "/")
-	}
-
-	s.renderTalkTemplate("talks/talk.html", tmplData).ServeHTTP(w, r)
+	talkrender.Render(w, r, p)
 	talkViews.With(prometheus.Labels{"talk": filepath.Base(p.Slug)}).Inc()
-}
-
-// originURL returns "<scheme>://<host>/" for the incoming request,
-// honouring X-Forwarded-Proto when present (we sit behind xff.Default
-// so that header is trusted at this point).
-func originURL(r *http.Request) string {
-	scheme := "http"
-	if r.TLS != nil {
-		scheme = "https"
-	}
-	if proto := r.Header.Get("X-Forwarded-Proto"); proto != "" {
-		scheme = proto
-	}
-	return scheme + "://" + r.Host + "/"
-}
-
-func (s *Site) renderTalkTemplate(templateFile string, data interface{}) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var t *template.Template
-		var err error
-		t, err = template.ParseFiles("templates/talks/base.html", "templates/"+templateFile)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			slog.Error(
-				"failed to render page",
-				"error", err,
-				"action", "renderPageTemplate",
-				"page", templateFile,
-			)
-			fmt.Fprintf(w, "error: %v", err)
-		}
-		w.Header().Add("Cache-Control", "max-age=86400")
-
-		err = t.Execute(w, data)
-		if err != nil {
-			slog.Error(
-				"failed to execute template",
-				"error", err,
-				"action", "executeTemplate",
-				"page", templateFile,
-			)
-		}
-		pageViews.With(prometheus.Labels{"page": templateFile}).Inc()
-	})
 }
 
 type Resume struct {
@@ -342,7 +242,7 @@ func (s *Site) renderNote(w http.ResponseWriter, r *http.Request) {
 		Title:    p.Title,
 		Link:     p.Link,
 		BodyHTML: p.BodyHTML,
-		Date:     internal.IOS13Detri(p.Date),
+		Date:     date.IOS13Detri(p.Date),
 		Tags:     tags,
 		Prism:    true,
 	}).ServeHTTP(w, r)

@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/fbegyn/website/cmd/server/internal/multiplex"
+	"github.com/fbegyn/website/internal/multiplex"
 )
 
 type MultiplexKey string

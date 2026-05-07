@@ -7,10 +7,11 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/fbegyn/website/cmd/server/internal"
-	"github.com/fbegyn/website/cmd/server/internal/blog"
-	"github.com/fbegyn/website/cmd/server/internal/middleware"
-	"github.com/fbegyn/website/cmd/server/internal/multiplex"
+	"github.com/fbegyn/website/internal/auth"
+	"github.com/fbegyn/website/internal/blog"
+	"github.com/fbegyn/website/internal/contextkey"
+	"github.com/fbegyn/website/internal/middleware"
+	"github.com/fbegyn/website/internal/multiplex"
 	"github.com/gorilla/feeds"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sebest/xff"
@@ -44,8 +45,8 @@ func (s *Site) Multiplex() *multiplex.Hub { return s.multiplex }
 func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Create a context for the request
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, internal.ContextKey("func"), "site.ServeHTTP")
-	ctx = context.WithValue(ctx, internal.ContextKey("user_agent"), r.Header.Get("User-Agent"))
+	ctx = context.WithValue(ctx, contextkey.Key("func"), "site.ServeHTTP")
+	ctx = context.WithValue(ctx, contextkey.Key("user_agent"), r.Header.Get("User-Agent"))
 	r = r.WithContext(ctx)
 	// Add a unique ID to each request
 	middleware.RequestID(s.xffmw.Handler(ex.HTTPLog(s.mux))).ServeHTTP(w, r)
@@ -55,7 +56,7 @@ func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // the /talks/presenter routes; if both are empty the routes are not
 // registered.
 func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass string) (*Site, chan int, error) {
-	ctx = context.WithValue(ctx, internal.ContextKey("func"), "Build")
+	ctx = context.WithValue(ctx, contextkey.Key("func"), "Build")
 	// Define sitemap for the website
 	smap := sitemap.New()
 	smap.Add(&sitemap.URL{
@@ -189,10 +190,10 @@ func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass
 	// site is exposed publicly without intending to host live talks.
 	if presenterUser != "" && presenterPass != "" {
 		s.mux.Handle("GET /talks/presenter/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(
-			internal.BasicAuth(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
+			auth.Basic(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
 		)))
 		s.mux.Handle("GET /talks/presenter/{year}/{slug}/{socketID}/{secret}", middleware.Metrics("talks", http.HandlerFunc(
-			internal.BasicAuth(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
+			auth.Basic(presenterUser, presenterPass, middleware.MultiplexCreateCredentials(s.multiplex, s.renderTalk)),
 		)))
 		slog.Info("presenter control available at /talks/presenter/...")
 	} else {
