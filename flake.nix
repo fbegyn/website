@@ -28,7 +28,7 @@
         name = "website";
         pname = "server";
         src = ./.;
-        vendorHash = "sha256-r6oleJa2iw7Bp8EDqONw/tcawrny7DIT09zf/awrszk=";
+        vendorHash = "sha256-wGCPHY6eNztX+iVIVTeanuYrud2uCIicUluA+Nz2/JU=";
         ldFlages = [
           "-S" "-W"
         ];
