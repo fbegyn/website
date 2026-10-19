@@ -52,6 +52,8 @@
             goreleaser
             nodejs
             deno
+            rsync
+            openssh
           ];
           commands = [
             {
@@ -73,8 +75,20 @@
                 make package
               '';
             }
+            {
+              name = "website:deploy";
+              help = "website:deploy <user>@<host> <root directory>";
+              command = ''
+                ./scripts/website-deploy "$@"
+              '';
+            }
           ];
         };
+      };
+      packages.website-deploy = pkgs.writeShellApplication {
+        name = "website-deploy";
+        runtimeInputs = with pkgs; [ git rsync openssh ];
+        text = builtins.readFile ./scripts/website-deploy;
       };
       nixosModules.website = { config, lib, pkgs, ...}:
         with lib;
@@ -138,6 +152,7 @@
                 Group = "fbegyn";
                 WorkingDirectory = "${cfg.workingDirectory}";
                 ExecStart = "${defaultPackage}/bin/server serve";
+                ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
               };
               wantedBy = [ "multi-user.target" ];
               after = [ "network.target" ];
@@ -150,6 +165,7 @@
                 Group = "fbegyn";
                 WorkingDirectory = "${cfg.workingDirectory}";
                 ExecStart = "${defaultPackage}/bin/server serve --drafts --port ${toString cfg.port+1}";
+                ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
               };
               wantedBy = [ "multi-user.target" ];
               after = [ "network.target" ];

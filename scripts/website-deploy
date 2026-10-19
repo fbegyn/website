@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Deploy the website content to a remote host.
+#
+# usage: website-deploy <user>@<host> <root directory>
+#
+# After syncing, the server is reloaded (SIGHUP) with $WEBSITE_RELOAD_CMD,
+# which defaults to "sudo systemctl reload website" and runs on the remote host.
+set -euo pipefail
+
+if [ "$#" -ne 2 ]; then
+  echo "usage: website-deploy <user>@<host> <root directory>" >&2
+  exit 1
+fi
+
+target="$1"
+root="${2%/}"
+
+cd "$(git rev-parse --show-toplevel)"
+
+# talks is a submodule, an uninitialised checkout would deploy an empty directory
+git submodule update --init talks
+if [ -z "$(ls -A talks)" ]; then
+  echo "error: ./talks is empty after submodule checkout, refusing to deploy" >&2
+  exit 1
+fi
+
+ssh "$target" mkdir -p "'$root'"/{blog,notes,templates,talks,static}
+
+sync() {
+  echo ">> $1 -> $target:$root/$2"
+  rsync -az --delete --exclude=.git "$1/" "$target:$root/$2/"
+}
+
+sync blog blog
+sync notes notes
+sync templates templates
+sync talks talks
+sync cmd/server/static static
+
+reload_cmd="${WEBSITE_RELOAD_CMD:-sudo systemctl reload website}"
+echo ">> $target: $reload_cmd"
+ssh "$target" "$reload_cmd"

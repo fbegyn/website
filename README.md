@@ -58,3 +58,17 @@ straight to your local working copy when accessed via `localhost`. To use it:
 1. Run `npx decap-server` from the repo root (a local proxy that reads/writes the working copy).
 2. Run the site with admin auth enabled, e.g. `go run ./cmd/server serve --admin-user=test --admin-pass=test`.
 3. Open `http://localhost:3114/admin/` — Sveltia detects the local backend automatically.
+
+## Deploying
+
+```
+website-deploy <user>@<host> <root directory>
+```
+
+Syncs `./blog`, `./notes`, `./templates`, `./talks` and `./cmd/server/static` to `<root>/blog`,
+`<root>/notes`, `<root>/templates`, `<root>/talks` and `<root>/static` over rsync/ssh. The `talks`
+submodule is checked out first; the script aborts if it is still empty. Afterwards it reloads the server on the host with
+`sudo systemctl reload website` (override with `WEBSITE_RELOAD_CMD`).
+
+Available as `website:deploy` in the dev shell, `nix run .#website-deploy -- <user>@<host> <root>`,
+or `make deploy DEPLOY_TARGET=<user>@<host> DEPLOY_ROOT=<root>`.
