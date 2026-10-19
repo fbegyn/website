@@ -77,7 +77,7 @@
             }
             {
               name = "website:deploy";
-              help = "website:deploy <user>@<host> <root directory>";
+              help = "website:deploy <user>@<host> <root directory> <service>";
               command = ''
                 ./scripts/website-deploy "$@"
               '';

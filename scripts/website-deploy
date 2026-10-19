@@ -1,22 +1,29 @@
 #!/usr/bin/env bash
 # Deploy the website content to a remote host.
 #
-# usage: website-deploy <user>@<host> <root directory>
+# usage: website-deploy <user>@<host> <root directory> <service>
 #
-# After syncing, the website service (and website-draft, if it exists) is
-# reloaded (SIGHUP) on the remote host with $WEBSITE_SYSTEMCTL, which defaults
-# to "sudo systemctl".
+# <service> is the systemd unit (e.g. website or website-draft) that serves
+# <root directory>. It must exist on the remote host, and is reloaded (SIGHUP)
+# after syncing with $WEBSITE_SYSTEMCTL, which defaults to "sudo systemctl".
 set -euo pipefail
 
-if [ "$#" -ne 2 ]; then
-  echo "usage: website-deploy <user>@<host> <root directory>" >&2
+if [ "$#" -ne 3 ]; then
+  echo "usage: website-deploy <user>@<host> <root directory> <service>" >&2
   exit 1
 fi
 
 target="$1"
 root="${2%/}"
+service="$3"
 
 cd "$(git rev-parse --show-toplevel)"
+
+# fail before syncing anything if there is nothing to reload afterwards
+if ! ssh "$target" "systemctl cat '$service' >/dev/null 2>&1"; then
+  echo "error: service '$service' does not exist on $target" >&2
+  exit 1
+fi
 
 # talks is a submodule, an uninitialised checkout would deploy an empty directory
 git submodule update --init talks
@@ -39,6 +46,5 @@ sync talks talks
 sync cmd/server/static static
 
 systemctl="${WEBSITE_SYSTEMCTL:-sudo systemctl}"
-echo ">> $target: reloading"
-ssh "$target" "$systemctl reload website
-if systemctl cat website-draft >/dev/null 2>&1; then $systemctl reload website-draft; fi"
+echo ">> $target: reloading $service"
+ssh "$target" "$systemctl reload '$service'"

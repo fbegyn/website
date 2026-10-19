@@ -16,6 +16,6 @@ package: build
 
 .PHONY: deploy
 deploy:
-	@test -n "$(DEPLOY_TARGET)" -a -n "$(DEPLOY_ROOT)" || { \
-		echo "usage: make deploy DEPLOY_TARGET=user@host DEPLOY_ROOT=/path"; exit 1; }
-	./scripts/website-deploy $(DEPLOY_TARGET) $(DEPLOY_ROOT)
+	@test -n "$(DEPLOY_TARGET)" -a -n "$(DEPLOY_ROOT)" -a -n "$(DEPLOY_SERVICE)" || { \
+		echo "usage: make deploy DEPLOY_TARGET=user@host DEPLOY_ROOT=/path DEPLOY_SERVICE=website"; exit 1; }
+	./scripts/website-deploy $(DEPLOY_TARGET) $(DEPLOY_ROOT) $(DEPLOY_SERVICE)
