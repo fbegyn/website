@@ -29,9 +29,11 @@
         pname = "server";
         src = ./.;
         vendorHash = "sha256-wGCPHY6eNztX+iVIVTeanuYrud2uCIicUluA+Nz2/JU=";
-        ldFlages = [
-          "-S" "-W"
+        ldflags = [
+          "-s" "-w"
         ];
+        # internal/multiplex tests hang in the nix build sandbox
+        doCheck = false;
         subPackages = [];
       };
       devShells = rec {
@@ -39,7 +41,7 @@
         website = pkgs.devshell.mkShell {
           name = "website";
           packages = with pkgs; [
-            go_1_24
+            go
             nix
             git
             gotools
