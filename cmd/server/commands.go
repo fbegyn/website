@@ -27,13 +27,15 @@ type ServeCmd struct {
 	Drafts        bool   `help:"publish drafts (default: false)" default:"false"`
 	PresenterUser string `help:"basic-auth username gating /talks/presenter/* (empty = disable)" env:"WEBSITE_PRESENTER_USER" default:""`
 	PresenterPass string `help:"basic-auth password gating /talks/presenter/* (empty = disable)" env:"WEBSITE_PRESENTER_PASS" default:""`
+	AdminUser     string `help:"basic-auth username gating /admin/ (empty = disable)" env:"WEBSITE_ADMIN_USER" default:""`
+	AdminPass     string `help:"basic-auth password gating /admin/ (empty = disable)" env:"WEBSITE_ADMIN_PASS" default:""`
 }
 
 func (c *ServeCmd) Run(globals *Globals) error {
 	ctx := context.Background()
 	logger := slog.Default()
 	// Create the site
-	s, _, err := Build(ctx, c.Drafts, c.PresenterUser, c.PresenterPass)
+	s, _, err := Build(ctx, c.Drafts, c.PresenterUser, c.PresenterPass, c.AdminUser, c.AdminPass)
 	if err != nil {
 		logger.ErrorContext(ctx, "failed to build website", slog.Any("err", err), slog.String("action", "build"))
 		os.Exit(1)

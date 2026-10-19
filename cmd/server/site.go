@@ -145,9 +145,9 @@ func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // Build renders the entire website. presenterUser/presenterPass guard
-// the /talks/presenter routes; if both are empty the routes are not
-// registered.
-func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass string) (*Site, chan int, error) {
+// the /talks/presenter routes, and adminUser/adminPass guard /admin/;
+// if either pair is empty the corresponding routes are not registered.
+func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass, adminUser, adminPass string) (*Site, chan int, error) {
 	ctx = context.WithValue(ctx, contextkey.Key("func"), "Build")
 	// Define sitemap for the website
 	smap := sitemap.New()
@@ -231,6 +231,17 @@ func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass
 
 	// server static files
 	s.mux.Handle("GET /static/", http.StripPrefix("/static", http.FileServer(http.Dir("./static"))))
+
+	// Admin UI (Sveltia CMS). Gated because the page and config.yml are
+	// otherwise publicly reachable and reveal the repo name/content layout.
+	if adminUser != "" && adminPass != "" {
+		s.mux.Handle("GET /admin/", middleware.Metrics("admin", http.HandlerFunc(
+			auth.Basic(adminUser, adminPass, http.StripPrefix("/admin", http.FileServer(http.Dir("./static/admin"))).ServeHTTP),
+		)))
+		slog.Info("admin UI available at /admin/")
+	} else {
+		slog.Info("admin UI disabled (set --admin-user/--admin-pass to enable)")
+	}
 	// TODO: figure out how the hell this is supposed to work in buildGoModule
 	// s.mux.Handle("GET /static/js/", http.FileServerFS(jsFS))
 	s.mux.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {

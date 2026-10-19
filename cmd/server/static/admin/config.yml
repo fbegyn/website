@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: fbegyn/website
+  branch: main
+
+# Lets the CMS skip GitHub auth and write straight to the local working
+# copy when accessed via localhost with `npx decap-server` running.
+local_backend: true
+
+media_folder: "static/media"
+public_folder: "/static/media"
+
+collections:
+  - name: "blog"
+    label: "Blog"
+    label_singular: "Blog post"
+    folder: "blog"
+    extension: "md"
+    format: "frontmatter"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: true, time_format: false }
+      - { label: "Draft", name: "draft", widget: "boolean", default: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false, default: [] }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "notes"
+    label: "Notes"
+    folder: "notes"
+    extension: "md"
+    format: "frontmatter"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: true, time_format: false }
+      - { label: "Draft", name: "draft", widget: "boolean", default: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false, default: [] }
+      - { label: "Body", name: "body", widget: "markdown" }
