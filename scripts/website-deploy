@@ -3,8 +3,9 @@
 #
 # usage: website-deploy <user>@<host> <root directory>
 #
-# After syncing, the server is reloaded (SIGHUP) with $WEBSITE_RELOAD_CMD,
-# which defaults to "sudo systemctl reload website" and runs on the remote host.
+# After syncing, the website service (and website-draft, if it exists) is
+# reloaded (SIGHUP) on the remote host with $WEBSITE_SYSTEMCTL, which defaults
+# to "sudo systemctl".
 set -euo pipefail
 
 if [ "$#" -ne 2 ]; then
@@ -37,6 +38,7 @@ sync templates templates
 sync talks talks
 sync cmd/server/static static
 
-reload_cmd="${WEBSITE_RELOAD_CMD:-sudo systemctl reload website}"
-echo ">> $target: $reload_cmd"
-ssh "$target" "$reload_cmd"
+systemctl="${WEBSITE_SYSTEMCTL:-sudo systemctl}"
+echo ">> $target: reloading"
+ssh "$target" "$systemctl reload website
+if systemctl cat website-draft >/dev/null 2>&1; then $systemctl reload website-draft; fi"

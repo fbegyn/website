@@ -159,12 +159,12 @@
             };
             systemd.services.website-draft = mkIf cfg.drafts {
               serviceConfig = {
-                Environment = "SERVER_PORT=${toString cfg.port}";
+                Environment = "SERVER_PORT=${toString (cfg.port+1)}";
                 EnvironmentFile = "${cfg.workingDirectory}/.env";
                 User = "fbegyn";
                 Group = "fbegyn";
                 WorkingDirectory = "${cfg.workingDirectory}";
-                ExecStart = "${defaultPackage}/bin/server serve --drafts --port ${toString (cfg.port+1)}";
+                ExecStart = "${defaultPackage}/bin/server serve --drafts";
                 ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
               };
               wantedBy = [ "multi-user.target" ];

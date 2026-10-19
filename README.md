@@ -68,7 +68,8 @@ website-deploy <user>@<host> <root directory>
 Syncs `./blog`, `./notes`, `./templates`, `./talks` and `./cmd/server/static` to `<root>/blog`,
 `<root>/notes`, `<root>/templates`, `<root>/talks` and `<root>/static` over rsync/ssh. The `talks`
 submodule is checked out first; the script aborts if it is still empty. Afterwards it reloads the server on the host with
-`sudo systemctl reload website` (override with `WEBSITE_RELOAD_CMD`).
+`sudo systemctl reload website`, and `website-draft` too if that unit exists (override the
+`sudo systemctl` prefix with `WEBSITE_SYSTEMCTL`).
 
 Available as `website:deploy` in the dev shell, `nix run .#website-deploy -- <user>@<host> <root>`,
 or `make deploy DEPLOY_TARGET=<user>@<host> DEPLOY_ROOT=<root>`.
