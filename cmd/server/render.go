@@ -52,6 +52,7 @@ func (s *Site) renderPageTemplate(templateFile string, data interface{}) http.Ha
 				"page", templateFile,
 			)
 			fmt.Fprintf(w, "error: %v", err)
+			return
 		}
 
 		w.Header().Add("Cache-Control", "max-age=86400")
@@ -183,6 +184,7 @@ func (s *Site) renderPageFromCUE(templateFile string, cueFile string) http.Handl
 				"page", templateFile,
 			)
 			fmt.Fprintf(w, "error: %v", err)
+			return
 		}
 
 		w.Header().Add("Cache-Control", "max-age=86400")
