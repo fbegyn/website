@@ -11,12 +11,11 @@
   };
 
   outputs = {
-    self,
     nixpkgs,
     flake-utils,
     devshell,
     ...
-  } @ inputs:
+  }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
@@ -96,10 +95,10 @@
               example = "francis.begyn.be";
               description = "The ACME host that should be used by NGINX";
             };
-            home = mkOption {
+            workingDirectory = mkOption {
               type = types.str;
-              default = "/srv/fbegyn/website";
-              example = "/var/lib/website";
+              default = "/srv/fbegyn/website/production";
+              example = "/var/lib/website/staging";
               description = "Working directory of the website";
             };
             aliases = mkOption {
@@ -114,36 +113,11 @@
               example = 3114;
               description = "The port number for the website server";
             };
-            multiplex = {
-              enable = mkEnableOption "enables the multiplex server on this host under multiplex-server.service";
-              location = mkOption {
-                type = types.str;
-                default = "/socket.io";
-                example = "/multiplex/socket";
-                description = "nginx location to run the multiplex server on";
-              };
-              proxyPass = mkOption {
-                type = types.str;
-                default = "http://127.0.0.1:${toString cfg.multiplex.port}/";
-                example = "http://127.0.0.1:3000/";
-                description = "nginx location to run the multiplex server on";
-              };
-              command = mkOption {
-                type = types.str;
-                description = "command to execute under de multiplex server systemd unit";
-              };
-              port = mkOption {
-                type = types.int;
-                default = 8000;
-                example = 8000;
-                description = "The port number for the multiplex server";
-              };
-              home = mkOption {
-                type = types.str;
-                default = "/srv/fbegyn/multiplex-server";
-                example = "/var/lib/website";
-                description = "Working directory of the website";
-              };
+            drafts = mkOption {
+              type = types.boolean;
+              default = false;
+              example = true;
+              description = "Render drafts on the port+1 port and expose under drafts.domain";
             };
           };
 
@@ -152,30 +126,32 @@
               createHome = true;
               isSystemUser = true;
               group = "fbegyn";
-              home = "${cfg.home}";
+              home = "${cfg.workingDirectory}";
               description = "francis.begyn.be";
             };
             users.groups.fbegyn.members = [ "francis" ];
             systemd.services.website = {
               serviceConfig = {
                 Environment = "SERVER_PORT=${toString cfg.port}";
-                EnvironmentFile = "${cfg.home}/.env";
+                EnvironmentFile = "${cfg.workingDirectory}/.env";
                 User = "fbegyn";
                 Group = "fbegyn";
-                WorkingDirectory = "${cfg.home}";
+                WorkingDirectory = "${cfg.workingDirectory}";
                 ExecStart = "${defaultPackage}/bin/server serve";
               };
               wantedBy = [ "multi-user.target" ];
               after = [ "network.target" ];
             };
-            systemd.services.multiplex-server = mkIf cfg.multiplex.enable {
+            systemd.services.website-draft = mkIf cfg.drafts {
               serviceConfig = {
-                EnvironmentFile = "${cfg.multiplex.home}/.env";
+                Environment = "SERVER_PORT=${toString cfg.port}";
+                EnvironmentFile = "${cfg.workingDirectory}/.env";
                 User = "fbegyn";
                 Group = "fbegyn";
-                WorkingDirectory = "${cfg.multiplex.home}";
-                ExecStart = "${cfg.multiplex.command}";
+                WorkingDirectory = "${cfg.workingDirectory}";
+                ExecStart = "${defaultPackage}/bin/server serve --drafts --port ${toString cfg.port+1}";
               };
+              wantedBy = [ "multi-user.target" ];
               after = [ "network.target" ];
             };
             # francis.begyn.be website/blog
@@ -191,9 +167,14 @@
                   add_header Permissions-Policy interest-cohort=();
                 '';
               };
-              locations."${cfg.multiplex.location}" = mkIf cfg.multiplex.enable {
-                proxyPass = "${cfg.multiplex.proxyPass}";
-                proxyWebsockets = true;
+            };
+            services.nginx.virtualHosts.francis-drafts = mkIf cfg.drafts {
+              forceSSL = true;
+              serverName = "drafts.${cfg.domain}";
+              useACMEHost = "${cfg.useACMEHost}";
+              root = "/var/www/${cfg.domain}";
+              locations."/" = {
+                proxyPass = "http://127.0.0.1:${toString cfg.port+1}";
                 extraConfig = ''
                   add_header Permissions-Policy interest-cohort=();
                 '';
