@@ -133,6 +133,12 @@
               example = true;
               description = "Render drafts on the port+1 port and expose under drafts.domain";
             };
+            draftsWorkingDirectory = mkOption {
+              type = types.str;
+              default = "/srv/fbegyn/website/staging";
+              example = "/var/lib/website/production";
+              description = "Working directory of the website";
+            };
             draftsBasicAuthFile = mkOption {
               type = types.nullOr types.path;
               default = null;
@@ -173,10 +179,10 @@
             systemd.services.website-draft = mkIf cfg.drafts {
               serviceConfig = {
                 Environment = "SERVER_PORT=${toString (cfg.port+1)}";
-                EnvironmentFile = "${cfg.workingDirectory}/.env";
+                EnvironmentFile = "${cfg.draftsWorkingDirectory}/.env";
                 User = "fbegyn";
                 Group = "fbegyn";
-                WorkingDirectory = "${cfg.workingDirectory}";
+                WorkingDirectory = "${cfg.draftsWorkingDirectory}";
                 ExecStart = "${defaultPackage}/bin/server serve --drafts";
                 ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
               };
