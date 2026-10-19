@@ -133,9 +133,22 @@
               example = true;
               description = "Render drafts on the port+1 port and expose under drafts.domain";
             };
+            draftsBasicAuthFile = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              example = "/run/secrets/website-drafts-htpasswd";
+              description = ''
+                Path to an htpasswd file protecting drafts.domain with basic auth.
+                Pass it as a string (not a nix path literal) so the hashes don't end up in the nix store.
+              '';
+            };
           };
 
           config = mkIf cfg.enable {
+            assertions = [{
+              assertion = cfg.drafts -> cfg.draftsBasicAuthFile != null;
+              message = "services.fbegyn.website.draftsBasicAuthFile must be set when drafts are enabled.";
+            }];
             users.users.fbegyn = {
               createHome = true;
               isSystemUser = true;
@@ -188,6 +201,7 @@
               forceSSL = true;
               serverName = "drafts.${cfg.domain}";
               useACMEHost = "${cfg.useACMEHost}";
+              basicAuthFile = cfg.draftsBasicAuthFile;
               root = "/var/www/${cfg.domain}";
               locations."/" = {
                 proxyPass = "http://127.0.0.1:${toString (cfg.port+1)}";
