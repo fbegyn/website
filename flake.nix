@@ -128,7 +128,7 @@
               description = "The port number for the website server";
             };
             drafts = mkOption {
-              type = types.boolean;
+              type = types.bool;
               default = false;
               example = true;
               description = "Render drafts on the port+1 port and expose under drafts.domain";
@@ -164,7 +164,7 @@
                 User = "fbegyn";
                 Group = "fbegyn";
                 WorkingDirectory = "${cfg.workingDirectory}";
-                ExecStart = "${defaultPackage}/bin/server serve --drafts --port ${toString cfg.port+1}";
+                ExecStart = "${defaultPackage}/bin/server serve --drafts --port ${toString (cfg.port+1)}";
                 ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
               };
               wantedBy = [ "multi-user.target" ];
@@ -190,7 +190,7 @@
               useACMEHost = "${cfg.useACMEHost}";
               root = "/var/www/${cfg.domain}";
               locations."/" = {
-                proxyPass = "http://127.0.0.1:${toString cfg.port+1}";
+                proxyPass = "http://127.0.0.1:${toString (cfg.port+1)}";
                 extraConfig = ''
                   add_header Permissions-Policy interest-cohort=();
                 '';
