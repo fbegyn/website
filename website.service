@@ -1,6 +1,7 @@
 [Service]
 Environment=SERVER_PORT=3114
 ExecStart=/usr/local/bin/website
+ExecReload=/bin/kill -HUP $MAINPID
 Group=fbegyn
 User=fbegyn
 WorkingDirectory=/srv/fbegyn/website

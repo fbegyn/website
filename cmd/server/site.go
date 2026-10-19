@@ -3,9 +3,11 @@ package main
 import (
 	"context"
 	"embed"
+	"fmt"
 	"html/template"
 	"log/slog"
 	"net/http"
+	"sync"
 
 	"github.com/fbegyn/website/internal/auth"
 	"github.com/fbegyn/website/internal/blog"
@@ -24,6 +26,8 @@ var jsFS embed.FS
 
 // Site represents the website structure and data
 type Site struct {
+	mu sync.RWMutex // guards Posts, Talks, Notes, rssFeed
+
 	Posts  blog.Entries
 	Talks  blog.Talks
 	Notes  blog.Notes
@@ -40,6 +44,94 @@ type Site struct {
 // Multiplex exposes the in-process multiplex Hub so the outer mux can
 // mount its routes ahead of the logging chain.
 func (s *Site) Multiplex() *multiplex.Hub { return s.multiplex }
+
+// snapPosts, snapTalks, snapNotes and snapFeed return a point-in-time
+// snapshot of content guarded by s.mu. Callers must not hold the result
+// across a Reload boundary expecting it to change — Reload swaps the
+// fields wholesale rather than mutating in place, so a snapshot taken
+// before a reload stays internally consistent for the life of a request.
+func (s *Site) snapPosts() blog.Entries {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.Posts
+}
+
+func (s *Site) snapTalks() blog.Talks {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.Talks
+}
+
+func (s *Site) snapNotes() blog.Notes {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.Notes
+}
+
+func (s *Site) snapFeed() *feeds.Feed {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.rssFeed
+}
+
+func newFeed() *feeds.Feed {
+	return &feeds.Feed{
+		Title: "Francis Begyn's thoughts",
+		Link: &feeds.Link{
+			Href: "https://francis.begyn.be/blog",
+		},
+		Description: "A collection of my thoughts on the interwebs",
+		Author: &feeds.Author{
+			Name:  "Francis Begyn",
+			Email: "francis@begyn.be",
+		},
+		Created:   rssTime,
+		Copyright: "Copyright 2020-2025 Francis Begyn. Any and all opinions listed here are my own and not representative of my employers; future, past and present.",
+	}
+}
+
+// Reload re-reads every content directory and atomically swaps the parsed
+// entries and the RSS feed. Safe to call while the server is serving. On
+// any error nothing is swapped and the previous content keeps serving.
+func (s *Site) Reload() error {
+	posts, err := blog.LoadEntriesDir("./blog/", "blog", s.Drafts)
+	if err != nil {
+		return fmt.Errorf("reload blog entries: %w", err)
+	}
+	talks, err := blog.LoadTalksDir("./talks/", "talk", s.Drafts)
+	if err != nil {
+		return fmt.Errorf("reload talks: %w", err)
+	}
+	notes, err := blog.LoadNotesDir("./notes/", "note", s.Drafts)
+	if err != nil {
+		return fmt.Errorf("reload notes: %w", err)
+	}
+
+	feed := newFeed()
+	for _, entry := range posts {
+		if entry.Draft {
+			continue
+		}
+		feed.Items = append(feed.Items, &feeds.Item{
+			Title: entry.Title,
+			Link: &feeds.Link{
+				Href: "https://francis.begyn.be/" + entry.Link,
+			},
+			Author: &feeds.Author{
+				Name:  "Francis Begyn",
+				Email: "francis@begyn.be",
+			},
+			Description: entry.Summary,
+			Created:     entry.Date,
+			Content:     string(entry.BodyHTML),
+		})
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.Posts, s.Talks, s.Notes, s.rssFeed = posts, talks, notes, feed
+	return nil
+}
 
 // Make so our site struct can serve http requests
 func (s *Site) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -76,57 +168,18 @@ func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass
 		mux:       http.NewServeMux(),
 		xffmw:     xffmw,
 		multiplex: multiplex.New(),
-		rssFeed: &feeds.Feed{
-			Title: "Francis Begyn's thoughts",
-			Link: &feeds.Link{
-				Href: "https://francis.begyn.be/blog",
-			},
-			Description: "A collection of my thoughts on the interwebs",
-			Author: &feeds.Author{
-				Name:  "Francis Begyn",
-				Email: "francis@begyn.be",
-			},
-			Created:   rssTime,
-			Copyright: "Copyright 2020-2025 Francis Begyn. Any and all opinions listed here are my own and not representative of my employers; future, past and present.",
-		},
+		Drafts:    publishDrafts,
 	}
 
-	// load the blog entries from disk
-	posts, err := blog.LoadEntriesDir("./blog/", "blog", publishDrafts)
-	if err != nil {
+	// Initial content load. Subsequent loads happen on SIGHUP.
+	if err := s.Reload(); err != nil {
 		return nil, nil, err
 	}
-	s.Posts = posts
-	// load talk entries from disk
-	talks, err := blog.LoadTalksDir("./talks/", "talk", publishDrafts)
-	if err != nil {
-		return nil, nil, err
-	}
-	s.Talks = talks
-	// load note entries from disk
-	notes, err := blog.LoadNotesDir("./notes/", "note", publishDrafts)
-	if err != nil {
-		return nil, nil, err
-	}
-	s.Notes = notes
 
 	for _, entry := range s.Posts {
 		if entry.Draft {
 			continue
 		}
-		s.rssFeed.Items = append(s.rssFeed.Items, &feeds.Item{
-			Title: entry.Title,
-			Link: &feeds.Link{
-				Href: "https://francis.begyn.be/" + entry.Link,
-			},
-			Author: &feeds.Author{
-				Name:  "Francis Begyn",
-				Email: "francis@begyn.be",
-			},
-			Description: entry.Summary,
-			Created:     entry.Date,
-			Content:     string(entry.BodyHTML),
-		})
 		smap.Add(&sitemap.URL{
 			Loc:        "https://francis.begyn.be/" + entry.Link,
 			LastMod:    &entry.Date,
@@ -149,7 +202,9 @@ func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass
 
 	s.mux.Handle("GET /metrics", promhttp.Handler())
 	s.mux.Handle("GET /about", middleware.Metrics("about", s.renderPageTemplate("about.html", nil)))
-	s.mux.Handle("GET /blog", middleware.Metrics("blog", s.renderPageTemplate("entries/overview.html", s.Posts)))
+	s.mux.Handle("GET /blog", middleware.Metrics("blog", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		s.renderPageTemplate("entries/overview.html", s.snapPosts()).ServeHTTP(w, r)
+	})))
 	s.mux.Handle("GET /resume", middleware.Metrics("resume", s.renderPageFromCUE("resume.html", "resume.cue")))
 	s.mux.Handle("GET /blog/rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
 	s.mux.Handle("GET /blog.rss", middleware.Metrics("rss", http.HandlerFunc(s.createFeed)))
@@ -158,7 +213,9 @@ func Build(ctx context.Context, publishDrafts bool, presenterUser, presenterPass
 
 	// handle talk content
 	t := blog.TalkFS{}
-	s.mux.Handle("GET /talks", middleware.Metrics("talk", s.renderPageTemplate("talks/overview.html", s.Talks)))
+	s.mux.Handle("GET /talks", middleware.Metrics("talk", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		s.renderPageTemplate("talks/overview.html", s.snapTalks()).ServeHTTP(w, r)
+	})))
 	s.mux.Handle("GET /talks/{year}/{slug}", middleware.Metrics("talks", http.HandlerFunc(s.renderTalk)))
 	s.mux.Handle("GET /talks/{year}/{slug}/{socketID}", middleware.Metrics("talks", http.HandlerFunc(
 		s.renderTalk,

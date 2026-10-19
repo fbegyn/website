@@ -78,7 +78,7 @@ func (s *Site) renderPost(w http.ResponseWriter, r *http.Request) {
 	cmp := r.URL.Path[1:]
 	var p blog.Entry
 	var found bool
-	for _, pst := range s.Posts {
+	for _, pst := range s.snapPosts() {
 		if pst.Link == cmp {
 			p = pst
 			found = true
@@ -123,7 +123,7 @@ func (s *Site) renderTalk(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/talk", http.StatusSeeOther)
 		return
 	}
-	p, ok := talkrender.Find(s.Talks, r.PathValue("year"), r.PathValue("slug"))
+	p, ok := talkrender.Find(s.snapTalks(), r.PathValue("year"), r.PathValue("slug"))
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		s.renderPageTemplate("error.html", "no such talk found: "+r.RequestURI).ServeHTTP(w, r)
@@ -209,7 +209,7 @@ func (s *Site) renderNote(w http.ResponseWriter, r *http.Request) {
 	cmp := r.URL.Path[1:]
 	var p blog.Note
 	var found bool
-	for _, pst := range s.Notes {
+	for _, pst := range s.snapNotes() {
 		if pst.Link == cmp {
 			p = pst
 			found = true

@@ -5,6 +5,8 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 var (
@@ -43,6 +45,22 @@ func (c *ServeCmd) Run(globals *Globals) error {
 	mux := http.NewServeMux()
 	s.Multiplex().Register(mux)
 	mux.Handle("/", s)
+
+	// Reload content on SIGHUP. `systemctl reload website` sends this,
+	// as does the deploy script after it swaps content into place.
+	hup := make(chan os.Signal, 1)
+	signal.Notify(hup, syscall.SIGHUP)
+	go func() {
+		for range hup {
+			logger.InfoContext(ctx, "reloading content", slog.String("action", "reload"))
+			if err := s.Reload(); err != nil {
+				logger.ErrorContext(ctx, "reload failed, keeping previous content",
+					slog.Any("err", err), slog.String("action", "reload"))
+				continue
+			}
+			logger.InfoContext(ctx, "content reloaded", slog.String("action", "reload"))
+		}
+	}()
 
 	// Enable logging and serve the website
 	logger.InfoContext(ctx, "starting webserver", slog.String("action", "http_listen"))
